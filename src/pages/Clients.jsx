@@ -8,6 +8,7 @@ import { CheckBox } from "../components/Elements/CheckBox";
 import { AddClients } from "../components/Clients/AddClients";
 import { ClientCard } from "../components/Clients/ClientCard";
 import { getClients } from "../Api";
+import { Loader } from "../components/Elements/Loader";
 
 function Clients() {
     useEffect(() => {
@@ -52,6 +53,7 @@ function Clients() {
                 />
                 <Button name="Добавить клиента" onClick={showPopUpNewDeal} />
             </div>
+            {clients.length == 0 ? <Loader /> : ""}
             <Table
                 props={clients}
                 check={<CheckBox />}

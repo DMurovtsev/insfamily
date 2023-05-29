@@ -107,8 +107,6 @@ function Stage({ props, setId, setStage }) {
     }
     function drop(e) {
         let endId = e.currentTarget.dataset.id;
-
-        // console.log(sort);
     }
 
     return (

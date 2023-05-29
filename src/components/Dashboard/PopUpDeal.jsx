@@ -2,8 +2,10 @@ import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
 import { InputFile } from "../Elements/InputFile";
 import { useEffect } from "react";
+import { addDiscription } from "../../Api";
 
-function PopUpDeal() {
+function PopUpDeal({ currentDeal, setCurrentDeal }) {
+    console.log(currentDeal);
     useEffect(() => {
         const fileInput = document.getElementById("popUp_InputFile");
         const fileList = document.getElementById("content__PopUp_files");
@@ -43,9 +45,7 @@ function PopUpDeal() {
         }
     }, []);
     function showPopUpNewDeal() {
-        document
-            .querySelector(".container__NewPopUp")
-            .classList.toggle("active");
+        document.querySelector(".container__NewPopUp").classList.add("active");
     }
     function showPopUpCalculations() {
         document
@@ -142,13 +142,47 @@ function PopUpDeal() {
             form.classList.remove("red_border");
         }
     }
+    /*Удаление двойных пробелов*/
+
+    document.querySelectorAll(".inputBox__standart").forEach((item) => {
+        item.oninput = (e) => {
+            e.target.value = e.target.value.replace(/\s+/g, " ");
+        };
+    });
+
+    /*Удаление пробелов в начале и конце строки*/
+    document.querySelectorAll(".inputBox__standart").forEach((item) => {
+        item.onchange = (e) => {
+            e.target.value = e.target.value.trim();
+        };
+    });
+    /*Склеиваем ФИО страхователя и задиваем в value input*/
+    if (currentDeal.length > 0) {
+        const current_deal = {
+            fio: `${currentDeal[0].policy.policyholder.first_name} ${currentDeal[0].policy.policyholder.last_name} ${currentDeal[0].policy.policyholder.middle_name}`,
+        };
+        document.getElementById("popUpDealFioNew").value = current_deal.fio;
+    }
+
+    function Discription() {
+        let discription = document.getElementById(
+            "inputFieldDiscription"
+        ).value;
+        let id = currentDeal.id;
+        addDiscription(discription, id).then((responce) => {});
+    }
+    function closePopUpDeal() {
+        setCurrentDeal();
+    }
+
+    console.log(currentDeal);
 
     return (
         <div id="container__PopUp" className="container__PopUp">
             <div className="content__PopUp">
                 <div className="content__PopUp_header">
-                    <p>Название сделки</p>
-                    <p>Дата создания</p>
+                    <p>{currentDeal.name}</p>
+                    <p>{currentDeal.date_create}</p>
                 </div>
 
                 <div id="outputField" className="content__PopUp_comments"></div>
@@ -163,7 +197,23 @@ function PopUpDeal() {
                         style="button_green addComment"
                         name={<ion-icon name="arrow-up-outline"></ion-icon>}
                     />
-                    <div className="content__PopUp_btn">
+                    <div className="content__PopUp_discription">
+                        {currentDeal.description}
+                    </div>
+                    <div className="content__PopUp_discriptionIn">
+                        <Input
+                            setId="inputFieldDiscription"
+                            name="Добавить заметку"
+                            style="inputBox__standart"
+                        />
+                        <Button
+                            setId="submitButton"
+                            onClick={Discription}
+                            style="button_green  button_greenS"
+                            name={<ion-icon name="arrow-up-outline"></ion-icon>}
+                        />
+                    </div>
+                    <div className="content__PopUp_btnNew">
                         <Button style="button_red" name="В архив" />
                         <Button
                             onClick={showPopUpNewDeal}
@@ -171,20 +221,37 @@ function PopUpDeal() {
                             name="Оплачено"
                         />
 
-                        <Button style="toggleBtn" name="Отмена" />
+                        <Button
+                            onClick={closePopUpDeal}
+                            style="toggleBtn"
+                            name="Отмена"
+                        />
                     </div>
                 </div>
 
                 <div className="content__PopUp_input">
-                    <Input name="Стоимость сделки" style="inputBox__standart" />
-                    <Input name="Дата выполнения" style="inputBox__standart" />
-                    <Input name="ФИО клиента" style="inputBox__standart" />
+                    <Input
+                        value={currentDeal.price}
+                        name="Стоимость сделки"
+                        style="inputBox__standart"
+                    />
+                    <Input
+                        value={currentDeal.next_contact_date}
+                        name="Дата выполнения"
+                        style="inputBox__standart"
+                    />
+                    <Input
+                        value={currentDeal.policy.contact_person}
+                        name="ФИО клиента"
+                        style="inputBox__standart"
+                    />
                     <Input
                         setId="happyBithday"
                         divId="divHappyBirthdayClient"
                         name="Дата рождения клиента"
                         style="inputBox__standart"
                         onInput={checkDate}
+                        value={currentDeal.policy.policyholder.birthday}
                     />
                     <Input
                         divId="divPhoneClient"
@@ -192,6 +259,7 @@ function PopUpDeal() {
                         name="Телефон клиента"
                         style="inputBox__standart"
                         onInput={validateInputPhone}
+                        value={currentDeal.policy.policyholder.phone}
                     />
                     <Input
                         divId="divEmailClient"
@@ -199,10 +267,20 @@ function PopUpDeal() {
                         name="Email Клиента"
                         style="inputBox__standart"
                         onInput={validateInputEmail}
+                        value={currentDeal.policy.policyholder.email}
                     />
-                    <Input name="Регион клиента" style="inputBox__standart" />
-                    <Input name="Тип полиса" style="inputBox__standart" />
                     <Input
+                        value={currentDeal.policy.policyholder.address}
+                        name="Регион клиента"
+                        style="inputBox__standart"
+                    />
+                    <Input
+                        value={currentDeal.policy.type.name}
+                        name="Тип полиса"
+                        style="inputBox__standart"
+                    />
+                    <Input
+                        value={currentDeal.policy.number}
                         name="Серия и номер полиса"
                         style="inputBox__standart"
                     />
@@ -211,14 +289,20 @@ function PopUpDeal() {
                         style="inputBox__standart"
                     />
                     <Input
+                        value={currentDeal.policy.date_end}
                         name="Дата окончания полиса"
                         style="inputBox__standart"
                     />
                     <Input
+                        value={currentDeal.policy.company}
                         name="Страховая компания"
                         style="inputBox__standart"
                     />
-                    <Input name="ФИО страхователя" style="inputBox__standart" />
+                    <Input
+                        setId="popUpDealFioNew"
+                        name="ФИО страхователя"
+                        style="inputBox__standart popUpDealFioNew"
+                    />
                     <Input name="Дополнительно" style="inputBox__standart" />
                 </div>
                 <div

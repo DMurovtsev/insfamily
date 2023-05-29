@@ -5,7 +5,6 @@ import { getStages, deleteStage } from "../../Api";
 
 function DeleteStage({ id, setId, setStage }) {
     const [stageOptions, setStageOptions] = useState([]);
-
     useEffect(() => {
         /*Наполняем select и фильтруем его исключая этап на который нажали*/
         getStages(1).then((data) => {

@@ -1,9 +1,9 @@
 import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
-import { createStages } from "../../Api";
+import { createStages, getDeals } from "../../Api";
 import { useEffect } from "react";
 
-function AddStage({ setStage }) {
+function AddStage({ setStage, setDeals }) {
     useEffect(() => {
         if (document.getElementById("cancelAddStage")) {
             document.getElementById("cancelAddStage").onclick = () => {
@@ -19,9 +19,12 @@ function AddStage({ setStage }) {
         let addNewStage = document.getElementById("inputAddNewStage").value;
         createStages(1, addNewStage).then((response) => {
             setStage(response);
+            getDeals(1).then((data) => {
+                setDeals(data);
+            });
             document
                 .querySelector(".container__addStage")
-                .classList.toggle("active");
+                .classList.remove("active");
         });
     }
 

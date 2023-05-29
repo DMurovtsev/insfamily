@@ -12,7 +12,7 @@
     --black2: #999;
     --green: #009b00;
     --red: #ff0000;
-    --blue: #24ecff;
+    --blue: #0070f1;
 }
 body {
     min-height: 100%;
@@ -1036,13 +1036,14 @@ tbody tr:hover {
     left: 0px;
     gap: 210px;
 }
+
 .container__dealCarde {
     display: flex;
     flex-direction: column;
     left: 0px;
     position: relative;
     top: 0px;
-    gap: 10px;
+    margin-top: 10px;
 }
 .addComment {
     position: absolute;
@@ -1059,7 +1060,7 @@ tbody tr:hover {
     position: absolute;
     gap: 10px;
     flex-wrap: nowrap;
-    height: 750px;
+    height: 780px;
     overflow-y: hidden;
 }
 .containerFlex_header {
@@ -1072,14 +1073,15 @@ tbody tr:hover {
     z-index: 5;
 }
 .container__dealCard_scroll {
-    padding-top: 20px;
     padding-left: 10px;
     height: 720px;
-    display: flex;
+    width: 100vw;
+    display: grid;
+    grid-auto-flow: dense;
+    grid-template-columns: repeat(auto-fit, 260px);
     position: absolute;
-    gap: 10px;
     overflow-y: scroll;
-    top: 70px;
+    top: 75px;
 }
 .containerFlex_Stage {
     width: 200px;
@@ -1110,6 +1112,19 @@ tbody tr:hover {
     height: 150px;
     background: var(--white);
     transition: 0.5s;
+}
+.dragLeft {
+    position: relative;
+    right: 260px;
+    /* transform: translateX(-260px);
+    transition: transform 0.5s; */
+}
+.dragRight {
+    position: relative;
+    left: 260px;
+
+    /* transform: translateX(260px);
+    transition: transform 0.5s; */
 }
 .card_tomorrow {
     opacity: 0.3;
@@ -1329,29 +1344,56 @@ tbody tr:hover {
     font-size: 30px;
     color: var(--red);
 }
-/*PopUpDeal*/
-.container__PopUp {
-    width: 0px;
-    height: 0px;
-    position: fixed;
-    background: #fff;
-    transition: 0.5s;
-    border-radius: 25px;
-    box-shadow: 0 0 15px var(--dark);
-    top: 70px;
-    right: 500px;
-}
+/*PopUp Create Deal*/
 
-.container__PopUp.active {
+/*PopUpDeal*/
+
+.container__PopUp {
+    left: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: fixed;
     width: 770px;
     height: 780px;
-    /* transition-delay: 0.5s; */
+    transition: 0.5s;
+    border-radius: 25px;
+    box-shadow: 0 0 15px var(--dark);
+    background: #fff;
     z-index: 11;
     display: flex;
+}
+
+.container__PopUpCreateDeal {
+    background: #fff;
+    width: 350px;
+    height: 500px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 200px;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s;
+    border-radius: 25px;
+    box-shadow: 0 0 15px var(--dark);
+}
+
+.container__PopUpCreateDeal.active {
+    width: 350px;
+    height: 500px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    visibility: visible;
+    transition: 0.5s;
+    z-index: 11;
 }
 .container__PopUp.active .content__PopUp {
     opacity: 1;
@@ -1404,9 +1446,9 @@ tbody tr:hover {
     width: 100%;
     padding: 10px;
     color: white;
-    opacity: 0;
+    opacity: 1;
     transition: 0.5s;
-    transform: scale(0);
+    transform: scale(1);
 }
 .content__PopUp_input {
     padding-top: 10px;
@@ -1436,6 +1478,8 @@ tbody tr:hover {
 .content__PopUp_input span:focus ~ span,
 .content__PopUp_comment input:focus ~ span,
 .content__PopUp_header input:valid ~ span,
+.content__PopUp_CreateDeal input:focus ~ span,
+/* .content__PopUp_CreateDeal input:valid ~ span, */
 .content__PopUp_header input:focus ~ span {
     color: var(--green);
     transform: translate(10px) translateY(-7px);
@@ -1480,8 +1524,11 @@ tbody tr:hover {
 .inputBox__select select:focus,
 .content__PopUp_input input:focus,
 .content__PopUp_input select:focus,
+.content__PopUp_CreateDeal select:focus,
 .content__PopUp_comment input:focus,
 .content__PopUp_header input:valid,
+.content__PopUp_CreateDeal input:focus,
+/* .content__PopUp_CreateDeal input:valid, */
 .content__PopUp_header input:focus,
 .container__flex_calc select:focus,
 .container__flex_calc input:focus {
@@ -1498,8 +1545,14 @@ tbody tr:hover {
 .content__PopUp_input button:before {
     background: #fff;
 }
-.content__PopUp_comment input {
+.content__PopUp_comment input,
+.content__PopUp_CreateDeal input,
+.content__PopUp_CreateDeal select {
     background: #fff;
+    border: 1px solid black;
+}
+.content__PopUp_CreateDeal input:valid ~ span {
+    background: var(--white);
 }
 .content__PopUp_btn {
     position: relative;
@@ -1509,6 +1562,26 @@ tbody tr:hover {
     gap: 10px;
     bottom: -10px;
     justify-content: space-around;
+}
+.content__PopUp_btnNew {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    left: 200px;
+    bottom: -200px;
+    justify-content: space-around;
+}
+.content__PopUp_discriptionIn {
+    position: absolute;
+    top: 190px;
+}
+.button_greenS {
+    position: absolute;
+    top: 5px;
+    right: -85px;
+    /* left: 50; */
 }
 .content__PopUp_btn button span {
     background: #fff;
@@ -1537,14 +1610,30 @@ tbody tr:hover {
     justify-content: flex-start;
     width: 400px;
     overflow-y: auto;
-    height: 625px;
+    height: 430px;
     color: var(--black1);
     background: #fff;
     border-radius: 15px;
     box-shadow: 0 0 5px var(--dark);
 }
+.content__PopUp_discription {
+    top: 75px;
+    position: absolute;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 400px;
+    overflow-y: auto;
+    height: 95px;
+    color: var(--black1);
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px var(--dark);
+    padding: 5px;
+}
+
 .content__PopUp_comment {
-    bottom: 30px;
+    bottom: 220px;
     position: absolute;
     z-index: 2;
     margin-left: 10px;
@@ -1557,16 +1646,33 @@ tbody tr:hover {
 }
 /*NewPopUp*/
 
-.container__NewPopUp.active {
-    top: 70px;
-    width: 600px;
-    position: fixed;
-}
 .container__NewPopUp {
+    left: 700px;
+    opacity: 0;
+    visibility: hidden;
+    width: 0px;
+    height: 0px;
     position: fixed;
-    height: 83vh;
+    background: #fff;
+    transition: 0.5s;
+    border-radius: 25px;
+    box-shadow: 0 0 15px var(--dark);
+    position: fixed;
     z-index: 10;
-    top: 70px;
+}
+.container__NewPopUp.active {
+    position: absolute;
+    left: 700px;
+    opacity: 1;
+    visibility: visible;
+    top: 60px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 370px;
+    height: 780px;
+    z-index: 11;
 }
 
 .closeLiveTape {
@@ -2412,8 +2518,8 @@ section {
 
 .contenerDeleteStage {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: -100px;
+    top: -60px;
     min-width: 100vw;
     min-height: 100vh;
     background: rgba(0, 0, 0, 0.5);
@@ -2435,4 +2541,36 @@ section {
     box-shadow: 0 0 5px var(--white);
     gap: 10px;
     border-radius: 10px;
+}
+.container__PopUp_CreateDeal {
+    position: absolute;
+    left: 800px;
+    top: 200px;
+    padding: 25px;
+    opacity: 0;
+    visibility: hidden;
+    height: auto;
+    width: 300px;
+}
+.container__PopUp_CreateDeal.active {
+    height: auto;
+    width: 300px;
+    opacity: 1;
+    visibility: visible;
+    position: fixed;
+    background: #fff;
+    transition: 0.5s;
+    border-radius: 25px;
+    box-shadow: 0 0 15px var(--dark);
+    z-index: 11;
+}
+.content__PopUp_CreateDeal {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    gap: 10px;
+}
+.input__medium {
+    width: 250px;
 }

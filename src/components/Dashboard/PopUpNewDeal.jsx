@@ -1,6 +1,6 @@
 import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { InfoPopUp } from "../Service/InfoPopUp";
 import { Select } from "../Elements/Select";
 import { InputFile } from "../Elements/InputFile";
@@ -25,7 +25,7 @@ function PopUpNewDeal() {
             document.querySelector(".toggleNewBtn").onclick = () => {
                 document
                     .querySelector(".container__NewPopUp")
-                    .classList.toggle("active");
+                    .classList.remove("active");
             };
         }
         /*Удаление двойных пробелов*/
@@ -361,143 +361,141 @@ function PopUpNewDeal() {
     }
 
     return (
-        <div className="main main__flex">
-            <div className="container__PopUp container__NewPopUp">
-                <div className="content__PopUp">
-                    <div className="content__NewPopUp_inputFile">
-                        {namesForFiles.map((item) => (
-                            <InputFile
-                                setId={Object.keys(item)[0]}
-                                name={Object.values(item)[0]}
-                                style="none"
-                            />
-                        ))}
-                    </div>
-                    <div className="content__PopUp_input content__NewPopUp_container">
-                        <Select
-                            setId="payId"
-                            name="Оплата"
-                            style="inputBox__standart_popUp requared"
-                            options={selectOptionsPay}
-                            // selected={selectElement}
+        <div className="container__NewPopUp">
+            <div className="content__NewPopUp">
+                <div className="content__NewPopUp_inputFile">
+                    {namesForFiles.map((item) => (
+                        <InputFile
+                            setId={Object.keys(item)[0]}
+                            name={Object.values(item)[0]}
+                            style="none"
                         />
-                        <Select
-                            name="Тип продажи"
-                            style="inputBox__standart_popUp requared"
-                            options={selectOptionsTypeSales}
-                            setId="typeSalesId"
-                        />
-                        <Select
-                            setId="typeId"
-                            name="Тип полиса"
-                            style="inputBox__standart_popUp requared"
-                            options={selectOptionsType}
-                            onChange={selectType}
-                        />
-                        <Select
-                            divId="divBankId"
-                            setId="bankId"
-                            name="Банк"
-                            options={selectOptionsBank}
-                            style="inputBox__standart_popUp none"
-                        />
-                        <Input
-                            divId="divIncomingCommissionId"
-                            setId="incomingCommissionId"
-                            name="Входящая комиссия"
-                            type="number"
-                            step="0.1"
-                            style="inputBox__standart_popUp none"
-                        />
-                        <Select
-                            divId="divCreditVehicleIdId"
-                            name="Кредитная ТС"
-                            style="inputBox__standart_popUp none"
-                            setId="creditVehicleId"
-                            options={selectOptionsCreditVehicle}
-                            onChange={selectKvBank}
-                        />
-                        <Input
-                            setId="kvBnakId"
-                            divId="divKvBankId"
-                            name="КВ Банк"
-                            type="number"
-                            step="0.1"
-                            style="inputBox__standart_popUp none"
-                        />
+                    ))}
+                </div>
+                <div className="content__PopUp_input content__NewPopUp_container">
+                    <Select
+                        setId="payId"
+                        name="Оплата"
+                        style="inputBox__standart_popUp requared"
+                        options={selectOptionsPay}
+                        // selected={selectElement}
+                    />
+                    <Select
+                        name="Тип продажи"
+                        style="inputBox__standart_popUp requared"
+                        options={selectOptionsTypeSales}
+                        setId="typeSalesId"
+                    />
+                    <Select
+                        setId="typeId"
+                        name="Тип полиса"
+                        style="inputBox__standart_popUp requared"
+                        options={selectOptionsType}
+                        onChange={selectType}
+                    />
+                    <Select
+                        divId="divBankId"
+                        setId="bankId"
+                        name="Банк"
+                        options={selectOptionsBank}
+                        style="inputBox__standart_popUp none"
+                    />
+                    <Input
+                        divId="divIncomingCommissionId"
+                        setId="incomingCommissionId"
+                        name="Входящая комиссия"
+                        type="number"
+                        step="0.1"
+                        style="inputBox__standart_popUp none"
+                    />
+                    <Select
+                        divId="divCreditVehicleIdId"
+                        name="Кредитная ТС"
+                        style="inputBox__standart_popUp none"
+                        setId="creditVehicleId"
+                        options={selectOptionsCreditVehicle}
+                        onChange={selectKvBank}
+                    />
+                    <Input
+                        setId="kvBnakId"
+                        divId="divKvBankId"
+                        name="КВ Банк"
+                        type="number"
+                        step="0.1"
+                        style="inputBox__standart_popUp none"
+                    />
 
-                        <Input
-                            divId="divSeriesId"
-                            onInput={validateInputSeries}
-                            setId="seriesId"
-                            name="Серия"
-                            style="inputBox__standart_popUp"
-                        />
+                    <Input
+                        divId="divSeriesId"
+                        onInput={validateInputSeries}
+                        setId="seriesId"
+                        name="Серия"
+                        style="inputBox__standart_popUp"
+                    />
 
-                        <Input
-                            setId="numberId"
-                            name="Номер"
-                            style="inputBox__standart_popUp requared"
-                        />
+                    <Input
+                        setId="numberId"
+                        name="Номер"
+                        style="inputBox__standart_popUp requared"
+                    />
 
-                        <Input
-                            setId="insurancePremiumId"
-                            name="Страховая премия"
-                            type="number"
-                            step="0.1"
-                            style="inputBox__standart_popUp requared"
-                        />
-                        <Select
-                            setId="companyId"
-                            name="Компания"
-                            style="inputBox__standart_popUp requared"
-                            onChange={channelUndisable}
-                            options={selectOptionsCompany}
-                        />
-                        <Select
-                            setId="channelId"
-                            name="Канал продаж"
-                            style="inputBox__standart_popUp requared"
-                            disabled="true"
-                            onClick={channelInfo}
-                            options={selectOptionsChannel}
-                            onChange={selectChannel}
-                        />
-                        <Input
-                            setId="discountCV"
-                            name="Скидка с КВ"
-                            type="number"
-                            step="0.1"
-                            style="inputBox__standart_popUp requared"
-                        />
+                    <Input
+                        setId="insurancePremiumId"
+                        name="Страховая премия"
+                        type="number"
+                        step="0.1"
+                        style="inputBox__standart_popUp requared"
+                    />
+                    <Select
+                        setId="companyId"
+                        name="Компания"
+                        style="inputBox__standart_popUp requared"
+                        onChange={channelUndisable}
+                        options={selectOptionsCompany}
+                    />
+                    <Select
+                        setId="channelId"
+                        name="Канал продаж"
+                        style="inputBox__standart_popUp requared"
+                        disabled="true"
+                        onClick={channelInfo}
+                        options={selectOptionsChannel}
+                        onChange={selectChannel}
+                    />
+                    <Input
+                        setId="discountCV"
+                        name="Скидка с КВ"
+                        type="number"
+                        step="0.1"
+                        style="inputBox__standart_popUp requared"
+                    />
 
-                        <Input
-                            name="Дата оформления"
-                            value={now}
-                            style="inputBox__standart_popUp requared"
-                            onInput={checkDate}
-                        />
-                        <Input
-                            name="Дата начала действия полиса"
-                            style="inputBox__standart_popUp requared"
-                            onInput={checkDate}
-                        />
-                        <Input
-                            name="Дата окончания полиса"
-                            value={ruDate}
-                            style="inputBox__standart_popUp requared"
-                            onInput={checkDate}
-                        />
-                    </div>
-                    <div className="content__PopUp_btn">
-                        <Button
-                            onClick={handleClick}
-                            style="button_green"
-                            name="Сохранить"
-                        />
-                        <div className="toggleNewBtn">
-                            <Button name="Отмена" />
-                        </div>
+                    <Input
+                        name="Дата оформления"
+                        value={now}
+                        style="inputBox__standart_popUp requared"
+                        onInput={checkDate}
+                    />
+                    <Input
+                        name="Дата начала действия полиса"
+                        style="inputBox__standart_popUp requared"
+                        onInput={checkDate}
+                    />
+                    <Input
+                        name="Дата окончания полиса"
+                        value={ruDate}
+                        style="inputBox__standart_popUp requared"
+                        onInput={checkDate}
+                    />
+                </div>
+                <div className="content__PopUp_btn">
+                    <Button
+                        onClick={handleClick}
+                        style="button_green"
+                        name="Сохранить"
+                    />
+                    <div className="toggleNewBtn">
+                        <Button name="Отмена" />
                     </div>
                 </div>
             </div>

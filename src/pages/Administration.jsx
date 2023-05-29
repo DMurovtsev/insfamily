@@ -12,9 +12,5 @@ function Administration() {
         });
         list[10].classList.add("hovered");
     }, []);
-
- 
-
-    return <Select_2 />;
 }
 export { Administration };

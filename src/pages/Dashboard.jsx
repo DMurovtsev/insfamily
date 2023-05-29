@@ -17,17 +17,36 @@ import {
     getClientsBirthdayCount,
     getClientsBirthday,
     getFunnels,
+    getManagers,
+    getDeals,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
+import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
 
 function Dashboard() {
     const [stages, setStage] = useState([]);
+    const [deal, setDeal] = useState();
+
+    const [currentDeal, setCurrentDeal] = useState();
+    const [deals, setDeals] = useState([]);
+    const [managers, setManagers] = useState([]);
     const [funnels, setFunnels] = useState([]);
     const [typePolicies, setTypePolicies] = useState();
     const [id, setId] = useState();
+    const [currentStage, setCurrentStage] = useState({
+        stage: {},
+        target: "",
+        position: "",
+    });
 
     useEffect(() => {
+        getManagers().then((data) => {
+            setManagers(data);
+        });
+        getDeals(1).then((data) => {
+            setDeals(data);
+        });
         getStages(1).then((data) => {
             setStage(data);
         });
@@ -35,12 +54,8 @@ function Dashboard() {
             setFunnels(data);
         });
         getClients().then((data) => {});
-        getClientsBirthdayCount().then((data) => {
-            // console.log(data);
-        });
-        getClientsBirthday().then((data) => {
-            // console.log(data);
-        });
+        getClientsBirthdayCount().then((data) => {});
+        getClientsBirthday().then((data) => {});
 
         getTypiesPolicies().then((data) => {
             setTypePolicies(data);
@@ -50,26 +65,39 @@ function Dashboard() {
             item.classList.remove("hovered");
         });
         list[1].classList.add("hovered");
-
-        if (document.querySelector(".card")) {
-            document.querySelectorAll(".card").forEach((card) => {
-                card.onclick = () => {
-                    document
-                        .querySelector(".container__PopUp")
-                        .classList.toggle("active");
-                };
-            });
-        }
     }, []);
+
+    const newManagersArr = managers.map((item) => ({
+        ...item,
+        name: `${item.first_name} ${item.last_name}`,
+    }));
 
     function showAddStage() {
         if (document.getElementById("addStage")) {
-            document.getElementById("addStage").onclick = () => {
-                document
-                    .querySelector(".container__addStage")
-                    .classList.toggle("active");
-            };
+            document
+                .querySelector(".container__addStage")
+                .classList.toggle("active");
         }
+    }
+    function showCreateDeal() {
+        if (document.querySelector(".container__PopUp_CreateDeal")) {
+            document
+                .querySelector(".container__PopUp_CreateDeal")
+                .classList.toggle("active");
+        }
+    }
+
+    if (document.querySelector(".card")) {
+        document.querySelectorAll(".card").forEach((card) => {
+            card.onclick = () => {
+                deals.forEach((item) => {
+                    let currentCard = item.filter((deal) => deal.id == card.id);
+                    if (currentCard.length > 0) {
+                        setCurrentDeal(currentCard[0]);
+                    }
+                });
+            };
+        });
     }
 
     const admin = useContext(CustomContext);
@@ -91,7 +119,23 @@ function Dashboard() {
             ) : (
                 <></>
             )}
-            <PopUpDeal />
+            {currentDeal ? (
+                <PopUpDeal
+                    currentDeal={currentDeal}
+                    setCurrentDeal={setCurrentDeal}
+                />
+            ) : (
+                <></>
+            )}
+
+            <PopUpCreateDeal
+                setCurrentDeal={setCurrentDeal}
+                newManagersArr={newManagersArr}
+                typePolicies={typePolicies}
+                stages={stages}
+                setDeals={setDeals}
+                deals={deals}
+            />
             <PopUpNewDeal />
             <Calculations />
             <div className="container__header">
@@ -102,7 +146,11 @@ function Dashboard() {
 
                 {admin === true ? <Select name="Отдел продаж" /> : ""}
 
-                {admin === true ? <Select name="Менеджер" /> : ""}
+                {admin === true ? (
+                    <Select options={newManagersArr} name="Менеджер" />
+                ) : (
+                    ""
+                )}
 
                 <Input
                     logo={<ion-icon name="search-outline"></ion-icon>}
@@ -110,7 +158,12 @@ function Dashboard() {
                     style="inputBox__standart"
                 />
                 <Button name="Поиск" />
-                <Button name="Создать сделку" />
+
+                <Button
+                    setId="createStage"
+                    name="Создать сделку"
+                    onClick={showCreateDeal}
+                />
             </div>
 
             <div className="containerFlex">
@@ -118,6 +171,8 @@ function Dashboard() {
                     {stages.map((stage) => {
                         return (
                             <Stage
+                                currentStage={currentStage}
+                                setCurrentStage={setCurrentStage}
                                 props={stage}
                                 setId={setId}
                                 setStage={setStage}
@@ -135,33 +190,22 @@ function Dashboard() {
                         ""
                     )}
 
-                    <AddStage setStage={setStage} />
+                    <AddStage setDeals={setDeals} setStage={setStage} />
                 </div>
                 <div className="container__dealCard_scroll">
-                    <div className="container__dealCarde">
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                    </div>
-                    <div className="container__dealCarde">
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                    </div>
-                    <div className="container__dealCarde">
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                        <DealCard />
-                    </div>
+                    {deals.map((item) => (
+                        <div>
+                            {item.map((deal) => {
+                                return (
+                                    <DealCard
+                                        deal={deal}
+                                        setDeal={setDeal}
+                                        props={deal}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ))}
                 </div>
             </div>
             <div className="main__bottom none">

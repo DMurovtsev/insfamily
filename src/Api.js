@@ -82,6 +82,21 @@ async function getFunnels() {
     });
     return await response.json();
 }
+/*Получение базового источника*/
+async function getBaseSource() {
+    let response = await fetch(`${myHost}/basesource/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+/*Получение менеджеров*/
+async function getManagers() {
+    let response = await fetch(`${myHost}/uft/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+
 /*Получить все этапы одной воронки*/
 async function getStages(id) {
     let response = await fetch(`${myHost}/stagefunnels/?funnel=${id}`, {
@@ -137,31 +152,96 @@ async function getClientsBirthdayCount() {
     });
     return await response.json();
 }
-async function changeStages(startId, endId) {
+async function changeStages(currentStage) {
     let formData = new FormData();
-    formData.append("stage_1", startId);
-    formData.append("stage_2", endId);
-
+    formData.append("stage_id", currentStage.stage.id);
+    formData.append("target_id", currentStage.target);
+    formData.append("position", currentStage.position);
     let response = await fetch(`${myHost}/stagefunnels/sort_refresh/`, {
-        body: formData,
         method: "POST",
         headers: headers,
         body: formData,
     });
     return await response.json();
 }
+async function createDeals(
+    basesource_id,
+    type_policy,
+    stage_id,
+    user,
+    full_name,
+    phone,
+    email,
+    birthday,
+    address
+) {
+    let formData = new FormData();
+    formData.append("basesource_id", basesource_id);
+    formData.append("type_policy", type_policy);
+    formData.append("stage_id", stage_id);
+    formData.append("user", user);
+    formData.append("full_name", full_name);
+    formData.append("phone", phone);
+    if (email != "") {
+        formData.append("email", email);
+    }
+    if (birthday != "") {
+        formData.append("birthday", birthday);
+    }
+    if (address != "") {
+        formData.append("address", address);
+    }
+    let response = await fetch(`${myHost}/deals/`, {
+        method: "POST",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
+async function getDeals(funnel_id) {
+    let response = await fetch(`${myHost}/deals/?funnel_id=${funnel_id}`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function addDiscription(discription, id) {
+    let formData = new FormData();
+    formData.append("description", discription);
+    let response = await fetch(`${myHost}/deals/${id}/`, {
+        method: "PATCH",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
+async function chanageDealCard(deal, stage_id) {
+    let formData = new FormData();
+    formData.append("stagefunnel_id", stage_id);
+    let response = await fetch(`${myHost}/deals/${deal}/`, {
+        method: "PATCH",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
 export {
-    changeStages,
     Login,
     loging,
     getAccessToken,
-    createStages,
     getTypiesPolicies,
-    getStages,
     getClients,
     getClientsBirthday,
-    getClientsBirthdayCount,
-    updateStageName,
     getFunnels,
+    getBaseSource,
+    getManagers,
+    getStages,
+    updateStageName,
+    createStages,
     deleteStage,
+    getClientsBirthdayCount,
+    changeStages,
+    createDeals,
+    getDeals,
+    addDiscription,
+    chanageDealCard,
 };
