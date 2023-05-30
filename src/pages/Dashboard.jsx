@@ -27,7 +27,6 @@ import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
 function Dashboard() {
     const [stages, setStage] = useState([]);
     const [deal, setDeal] = useState();
-
     const [currentDeal, setCurrentDeal] = useState();
     const [deals, setDeals] = useState([]);
     const [managers, setManagers] = useState([]);
@@ -176,6 +175,7 @@ function Dashboard() {
                                 props={stage}
                                 setId={setId}
                                 setStage={setStage}
+                                setDeals={setDeals}
                             />
                         );
                     })}
@@ -195,12 +195,13 @@ function Dashboard() {
                 <div className="container__dealCard_scroll">
                     {deals.map((item) => (
                         <div>
-                            {item.map((deal) => {
+                            {item.map((dial) => {
                                 return (
                                     <DealCard
                                         deal={deal}
                                         setDeal={setDeal}
-                                        props={deal}
+                                        props={dial}
+                                        setDeals={setDeals}
                                     />
                                 );
                             })}

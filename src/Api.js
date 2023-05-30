@@ -216,7 +216,7 @@ async function addDiscription(discription, id) {
 }
 async function chanageDealCard(deal, stage_id) {
     let formData = new FormData();
-    formData.append("stagefunnel_id", stage_id);
+    formData.append("stage_funnel_id", stage_id);
     let response = await fetch(`${myHost}/deals/${deal}/`, {
         method: "PATCH",
         headers: headers,

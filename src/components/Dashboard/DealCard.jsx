@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { chanageDealCard } from "../../Api";
+import { chanageDealCard, getDeals } from "../../Api";
 
-function DealCard({ props, setDeal, deal }) {
+function DealCard({ props, setDeal, deal, setDeals }) {
     let discription = props.description;
     let user = props.user;
     let manager = {
@@ -13,21 +12,34 @@ function DealCard({ props, setDeal, deal }) {
     };
     function dragStartDeal(e) {
         e.target.classList.add("selected");
+        e.target.closest(".container__dealCarde").classList.remove("hover");
+
+        let id = e.target.id;
+        setDeal(id);
     }
 
     function dragEndDeal(e) {
         e.target.classList.remove("selected");
-        let id = e.target.id;
-        setDeal(id);
+        e.target.closest(".container__dealCarde").classList.remove("hover");
     }
     function dropDeal(e) {
-        console.log(e);
-        let stage_id = e.target.closest(".container__dealCarde");
-        console.log(deal);
+        let stage_id = e.target.closest(".container__dealCarde").dataset
+            .stageid;
+        e.target.closest(".container__dealCarde").classList.remove("hover");
 
-        chanageDealCard(deal, stage_id).then((response) => {});
+        chanageDealCard(deal, stage_id).then((response) => {
+            getDeals(1).then((data) => {
+                setDeals(data);
+            });
+        });
     }
-    function dragOverDeal(e) {}
+    function dragOverDeal(e) {
+        if (e.target.classList.contains("container__dealCarde")) {
+            e.preventDefault();
+            e.target.closest(".container__dealCarde").classList.add("hover");
+        }
+        return;
+    }
 
     return (
         <div

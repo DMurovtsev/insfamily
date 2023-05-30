@@ -1,10 +1,16 @@
-import { updateStageName, changeStages } from "../../Api";
+import { updateStageName, changeStages, getStages, getDeals } from "../../Api";
 import { Button } from "../Elements/Button";
 import { CustomContext } from "../Service/Context";
-import { useContext, useEffect, useRef, useState } from "react";
-import { DeleteStage } from "./DeleteStage";
+import { useContext, useEffect, useState } from "react";
 
-function Stage({ props, setId, setStage }) {
+function Stage({
+    props,
+    setId,
+    setStage,
+    setCurrentStage,
+    currentStage,
+    setDeals,
+}) {
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState(props.stage.name);
 
@@ -74,40 +80,78 @@ function Stage({ props, setId, setStage }) {
     const admin = useContext(CustomContext);
     const [sort, setSort] = useState();
     const [stageId, setStageId] = useState();
-    const [currentStage, setCurrentStage] = useState();
     function dragStart(e) {
-        setCurrentStage(props.stage);
+        setCurrentStage({ ...currentStage, stage: props.stage });
         e.target.classList.add("selected");
         setStageId(props.stage.id);
         setSort(props.stage.sort);
     }
     function dragEnd(e) {
+        document.querySelectorAll(".dragRight").forEach((item) => {
+            item.classList.remove("dragRight");
+        });
+        document.querySelectorAll(".dragLeft").forEach((item) => {
+            item.classList.remove("dragLeft");
+        });
         e.target.classList.remove("selected");
+        changeStages(currentStage).then((response) => {
+            getStages(1).then((data) => {
+                setStage(data);
+            });
+            getDeals(1).then((data) => {
+                setDeals(data);
+            });
+        });
     }
     /*Для того чтобы элементы раздвигались*/
     function dragOver(e, currentStage) {
-        e.preventDefault();
         if (
-            e.currentTarget.classList.contains(
-                "containerFlex__header_single"
-            ) &&
-            e.currentTarget.dataset.id != stageId
+            e.currentTarget.classList.contains("containerFlex__header_single")
         ) {
-            console.log(currentStage);
-
-            // console.log(e.currentTarget.dataset.sort);
-            // console.log(sort);
-
-            if (e.currentTarget.dataset.sort > sort) {
-                e.currentTarget.classList.add("dragLeft");
-            } else {
-                e.currentTarget.classList.add("dragRight");
+            e.preventDefault();
+            if (e.currentTarget.classList.contains("dragLeft")) {
+                e.currentTarget.classList.remove("dragLeft");
+                setCurrentStage({
+                    ...currentStage,
+                    target: e.currentTarget.dataset.id,
+                    position: "bef",
+                });
+                return;
             }
-        }
+            if (e.currentTarget.classList.contains("dragRight")) {
+                e.currentTarget.classList.remove("dragRight");
+                setCurrentStage({
+                    ...currentStage,
+                    target: e.currentTarget.dataset.id,
+                    position: "aft",
+                });
+                return;
+            }
+            if (
+                e.currentTarget.classList.contains(
+                    "containerFlex__header_single"
+                ) &&
+                e.currentTarget.dataset.id != currentStage.stage.id
+            ) {
+                if (e.currentTarget.dataset.sort > currentStage.stage.sort) {
+                    e.currentTarget.classList.add("dragLeft");
+                    setCurrentStage({
+                        ...currentStage,
+                        target: e.currentTarget.dataset.id,
+                        position: "aft",
+                    });
+                } else {
+                    e.currentTarget.classList.add("dragRight");
+                    setCurrentStage({
+                        ...currentStage,
+                        target: e.currentTarget.dataset.id,
+                        position: "bef",
+                    });
+                }
+            }
+        } else return;
     }
-    function drop(e) {
-        let endId = e.currentTarget.dataset.id;
-    }
+    function drop(e) {}
 
     return (
         <div
