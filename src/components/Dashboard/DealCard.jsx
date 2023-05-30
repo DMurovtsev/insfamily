@@ -14,9 +14,7 @@ function DealCard({ props, setDeal, deal }) {
     function dragStartDeal(e) {
         e.target.classList.add("selected");
     }
-    // function dragLeaveDeal(e) {
-    //     e.preventDefault();
-    // }
+
     function dragEndDeal(e) {
         e.target.classList.remove("selected");
         let id = e.target.id;
