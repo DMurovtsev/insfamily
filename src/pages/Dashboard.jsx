@@ -19,6 +19,7 @@ import {
     getFunnels,
     getManagers,
     getDeals,
+    chanageDealCard,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
@@ -26,6 +27,7 @@ import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
 
 function Dashboard() {
     const [stages, setStage] = useState([]);
+    const [stageId, setStageId] = useState();
     const [deal, setDeal] = useState();
     const [currentDeal, setCurrentDeal] = useState();
     const [deals, setDeals] = useState([]);
@@ -111,6 +113,44 @@ function Dashboard() {
         { id: 2, name: "Сегодня не звонили" },
     ];
 
+    function onDragEnterArhive(e) {
+        e.target.classList.add("arhive");
+    }
+    function dragleaveArhive(e) {
+        e.target.classList.remove("arhive");
+    }
+
+    function onDragEnterPaid(e) {}
+    function dragleavePaid(e) {}
+    function onEnter(e) {}
+    function onleave(e) {
+        if (!e.currentTarget.classList.contains("paid")) {
+            return;
+        }
+        e.currentTarget.classList.remove("paid");
+    }
+    function drop(e) {
+        e.currentTarget.classList.remove("paid");
+
+        let dealColumn = e.target.closest(".dealColumn");
+        console.log(dealColumn);
+        let index = Array.from(
+            document.querySelectorAll(".dealColumn")
+        ).indexOf(dealColumn);
+        let stageId = document.querySelectorAll(
+            ".containerFlex__header_single"
+        )[index].dataset.id;
+        chanageDealCard(deal, stageId).then((response) => {
+            getDeals(1).then((data) => {
+                setDeals(data);
+            });
+        });
+    }
+    function dragOver(e) {
+        e.preventDefault();
+        e.currentTarget.classList.add("paid");
+    }
+
     return (
         <div>
             {id ? (
@@ -194,10 +234,21 @@ function Dashboard() {
                 </div>
                 <div className="container__dealCard_scroll">
                     {deals.map((item) => (
-                        <div>
+                        <div
+                            onDragEnter={(e) => {
+                                onEnter(e);
+                            }}
+                            onDragLeave={(e) => {
+                                onleave(e);
+                            }}
+                            className="dealColumn"
+                            onDrop={drop}
+                            onDragOver={dragOver}
+                        >
                             {item.map((dial) => {
                                 return (
                                     <DealCard
+                                        stageId={stageId}
                                         deal={deal}
                                         setDeal={setDeal}
                                         props={dial}
@@ -210,8 +261,20 @@ function Dashboard() {
                 </div>
             </div>
             <div className="main__bottom none">
-                <div className="main__botton_arhive">В архив</div>
-                <div className="main__botton_paid">Оплачено</div>
+                <div
+                    onDragEnter={onDragEnterArhive}
+                    onDragLeave={dragleaveArhive}
+                    className="main__botton_arhive"
+                >
+                    В архив
+                </div>
+                <div
+                    onDragEnter={onDragEnterPaid}
+                    onDragLeave={dragleavePaid}
+                    className="main__botton_paid"
+                >
+                    Оплачено
+                </div>
             </div>
         </div>
     );

@@ -1,6 +1,4 @@
-import { chanageDealCard, getDeals } from "../../Api";
-
-function DealCard({ props, setDeal, deal, setDeals }) {
+function DealCard({ props, setDeal }) {
     let discription = props.description;
     let user = props.user;
     let manager = {
@@ -11,34 +9,35 @@ function DealCard({ props, setDeal, deal, setDeals }) {
         client: `${clientName.first_name} ${clientName.last_name}`,
     };
     function dragStartDeal(e) {
+        document.querySelector(".main__bottom").classList.remove("none");
         e.target.classList.add("selected");
-        e.target.closest(".container__dealCarde").classList.remove("hover");
-
         let id = e.target.id;
         setDeal(id);
     }
 
     function dragEndDeal(e) {
+        e.preventDefault();
+        document.querySelector(".main__bottom").classList.add("none");
         e.target.classList.remove("selected");
-        e.target.closest(".container__dealCarde").classList.remove("hover");
     }
     function dropDeal(e) {
-        let stage_id = e.target.closest(".container__dealCarde").dataset
-            .stageid;
-        e.target.closest(".container__dealCarde").classList.remove("hover");
-
-        chanageDealCard(deal, stage_id).then((response) => {
-            getDeals(1).then((data) => {
-                setDeals(data);
-            });
-        });
+        // let dealColumn = e.target.closest(".dealColumn");
+        // console.log(dealColumn);
+        // let index = Array.from(
+        //     document.querySelectorAll(".dealColumn")
+        // ).indexOf(dealColumn);
+        // let stageId = document.querySelectorAll(
+        //     ".containerFlex__header_single"
+        // )[index].dataset.id;
+        // chanageDealCard(deal, stageId).then((response) => {
+        //     getDeals(1).then((data) => {
+        //         setDeals(data);
+        //     });
+        // });
     }
+    function enterDeal(e) {}
     function dragOverDeal(e) {
-        if (e.target.classList.contains("container__dealCarde")) {
-            e.preventDefault();
-            e.target.closest(".container__dealCarde").classList.add("hover");
-        }
-        return;
+        e.preventDefault();
     }
 
     return (
@@ -50,9 +49,6 @@ function DealCard({ props, setDeal, deal, setDeals }) {
                 draggable
                 id={props.id}
                 className="card"
-                onDragLeave={(e) => {
-                    // dragLeaveDeal(e);
-                }}
                 onDragStart={(e) => {
                     dragStartDeal(e);
                 }}
@@ -62,8 +58,9 @@ function DealCard({ props, setDeal, deal, setDeals }) {
                 onDragOver={(e) => {
                     dragOverDeal(e);
                 }}
-                onDrop={(e) => {
-                    dropDeal(e);
+                onDrop={dropDeal}
+                onDragEnter={(e) => {
+                    enterDeal(e);
                 }}
             >
                 {props.label === "new" ? (

@@ -80,6 +80,7 @@ function Stage({
     const admin = useContext(CustomContext);
     const [sort, setSort] = useState();
     const [stageId, setStageId] = useState();
+
     function dragStart(e) {
         setCurrentStage({ ...currentStage, stage: props.stage });
         e.target.classList.add("selected");
@@ -151,7 +152,7 @@ function Stage({
             }
         } else return;
     }
-    function drop(e) {}
+    // function drop(e) {}
 
     return (
         <div
@@ -166,7 +167,7 @@ function Stage({
             onDragOver={(e) => {
                 dragOver(e, currentStage);
             }}
-            onDrop={drop}
+            // onDrop={drop}
         >
             <div className={admin ? "containerStage" : "containerStageManager"}>
                 <div className="redactorStageDiv">
