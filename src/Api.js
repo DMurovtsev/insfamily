@@ -82,6 +82,7 @@ async function getFunnels() {
     });
     return await response.json();
 }
+
 /*Получение базового источника*/
 async function getBaseSource() {
     let response = await fetch(`${myHost}/basesource/`, {
@@ -204,9 +205,9 @@ async function getDeals(funnel_id) {
     });
     return await response.json();
 }
-async function addDiscription(discription, id) {
+async function addDiscription(description, id) {
     let formData = new FormData();
-    formData.append("description", discription);
+    formData.append("description", description);
     let response = await fetch(`${myHost}/deals/${id}/`, {
         method: "PATCH",
         headers: headers,
@@ -221,6 +222,27 @@ async function chanageDealCard(deal, stage_id) {
         method: "PATCH",
         headers: headers,
         body: formData,
+    });
+    return await response.json();
+}
+async function chanageStatusDealCard(deal, status_deal) {
+    let formData = new FormData();
+    formData.append("status", status_deal);
+    let response = await fetch(`${myHost}/deals/${deal}/`, {
+        method: "PATCH",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
+/*Добавление воронки*/
+async function addFunnels(funnelName) {
+    let formData = new FormData();
+    formData.append("name", funnelName);
+    let response = await fetch(`${myHost}/funnels/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
     });
     return await response.json();
 }
@@ -244,4 +266,6 @@ export {
     getDeals,
     addDiscription,
     chanageDealCard,
+    chanageStatusDealCard,
+    addFunnels,
 };

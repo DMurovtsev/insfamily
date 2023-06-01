@@ -10,6 +10,7 @@ function Stage({
     setCurrentStage,
     currentStage,
     setDeals,
+    idFunnel,
 }) {
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState(props.stage.name);
@@ -96,12 +97,14 @@ function Stage({
         });
         e.target.classList.remove("selected");
         changeStages(currentStage).then((response) => {
-            getStages(1).then((data) => {
-                setStage(data);
-            });
-            getDeals(1).then((data) => {
-                setDeals(data);
-            });
+            if (idFunnel) {
+                getStages(idFunnel.id).then((data) => {
+                    setStage(data);
+                });
+                getDeals(idFunnel.id).then((data) => {
+                    setDeals(data);
+                });
+            }
         });
     }
     /*Для того чтобы элементы раздвигались*/
@@ -152,7 +155,6 @@ function Stage({
             }
         } else return;
     }
-    // function drop(e) {}
 
     return (
         <div

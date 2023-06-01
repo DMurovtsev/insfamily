@@ -20,6 +20,7 @@ import {
     getManagers,
     getDeals,
     chanageDealCard,
+    chanageStatusDealCard,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
@@ -27,6 +28,7 @@ import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
 
 function Dashboard() {
     const [stages, setStage] = useState([]);
+    const [idFunnel, setIdFunnel] = useState();
     const [stageId, setStageId] = useState();
     const [deal, setDeal] = useState();
     const [currentDeal, setCurrentDeal] = useState();
@@ -45,14 +47,17 @@ function Dashboard() {
         getManagers().then((data) => {
             setManagers(data);
         });
-        getDeals(1).then((data) => {
-            setDeals(data);
-        });
-        getStages(1).then((data) => {
-            setStage(data);
-        });
         getFunnels().then((data) => {
-            setFunnels(data);
+            let funnelArr = data.results.filter((funnel) => {
+                let localId = localStorage.getItem("funnelId");
+                if (localId) {
+                    return funnel.id == localId;
+                } else {
+                    return funnel.id == 1;
+                }
+            });
+            setIdFunnel(funnelArr[0]);
+            setFunnels(data.results);
         });
         getClients().then((data) => {});
         getClientsBirthdayCount().then((data) => {});
@@ -68,11 +73,24 @@ function Dashboard() {
         list[1].classList.add("hovered");
     }, []);
 
+    useEffect(() => {
+        if (idFunnel) {
+            getDeals(idFunnel.id).then((data) => {
+                setDeals(data);
+            });
+            getStages(idFunnel.id).then((data) => {
+                setStage(data);
+            });
+        }
+    }, [idFunnel]);
+
+    /*Склеивание имени и фамилии менеджера*/
     const newManagersArr = managers.map((item) => ({
         ...item,
         name: `${item.first_name} ${item.last_name}`,
     }));
 
+    /*Отрисовка div создания этапа*/
     function showAddStage() {
         if (document.getElementById("addStage")) {
             document
@@ -80,6 +98,8 @@ function Dashboard() {
                 .classList.toggle("active");
         }
     }
+
+    /*Отрисовка div созданиz сделки*/
     function showCreateDeal() {
         if (document.querySelector(".container__PopUp_CreateDeal")) {
             document
@@ -87,7 +107,7 @@ function Dashboard() {
                 .classList.toggle("active");
         }
     }
-
+    /*onClick на сделки для открытия подробной сделки*/
     if (document.querySelector(".card")) {
         document.querySelectorAll(".card").forEach((card) => {
             card.onclick = () => {
@@ -103,6 +123,7 @@ function Dashboard() {
 
     const admin = useContext(CustomContext);
 
+    /*Наполнение статичных select*/
     const status = [
         { id: 1, name: "В архиве" },
         { id: 2, name: "Оплачено" },
@@ -113,6 +134,7 @@ function Dashboard() {
         { id: 2, name: "Сегодня не звонили" },
     ];
 
+    /*Отрисовка и стилизация div для смены статуса*/
     function onDragEnterArhive(e) {
         e.target.classList.add("arhive");
     }
@@ -120,8 +142,37 @@ function Dashboard() {
         e.target.classList.remove("arhive");
     }
 
-    function onDragEnterPaid(e) {}
-    function dragleavePaid(e) {}
+    function onDragEnterPaid(e) {
+        e.target.classList.add("sales");
+    }
+    function dragleavePaid(e) {
+        e.target.classList.remove("sales");
+    }
+    function dragOverPaid(e) {
+        e.preventDefault();
+    }
+
+    /*Смена статуса перетаскивая сделку*/
+    function dropPaid() {
+        let status_deal = "paid";
+        chanageStatusDealCard(deal, status_deal).then((response) => {
+            getDeals(idFunnel.id).then((data) => {
+                setDeals(data);
+            });
+            document
+                .querySelector(".container__NewPopUp")
+                .classList.add("active");
+        });
+    }
+    function dragOverArhive(e) {
+        e.preventDefault();
+    }
+    function dropArhive() {
+        let status_deal = "archived";
+        chanageStatusDealCard(deal, status_deal).then((response) => {});
+    }
+
+    /*Drag and Drop сделок*/
     function onEnter(e) {}
     function onleave(e) {
         if (!e.currentTarget.classList.contains("paid")) {
@@ -133,7 +184,7 @@ function Dashboard() {
         e.currentTarget.classList.remove("paid");
 
         let dealColumn = e.target.closest(".dealColumn");
-        console.log(dealColumn);
+
         let index = Array.from(
             document.querySelectorAll(".dealColumn")
         ).indexOf(dealColumn);
@@ -141,7 +192,7 @@ function Dashboard() {
             ".containerFlex__header_single"
         )[index].dataset.id;
         chanageDealCard(deal, stageId).then((response) => {
-            getDeals(1).then((data) => {
+            getDeals(idFunnel.id).then((data) => {
                 setDeals(data);
             });
         });
@@ -162,6 +213,8 @@ function Dashboard() {
                 <PopUpDeal
                     currentDeal={currentDeal}
                     setCurrentDeal={setCurrentDeal}
+                    setDeals={setDeals}
+                    idFunnel={idFunnel}
                 />
             ) : (
                 <></>
@@ -178,7 +231,15 @@ function Dashboard() {
             <PopUpNewDeal />
             <Calculations />
             <div className="container__header">
-                <Select_2 name="Воронка Продаж" options={funnels} />
+                <Select_2
+                    name="Воронка Продаж"
+                    options={funnels}
+                    setDeals={setDeals}
+                    setStage={setStage}
+                    setFunnels={setFunnels}
+                    setIdFunnel={setIdFunnel}
+                    idFunnel={idFunnel}
+                />
                 <Select first="В работе" name="Статус" options={status} />
                 <Select first="Все" name="Метка" options={label} />
                 <Select name="Тип полиса" options={typePolicies} />
@@ -216,6 +277,7 @@ function Dashboard() {
                                 setId={setId}
                                 setStage={setStage}
                                 setDeals={setDeals}
+                                idFunnel={idFunnel}
                             />
                         );
                     })}
@@ -230,7 +292,11 @@ function Dashboard() {
                         ""
                     )}
 
-                    <AddStage setDeals={setDeals} setStage={setStage} />
+                    <AddStage
+                        setDeals={setDeals}
+                        setStage={setStage}
+                        idFunnel={idFunnel}
+                    />
                 </div>
                 <div className="container__dealCard_scroll">
                     {deals.map((item) => (
@@ -265,6 +331,8 @@ function Dashboard() {
                     onDragEnter={onDragEnterArhive}
                     onDragLeave={dragleaveArhive}
                     className="main__botton_arhive"
+                    onDragOver={dragOverArhive}
+                    onDrop={dropArhive}
                 >
                     В архив
                 </div>
@@ -272,6 +340,8 @@ function Dashboard() {
                     onDragEnter={onDragEnterPaid}
                     onDragLeave={dragleavePaid}
                     className="main__botton_paid"
+                    onDragOver={dragOverPaid}
+                    onDrop={dropPaid}
                 >
                     Оплачено
                 </div>

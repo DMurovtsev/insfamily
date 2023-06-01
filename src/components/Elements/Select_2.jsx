@@ -1,9 +1,8 @@
-import { useEffect } from "react";
-import { CheckBox } from "./CheckBox";
-import { Input } from "./Input";
-import { logDOM } from "@testing-library/react";
+import { useEffect, useState } from "react";
+import { addFunnels, getStages, getDeals } from "../../Api";
 
-function Select_2({ options }) {
+function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
+    const [funnelLabel, setFunnelLabel] = useState();
     useEffect(() => {
         if (document.getElementById("Select_2__text")) {
             document.getElementById("Select_2__text").onclick = () => {
@@ -15,9 +14,8 @@ function Select_2({ options }) {
             document
                 .querySelectorAll(".Select_2__Option_all")
                 .forEach((item) => {
-                    console.log(item);
                     if (
-                        item.target.attributes[0].value ==
+                        item.attributes[0].value ==
                         localStorage.getItem("funnelId")
                     ) {
                         document.getElementById("Select_2__text").textContent =
@@ -32,18 +30,33 @@ function Select_2({ options }) {
 
     function show(i, e) {
         if (document.querySelector(".Select_2__text")) {
-            document.querySelector(".Select_2__text").textContent = i;
-            localStorage.setItem("funnelId", e.target.attributes[0].value);
+            document.querySelector(".Select_2__text").textContent = i.name;
+            localStorage.setItem("funnelId", e.target.attributes[1].value);
+            document.querySelector(".Select_2").classList.toggle("active");
+
+            setIdFunnel(i);
+
+            getDeals(idFunnel.id).then((data) => {
+                setDeals(data);
+            });
+            getStages(idFunnel.id).then((data) => {
+                setStage(data);
+            });
         }
     }
-    function addSalesFunnel() {}
 
+    function addSalesFunnel() {
+        let funnelName = document.getElementById("addFunnelInput").value;
+        addFunnels(funnelName).then((response) => {});
+    }
     return (
         <div className="Select_2">
-            <div id="Select_2__text" className="Select_2__text"></div>
+            <div id="Select_2__text" className="Select_2__text">
+                {idFunnel ? idFunnel.name : ""}
+            </div>
             <div className="Select_2__Option">
-                {options.results
-                    ? options.results.map((i) => (
+                {options
+                    ? options.map((i) => (
                           <div
                               className="Select_2__Option_all"
                               onClick={(e) => {
@@ -57,6 +70,7 @@ function Select_2({ options }) {
                     : ""}
                 <div className="input__select2">
                     <input
+                        id="addFunnelInput"
                         style={{ outline: "none" }}
                         type="text"
                         placeholder="Добавить воронку"

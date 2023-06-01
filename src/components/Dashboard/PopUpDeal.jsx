@@ -2,10 +2,9 @@ import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
 import { InputFile } from "../Elements/InputFile";
 import { useEffect } from "react";
-import { addDiscription } from "../../Api";
+import { addDiscription, getDeals } from "../../Api";
 
-function PopUpDeal({ currentDeal, setCurrentDeal }) {
-    console.log(currentDeal);
+function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
     useEffect(() => {
         const fileInput = document.getElementById("popUp_InputFile");
         const fileList = document.getElementById("content__PopUp_files");
@@ -165,17 +164,19 @@ function PopUpDeal({ currentDeal, setCurrentDeal }) {
     }
 
     function Discription() {
-        let discription = document.getElementById(
+        let description = document.getElementById(
             "inputFieldDiscription"
         ).value;
         let id = currentDeal.id;
-        addDiscription(discription, id).then((responce) => {});
+        addDiscription(description, id).then((responce) => {
+            getDeals(idFunnel).then((data) => {
+                setDeals(data);
+            });
+        });
     }
     function closePopUpDeal() {
         setCurrentDeal();
     }
-
-    console.log(currentDeal);
 
     return (
         <div id="container__PopUp" className="container__PopUp">

@@ -68,9 +68,13 @@ body {
     border-right: 1px solid var(--dark);
 }
 .arhive {
-    border-color: #b94848;
     /* box-shadow: 0px 0px 5px var(--red), 0px 0px 20px var(--red); */
     background: #e08080;
+    color: var(--white);
+}
+.sales {
+    /* box-shadow: 0px 0px 5px var(--red), 0px 0px 20px var(--red); */
+    background: #86d43e;
     color: var(--white);
 }
 .main__botton_paid {

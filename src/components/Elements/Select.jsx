@@ -37,7 +37,7 @@ function Select({
                 id={setId}
                 required="required"
             >
-                {first ? "" : <option></option>}
+                {first ? <option>{first}</option> : <option></option>}
 
                 {options
                     ? options.map((i) => <option value={i.id}>{i.name}</option>)

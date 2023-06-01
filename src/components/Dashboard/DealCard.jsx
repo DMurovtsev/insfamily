@@ -20,21 +20,7 @@ function DealCard({ props, setDeal }) {
         document.querySelector(".main__bottom").classList.add("none");
         e.target.classList.remove("selected");
     }
-    function dropDeal(e) {
-        // let dealColumn = e.target.closest(".dealColumn");
-        // console.log(dealColumn);
-        // let index = Array.from(
-        //     document.querySelectorAll(".dealColumn")
-        // ).indexOf(dealColumn);
-        // let stageId = document.querySelectorAll(
-        //     ".containerFlex__header_single"
-        // )[index].dataset.id;
-        // chanageDealCard(deal, stageId).then((response) => {
-        //     getDeals(1).then((data) => {
-        //         setDeals(data);
-        //     });
-        // });
-    }
+    function dropDeal(e) {}
     function enterDeal(e) {}
     function dragOverDeal(e) {
         e.preventDefault();

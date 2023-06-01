@@ -3,7 +3,7 @@ import { Input } from "../Elements/Input";
 import { createStages, getDeals } from "../../Api";
 import { useEffect } from "react";
 
-function AddStage({ setStage, setDeals }) {
+function AddStage({ setStage, setDeals, idFunnel }) {
     useEffect(() => {
         if (document.getElementById("cancelAddStage")) {
             document.getElementById("cancelAddStage").onclick = () => {
@@ -17,15 +17,17 @@ function AddStage({ setStage, setDeals }) {
 
     function addNewStage() {
         let addNewStage = document.getElementById("inputAddNewStage").value;
-        createStages(1, addNewStage).then((response) => {
-            setStage(response);
-            getDeals(1).then((data) => {
-                setDeals(data);
+        if (idFunnel) {
+            createStages(idFunnel.id, addNewStage).then((response) => {
+                setStage(response);
+                getDeals(idFunnel.id).then((data) => {
+                    setDeals(data);
+                });
+                document
+                    .querySelector(".container__addStage")
+                    .classList.remove("active");
             });
-            document
-                .querySelector(".container__addStage")
-                .classList.remove("active");
-        });
+        }
     }
 
     return (
