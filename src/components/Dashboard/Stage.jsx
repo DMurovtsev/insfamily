@@ -26,6 +26,9 @@ function Stage({
         e.target.parentNode.parentNode.parentNode.firstChild.classList.toggle(
             "active"
         );
+        e.target.parentNode.parentNode.parentNode.firstChild.classList.remove(
+            "active"
+        );
         setEditing(true);
         if (document.getElementById("inputUpdateStage")) {
             document.getElementById("inputUpdateStage").focus();

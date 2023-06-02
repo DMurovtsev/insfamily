@@ -1,29 +1,76 @@
 import { useEffect } from "react";
 import { Input } from "../Elements/Input";
 import { Select } from "../Elements/Select";
-function Calculations() {
+import { Button } from "../Elements/Button";
+import { addCalc, deleteCalc } from "../../Api";
+function Calculations({ companiesL, deal, currentDeal }) {
     useEffect(() => {}, []);
+
+    function closeCalculation() {
+        document
+            .querySelector(".container__Calculations")
+            .classList.remove("active");
+    }
+    function createCalc() {
+        if (document.getElementById("selectCompaniesL")) {
+            let companies_option =
+                document.getElementById("selectCompaniesL").value;
+            let sum = document.getElementById("inputSum").value;
+            addCalc(deal, companies_option, sum).then((response) => {});
+        }
+    }
+    function deleteCalcs(e, id) {
+        deleteCalc(id).then((response) => {
+            e.target.parentNode.remove();
+        });
+    }
     return (
         <div className="container__Calculations">
             <div className="content__Calculations">
-                <h3>Расчёты </h3>
-                <div className="input__Calculations">
-                    <label htmlFor="">Сбербанк </label>
-                    <input style={{ textAlign: "center" }} type="number" />
-                    <div className="deleteCalcInput">
-                        <ion-icon name="close-circle-outline"></ion-icon>
-                    </div>
+                <h3>Расчёты</h3>
+                <div className="list__Calculations">
+                    {currentDeal.calcs.length > 0
+                        ? currentDeal.calcs.map((item) => (
+                              <div className="list__Calculations_div">
+                                  {item.company.name} {item.value}{" "}
+                                  <div
+                                      onClick={(e) => {
+                                          deleteCalcs(e, item.id);
+                                      }}
+                                      className="trash-outline"
+                                  >
+                                      <ion-icon name="trash-outline"></ion-icon>
+                                  </div>
+                              </div>
+                          ))
+                        : ""}
                 </div>
-                <div className="input__Calculations">
-                    <label htmlFor="">Альфабанк </label>
-                    <input style={{ textAlign: "center" }} type="number" />
-                    <div className="deleteCalcInput">
-                        <ion-icon name="close-circle-outline"></ion-icon>
-                    </div>
-                </div>
+
                 <div className="container__flex_calc">
-                    <Select name="Компания" />{" "}
-                    <Input style="inputBox__small" name="Сумма" />
+                    <Select
+                        setId="selectCompaniesL"
+                        name="Компания"
+                        options={companiesL}
+                    />
+                    <Input
+                        setId="inputSum"
+                        step="0.1"
+                        type="number"
+                        style="inputBox__small"
+                        name="Сумма"
+                    />
+                </div>
+                <div className="flexBtn">
+                    <Button
+                        onClick={createCalc}
+                        name="Создать"
+                        style="button_green"
+                    />
+                    <Button
+                        onClick={closeCalculation}
+                        name="Отмена"
+                        style="button_red"
+                    />
                 </div>
             </div>
         </div>

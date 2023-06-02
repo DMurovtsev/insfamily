@@ -246,6 +246,74 @@ async function addFunnels(funnelName) {
     });
     return await response.json();
 }
+async function chanageLabelDealCard(deal, label_deal) {
+    let formData = new FormData();
+    formData.append("label", label_deal);
+    let response = await fetch(`${myHost}/deals/${deal}/`, {
+        method: "PATCH",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
+async function addComments(deal_id, comment_content) {
+    let formData = new FormData();
+    formData.append("deal", deal_id);
+    formData.append("content", comment_content);
+    let response = await fetch(`${myHost}/comments/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getCompaniesL() {
+    let response = await fetch(`${myHost}/companies/l/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getReasonForFailure() {
+    let response = await fetch(`${myHost}/reason_for_failure/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function chooseReasonForFailure(deal, reason_for_failure) {
+    let formData = new FormData();
+    formData.append("reason_for_failure_id", reason_for_failure);
+    let response = await fetch(`${myHost}/deals/${deal}/`, {
+        method: "PATCH",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
+async function addCalc(deal, companies_option, sum) {
+    let formData = new FormData();
+    formData.append("deal_id", deal);
+    formData.append("company_id", companies_option);
+    formData.append("value", sum);
+    let response = await fetch(`${myHost}/calc/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getCalc() {
+    let response = await fetch(`${myHost}/calc/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function deleteCalc(id) {
+    let response = await fetch(`${myHost}/calc/${id}/`, {
+        method: "DELETE",
+        headers: headers,
+    });
+    return await response.json();
+}
 export {
     Login,
     loging,
@@ -268,4 +336,12 @@ export {
     chanageDealCard,
     chanageStatusDealCard,
     addFunnels,
+    chanageLabelDealCard,
+    addComments,
+    getCompaniesL,
+    getReasonForFailure,
+    chooseReasonForFailure,
+    addCalc,
+    getCalc,
+    deleteCalc,
 };

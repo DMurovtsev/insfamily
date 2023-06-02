@@ -6,7 +6,6 @@ import { Input } from "../components/Elements/Input";
 import { DealCard } from "../components/Dashboard/DealCard";
 import { Stage } from "../components/Dashboard/Stage";
 import { CustomContext } from "../components/Service/Context";
-import { Calculations } from "../components/Dashboard/Calculations";
 import { PopUpDeal } from "../components/Dashboard/PopUpDeal";
 import { PopUpNewDeal } from "../components/Dashboard/PopUpNewDeal";
 
@@ -21,13 +20,20 @@ import {
     getDeals,
     chanageDealCard,
     chanageStatusDealCard,
+    chanageLabelDealCard,
+    getCompaniesL,
+    getReasonForFailure,
+    getCalc,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
 import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
 
 function Dashboard() {
+    const [currentPage, setCurrentPage] = useState("");
     const [stages, setStage] = useState([]);
+    const [companiesL, setCompaniesL] = useState([]);
+    const [reasonForFailure, setReasonForFailure] = useState([]);
     const [idFunnel, setIdFunnel] = useState();
     const [stageId, setStageId] = useState();
     const [deal, setDeal] = useState();
@@ -37,6 +43,7 @@ function Dashboard() {
     const [funnels, setFunnels] = useState([]);
     const [typePolicies, setTypePolicies] = useState();
     const [id, setId] = useState();
+
     const [currentStage, setCurrentStage] = useState({
         stage: {},
         target: "",
@@ -66,6 +73,14 @@ function Dashboard() {
         getTypiesPolicies().then((data) => {
             setTypePolicies(data);
         });
+        getCompaniesL().then((data) => {
+            setCompaniesL(data);
+        });
+
+        getReasonForFailure().then((data) => {
+            setReasonForFailure(data.results);
+        });
+
         let list = document.querySelectorAll(".navigation li");
         list.forEach((item) => {
             item.classList.remove("hovered");
@@ -83,6 +98,24 @@ function Dashboard() {
             });
         }
     }, [idFunnel]);
+
+    const scrollHandler = (e) => {
+        if (
+            e.target.scrollHeight -
+                (e.target.scrollTop + e.target.offsetHeight) <
+                100 &&
+            currentPage
+        ) {
+            getDeals(`?${currentPage}`).then((data) => {
+                setDeals([...deals, ...data.results]);
+                if (data.next) {
+                    setCurrentPage(data.next.split("?")[1]);
+                } else {
+                    setCurrentPage(null);
+                }
+            });
+        }
+    };
 
     /*Склеивание имени и фамилии менеджера*/
     const newManagersArr = managers.map((item) => ({
@@ -107,14 +140,27 @@ function Dashboard() {
                 .classList.toggle("active");
         }
     }
+
     /*onClick на сделки для открытия подробной сделки*/
     if (document.querySelector(".card")) {
         document.querySelectorAll(".card").forEach((card) => {
             card.onclick = () => {
                 deals.forEach((item) => {
                     let currentCard = item.filter((deal) => deal.id == card.id);
+
                     if (currentCard.length > 0) {
                         setCurrentDeal(currentCard[0]);
+                        if (currentCard[0].label == "new") {
+                            let label_deal = "no_call";
+                            let label_id = currentCard[0].id;
+                            chanageLabelDealCard(label_id, label_deal).then(
+                                (response) => {
+                                    getDeals(idFunnel.id).then((data) => {
+                                        setDeals(data);
+                                    });
+                                }
+                            );
+                        }
                     }
                 });
             };
@@ -169,6 +215,12 @@ function Dashboard() {
     }
     function dropArhive() {
         let status_deal = "archived";
+        setCurrentDeal();
+        if (document.querySelector(".container__ReasonForFailure")) {
+            document
+                .querySelector(".container__ReasonForFailure")
+                .classList.toggle("active");
+        }
         chanageStatusDealCard(deal, status_deal).then((response) => {});
     }
 
@@ -215,6 +267,8 @@ function Dashboard() {
                     setCurrentDeal={setCurrentDeal}
                     setDeals={setDeals}
                     idFunnel={idFunnel}
+                    reasonForFailure={reasonForFailure}
+                    companiesL={companiesL}
                 />
             ) : (
                 <></>
@@ -229,7 +283,7 @@ function Dashboard() {
                 deals={deals}
             />
             <PopUpNewDeal />
-            <Calculations />
+
             <div className="container__header">
                 <Select_2
                     name="Воронка Продаж"

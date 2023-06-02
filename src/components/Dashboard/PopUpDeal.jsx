@@ -2,9 +2,18 @@ import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
 import { InputFile } from "../Elements/InputFile";
 import { useEffect } from "react";
-import { addDiscription, getDeals } from "../../Api";
+import { addComments, addDiscription, getDeals } from "../../Api";
+import { ReasonForFailure } from "./ReasonForFailure";
+import { Calculations } from "./Calculations";
 
-function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
+function PopUpDeal({
+    currentDeal,
+    setCurrentDeal,
+    setDeals,
+    idFunnel,
+    reasonForFailure,
+    companiesL,
+}) {
     useEffect(() => {
         const fileInput = document.getElementById("popUp_InputFile");
         const fileList = document.getElementById("content__PopUp_files");
@@ -24,24 +33,6 @@ function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
                 }
             });
         }
-
-        const inputField = document.getElementById("inputField");
-        const outputField = document.getElementById("outputField");
-        const submitButton = document.getElementById("submitButton");
-        submitButton.addEventListener("click", () => {
-            outputField.innerText = inputField.value;
-        });
-
-        if (document.querySelector(".toggleBtn")) {
-            document.querySelector(".toggleBtn").onclick = () => {
-                document
-                    .querySelector(".container__PopUp")
-                    .classList.toggle("active");
-                document
-                    .querySelector(".container__Calculations")
-                    .classList.remove("active");
-            };
-        }
     }, []);
     function showPopUpNewDeal() {
         document.querySelector(".container__NewPopUp").classList.add("active");
@@ -51,6 +42,16 @@ function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
             .querySelector(".container__Calculations")
             .classList.toggle("active");
     }
+
+    function showReasonForFailure() {
+        // setCurrentDeal();
+        if (document.querySelector(".container__ReasonForFailure")) {
+            document
+                .querySelector(".container__ReasonForFailure")
+                .classList.toggle("active");
+        }
+    }
+    let deal = currentDeal.id;
 
     /*Валидация даты*/
     function checkDate(e) {
@@ -163,20 +164,30 @@ function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
         document.getElementById("popUpDealFioNew").value = current_deal.fio;
     }
 
+    /*Добавление заметки*/
     function Discription() {
         let description = document.getElementById(
             "inputFieldDiscription"
         ).value;
         let id = currentDeal.id;
         addDiscription(description, id).then((responce) => {
-            getDeals(idFunnel).then((data) => {
+            getDeals(idFunnel.id).then((data) => {
                 setDeals(data);
             });
         });
     }
     function closePopUpDeal() {
         setCurrentDeal();
+        document
+            .querySelector(".container__Calculations")
+            .classList.remove("active");
     }
+    function addComment() {
+        let comment_content = document.getElementById("inputAddComments").value;
+        let deal_id = currentDeal.id;
+        addComments(deal_id, comment_content).then((responce) => {});
+    }
+    console.log(currentDeal);
 
     return (
         <div id="container__PopUp" className="container__PopUp">
@@ -186,15 +197,15 @@ function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
                     <p>{currentDeal.date_create}</p>
                 </div>
 
-                <div id="outputField" className="content__PopUp_comments"></div>
+                <div className="content__PopUp_comments"></div>
                 <div className="content__PopUp_comment ">
                     <Input
-                        setId="inputField"
+                        setId="inputAddComments"
                         name="Добавить комментарий"
                         style="inputBox__standart"
                     />
                     <Button
-                        setId="submitButton"
+                        onClick={addComment}
                         style="button_green addComment"
                         name={<ion-icon name="arrow-up-outline"></ion-icon>}
                     />
@@ -215,7 +226,11 @@ function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
                         />
                     </div>
                     <div className="content__PopUp_btnNew">
-                        <Button style="button_red" name="В архив" />
+                        <Button
+                            onClick={showReasonForFailure}
+                            style="button_red"
+                            name="В архив"
+                        />
                         <Button
                             onClick={showPopUpNewDeal}
                             style="button_green"
@@ -319,6 +334,16 @@ function PopUpDeal({ currentDeal, setCurrentDeal, setDeals, idFunnel }) {
                     />
                 </div>
             </div>
+            <ReasonForFailure
+                setCurrentDeal={setCurrentDeal}
+                reasonForFailure={reasonForFailure}
+                deal={deal}
+            />
+            <Calculations
+                companiesL={companiesL}
+                deal={deal}
+                currentDeal={currentDeal}
+            />
         </div>
     );
 }

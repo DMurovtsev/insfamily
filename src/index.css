@@ -1224,8 +1224,17 @@ tbody tr:hover {
 }
 .content__container_top {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+}
+.content__container_top h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.content__container_top h6 {
+    text-align: left;
+    width: 60px;
 }
 .content__container_mid {
     margin: 5px;
@@ -1366,7 +1375,6 @@ tbody tr:hover {
     box-shadow: 0 0 15px var(--dark);
     background: #fff;
     z-index: 11;
-    display: flex;
 }
 
 .container__PopUpCreateDeal {
@@ -2038,29 +2046,27 @@ section {
 .container__Calculations {
     width: 0px;
     height: 0px;
-    position: fixed;
+    right: 0;
+    top: 0;
+    position: absolute;
     background: #fff;
     transition: 0.5s;
     border-radius: 25px;
     box-shadow: 0 0 15px var(--dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     visibility: hidden;
     opacity: 0;
-    /* transform: scale(0); */
+}
+
+.flexBtn {
+    display: flex;
 }
 .container__Calculations.active {
-    padding: 10px;
-    display: flex;
-    align-items: center;
     position: fixed;
     top: 380px;
-    right: 130px;
+    right: 230px;
     width: 350px;
     height: 350px;
-    z-index: 5;
-    display: flex;
+    z-index: 12;
     visibility: visible;
     opacity: 1;
     transition: 0.5s;
@@ -2084,11 +2090,26 @@ section {
     align-items: center;
     overflow-y: auto;
 }
-.input__Calculations {
+.list__Calculations {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    height: 150px;
+    box-shadow: 0 0 5px var(--black1);
+    border-radius: 15px;
     position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
+}
+.list__Calculations_div {
+    display: flex;
+    justify-content: space-around;
+}
+.trash-outline:hover {
+    color: red;
+    cursor: pointer;
 }
 .deleteCalcInput {
     font-size: larger;
@@ -2523,7 +2544,50 @@ section {
 .closeRedactorStage:hover {
     color: var(--red);
 }
+.container__ReasonForFailure {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 12;
+}
+.container__ReasonForFailure.active {
+    opacity: 1;
+    left: -500px;
+    bottom: 0;
+    visibility: visible;
+    transition: 0.5s;
+    position: absolute;
 
+    top: -60px;
+    min-width: 100vw;
+    min-height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 12;
+}
+.content__ReasonForFailure {
+    padding: 15px;
+    width: 300px;
+    position: relative;
+    height: 150px;
+    background: var(--grey);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 5px var(--white);
+    gap: 10px;
+    border-radius: 10px;
+}
 .contenerDeleteStage {
     position: absolute;
     left: -100px;

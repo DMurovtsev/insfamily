@@ -106,7 +106,7 @@ function DealCard({ props, setDeal }) {
                                         ""
                                     )}
 
-                                    {discription ? (
+                                    {discription.length > 50 ? (
                                         <>
                                             <span>
                                                 ... <br />
