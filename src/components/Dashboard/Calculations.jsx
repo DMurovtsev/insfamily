@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Input } from "../Elements/Input";
 import { Select } from "../Elements/Select";
 import { Button } from "../Elements/Button";
-import { addCalc, deleteCalc } from "../../Api";
-function Calculations({ companiesL, deal, currentDeal }) {
+import { addCalc, deleteCalc, getCalc } from "../../Api";
+function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
     useEffect(() => {}, []);
 
     function closeCalculation() {
@@ -16,16 +16,29 @@ function Calculations({ companiesL, deal, currentDeal }) {
             let companies_option =
                 document.getElementById("selectCompaniesL").value;
             let sum = document.getElementById("inputSum").value;
-            addCalc(deal, companies_option, sum).then((response) => {});
+            addCalc(deal, companies_option, sum).then((response) => {
+                getCalc(`?deal=${deal}`).then((data) => {
+                    setCurrentDeal({ ...currentDeal, calcs: data.results });
+                });
+            });
         }
     }
     function deleteCalcs(e, id) {
         deleteCalc(id).then((response) => {
-            e.target.parentNode.remove();
+            getCalc(`?deal=${deal}`).then((data) => {
+                setCurrentDeal({ ...currentDeal, calcs: data.results });
+            });
         });
     }
+
     return (
-        <div className="container__Calculations">
+        <div
+            className={
+                currentDeal.calcs.length > 0
+                    ? "container__Calculations active"
+                    : "container__Calculations"
+            }
+        >
             <div className="content__Calculations">
                 <h3>Расчёты</h3>
                 <div className="list__Calculations">

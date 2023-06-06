@@ -8,6 +8,8 @@ function Input({
     divId,
     type,
     step,
+    onBlur,
+    onKeyDown,
 }) {
     return (
         <div
@@ -20,11 +22,13 @@ function Input({
         >
             <input
                 onInput={onInput}
+                onBlur={onBlur}
                 id={setId}
                 type={type ? type : "text"}
                 required
                 value={value}
                 step={step ? step : ""}
+                onKeyDown={onKeyDown}
             />
             <span>
                 {logo}

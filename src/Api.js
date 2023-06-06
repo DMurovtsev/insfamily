@@ -199,8 +199,12 @@ async function createDeals(
     });
     return await response.json();
 }
-async function getDeals(funnel_id) {
-    let response = await fetch(`${myHost}/deals/?funnel_id=${funnel_id}`, {
+async function getDeals(funnel_id, search = "") {
+    let url = `${myHost}/deals/?funnel_id=${funnel_id}`;
+    if (search != "") {
+        url = url + `&search=${search}`;
+    }
+    let response = await fetch(url, {
         headers: headers,
     });
     return await response.json();
@@ -301,19 +305,40 @@ async function addCalc(deal, companies_option, sum) {
     });
     return await response.json();
 }
-async function getCalc() {
-    let response = await fetch(`${myHost}/calc/`, {
+async function getCalc(link = "") {
+    let response = await fetch(`${myHost}/calc/${link}`, {
         headers: headers,
     });
     return await response.json();
 }
 async function deleteCalc(id) {
-    let response = await fetch(`${myHost}/calc/${id}/`, {
+    return await fetch(`${myHost}/calc/${id}/`, {
         method: "DELETE",
+        headers: headers,
+    });
+}
+async function getSD() {
+    let response = await fetch(`${myHost}/sd/`, {
         headers: headers,
     });
     return await response.json();
 }
+async function getScrollDeals(currentPage) {
+    let response = await fetch(`${myHost}/deals/${currentPage}`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getFilterDeals(funnel_id, link) {
+    let response = await fetch(
+        `${myHost}/deals/?funnel_id=${funnel_id}/?link`,
+        {
+            headers: headers,
+        }
+    );
+    return await response.json();
+}
+
 export {
     Login,
     loging,
@@ -344,4 +369,7 @@ export {
     addCalc,
     getCalc,
     deleteCalc,
+    getSD,
+    getScrollDeals,
+    getFilterDeals,
 };

@@ -2,11 +2,18 @@ import { useEffect, useState } from "react";
 import { addFunnels, getStages, getDeals } from "../../Api";
 
 function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
-    const [funnelLabel, setFunnelLabel] = useState();
     useEffect(() => {
         if (document.getElementById("Select_2__text")) {
             document.getElementById("Select_2__text").onclick = () => {
                 document.querySelector(".Select_2").classList.toggle("active");
+                document.addEventListener("click", function eventClose(e) {
+                    if (!e.target.closest(".Select_2")) {
+                        document
+                            .querySelector(".Select_2")
+                            .classList.remove("active");
+                        document.removeEventListener("click", eventClose);
+                    }
+                });
             };
         }
 
@@ -27,17 +34,23 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
                 document.querySelectorAll(".Select_2__Option")[0].textContent;
         }
     }, []);
+    /*Функция закрыитя select_2 по клику вне его*/
+    function R(e) {
+        {
+            if (!e.target.closest(".Select_2")) {
+                document.querySelector(".Select_2").classList.remove("active");
+            }
+        }
+    }
 
     function show(i, e) {
         if (document.querySelector(".Select_2__text")) {
             document.querySelector(".Select_2__text").textContent = i.name;
             localStorage.setItem("funnelId", e.target.attributes[1].value);
             document.querySelector(".Select_2").classList.toggle("active");
-
             setIdFunnel(i);
-
             getDeals(idFunnel.id).then((data) => {
-                setDeals(data);
+                setDeals(data.results);
             });
             getStages(idFunnel.id).then((data) => {
                 setStage(data);
@@ -49,6 +62,7 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
         let funnelName = document.getElementById("addFunnelInput").value;
         addFunnels(funnelName).then((response) => {});
     }
+
     return (
         <div className="Select_2">
             <div id="Select_2__text" className="Select_2__text">

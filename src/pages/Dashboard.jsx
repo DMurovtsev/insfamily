@@ -23,7 +23,8 @@ import {
     chanageLabelDealCard,
     getCompaniesL,
     getReasonForFailure,
-    getCalc,
+    getSD,
+    getScrollDeals,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
@@ -43,6 +44,8 @@ function Dashboard() {
     const [funnels, setFunnels] = useState([]);
     const [typePolicies, setTypePolicies] = useState();
     const [id, setId] = useState();
+    const [sd, setSd] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const [currentStage, setCurrentStage] = useState({
         stage: {},
@@ -66,6 +69,16 @@ function Dashboard() {
             setIdFunnel(funnelArr[0]);
             setFunnels(data.results);
         });
+        // getDeals(idFunnel).then((data) => {
+        //     setDeals(data.results);
+        //     console.log(data);
+        //     if (data.results.next) {
+        //         setCurrentPage(data.results.next.split("?")[1]);
+        //     } else {
+        //         setCurrentPage(null);
+        //     }
+        // });
+
         getClients().then((data) => {});
         getClientsBirthdayCount().then((data) => {});
         getClientsBirthday().then((data) => {});
@@ -75,6 +88,9 @@ function Dashboard() {
         });
         getCompaniesL().then((data) => {
             setCompaniesL(data);
+        });
+        getSD().then((data) => {
+            setSd(data.results);
         });
 
         getReasonForFailure().then((data) => {
@@ -91,7 +107,12 @@ function Dashboard() {
     useEffect(() => {
         if (idFunnel) {
             getDeals(idFunnel.id).then((data) => {
-                setDeals(data);
+                setDeals(data.results);
+                if (data.next_page) {
+                    setCurrentPage(data.next_page.split("/")[2]);
+                } else {
+                    setCurrentPage(null);
+                }
             });
             getStages(idFunnel.id).then((data) => {
                 setStage(data);
@@ -99,23 +120,32 @@ function Dashboard() {
         }
     }, [idFunnel]);
 
-    const scrollHandler = (e) => {
-        if (
-            e.target.scrollHeight -
-                (e.target.scrollTop + e.target.offsetHeight) <
-                100 &&
-            currentPage
-        ) {
-            getDeals(`?${currentPage}`).then((data) => {
-                setDeals([...deals, ...data.results]);
-                if (data.next) {
-                    setCurrentPage(data.next.split("?")[1]);
-                } else {
-                    setCurrentPage(null);
-                }
-            });
-        }
-    };
+    // const scrollHandler = (e) => {
+    //     if (
+    //         e.target.scrollHeight -
+    //             (e.target.scrollTop + e.target.offsetHeight) <
+    //             5 &&
+    //         currentPage &&
+    //         !loading
+    //     ) {
+    //         setLoading(true);
+    //         getScrollDeals(`?${currentPage}`).then((data) => {
+    //             setDeals([...deals, ...data.results]);
+
+    //             if (data.next_page) {
+    //                 setCurrentPage(data.next_page.split("/")[2]);
+    //             } else {
+    //                 setCurrentPage(null);
+    //             }
+    //             setLoading(false);
+    //         });
+    //     }
+    // };
+    // if (document.querySelector(".container__dealCard_scroll")) {
+    //     document
+    //         .querySelector(".container__dealCard_scroll")
+    //         .addEventListener("scroll", scrollHandler);
+    // }
 
     /*Склеивание имени и фамилии менеджера*/
     const newManagersArr = managers.map((item) => ({
@@ -130,6 +160,15 @@ function Dashboard() {
                 .querySelector(".container__addStage")
                 .classList.toggle("active");
         }
+    }
+    /*Поиск по Dashbord
+    Удаление пробелов в начале и конце строки*/
+    function Search(e) {
+        let search = e.target.value.trim().replace(/\s+/g, " ");
+        e.target.value = search;
+        getDeals(idFunnel.id, search).then((response) => {
+            setDeals(response.results);
+        });
     }
 
     /*Отрисовка div созданиz сделки*/
@@ -147,7 +186,6 @@ function Dashboard() {
             card.onclick = () => {
                 deals.forEach((item) => {
                     let currentCard = item.filter((deal) => deal.id == card.id);
-
                     if (currentCard.length > 0) {
                         setCurrentDeal(currentCard[0]);
                         if (currentCard[0].label == "new") {
@@ -156,7 +194,7 @@ function Dashboard() {
                             chanageLabelDealCard(label_id, label_deal).then(
                                 (response) => {
                                     getDeals(idFunnel.id).then((data) => {
-                                        setDeals(data);
+                                        setDeals(data.results);
                                     });
                                 }
                             );
@@ -203,7 +241,7 @@ function Dashboard() {
         let status_deal = "paid";
         chanageStatusDealCard(deal, status_deal).then((response) => {
             getDeals(idFunnel.id).then((data) => {
-                setDeals(data);
+                setDeals(data.results);
             });
             document
                 .querySelector(".container__NewPopUp")
@@ -245,7 +283,7 @@ function Dashboard() {
         )[index].dataset.id;
         chanageDealCard(deal, stageId).then((response) => {
             getDeals(idFunnel.id).then((data) => {
-                setDeals(data);
+                setDeals(data.results);
             });
         });
     }
@@ -298,7 +336,11 @@ function Dashboard() {
                 <Select first="Все" name="Метка" options={label} />
                 <Select name="Тип полиса" options={typePolicies} />
 
-                {admin === true ? <Select name="Отдел продаж" /> : ""}
+                {admin === true ? (
+                    <Select options={sd} name="Отдел продаж" />
+                ) : (
+                    ""
+                )}
 
                 {admin === true ? (
                     <Select options={newManagersArr} name="Менеджер" />
@@ -310,8 +352,13 @@ function Dashboard() {
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск"
                     style="inputBox__standart"
+                    setId="inputSearch"
+                    onKeyDown={(e) => {
+                        if (e.keyCode === 13) {
+                            Search(e);
+                        }
+                    }}
                 />
-                <Button name="Поиск" />
 
                 <Button
                     setId="createStage"

@@ -12,10 +12,6 @@ function Authorization() {
         list[11].classList.add("hovered");
     }, []);
 
-    // function handleClick() {
-
-    // }
-
     function LogIn() {
         if (document.getElementById("inputLoginId").value == "") {
             document.getElementById("inputLoginId").classList.add("red_border");
@@ -31,7 +27,6 @@ function Authorization() {
                 login: document.getElementById("inputLoginId").value,
                 password: document.getElementById("inputPasswordId").value,
             };
-
             Login(LoginArray).then((data) => {});
         }
     }

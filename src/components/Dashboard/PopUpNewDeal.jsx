@@ -127,11 +127,16 @@ function PopUpNewDeal() {
     let now = today.toLocaleDateString("ru-RU");
 
     /*Дата через год*/
-    const currentDate = new Date();
-    const nextYear = currentDate.getFullYear() + 1;
-    currentDate.setFullYear(nextYear);
-    const options = { year: "numeric", month: "numeric", day: "numeric" };
-    const ruDate = currentDate.toLocaleString("ru-RU", options);
+    function addYear() {
+        const dateInput = document.getElementById("dateNow");
+        const dateWithYearInput = document.getElementById("datePlusYear");
+        const dateValue = dateInput.value;
+        const date = new Date(dateValue);
+        date.setFullYear(date.getFullYear() + 1);
+        const options = { year: "numeric", month: "numeric", day: "numeric" };
+        const ruDate = date.toLocaleString("ru-RU", options);
+        dateWithYearInput.value = ruDate;
+    }
 
     /*Наполнение статичных select*/
     let selectOptionsPay = [
@@ -480,12 +485,15 @@ function PopUpNewDeal() {
                         name="Дата начала действия полиса"
                         style="inputBox__standart_popUp requared"
                         onInput={checkDate}
+                        onBlur={addYear}
+                        setId="dateNow"
                     />
                     <Input
                         name="Дата окончания полиса"
-                        value={ruDate}
+                        // value={ruDate}
                         style="inputBox__standart_popUp requared"
                         onInput={checkDate}
+                        setId="datePlusYear"
                     />
                 </div>
                 <div className="content__PopUp_btn">

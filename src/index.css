@@ -96,7 +96,7 @@ body {
     position: absolute;
     display: flex;
     top: 20px;
-    left: 0px;
+    left: 220px;
     gap: 10px;
 }
 .container__header_relative {
@@ -466,8 +466,9 @@ select:focus,
 /*Select2_0*/
 
 .Select_2 {
-    position: relative;
-    margin-top: 0px;
+    position: absolute;
+    top: -5px;
+    left: -210px;
     width: 200px;
     height: 50px;
 }
@@ -1087,6 +1088,7 @@ tbody tr:hover {
     position: absolute;
     overflow-y: scroll;
     top: 75px;
+    z-index: 2;
 }
 .containerFlex_Stage {
     width: 200px;
@@ -1361,13 +1363,18 @@ tbody tr:hover {
 /*PopUp Create Deal*/
 
 /*PopUpDeal*/
-
-.container__PopUp {
-    left: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.popUp__body {
+    width: 100vw;
+    height: 100vh;
     position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+}
+.container__PopUp {
+    top: 70px;
+    position: fixed;
+    left: 300px;
     width: 770px;
     height: 780px;
     transition: 0.5s;
@@ -2046,9 +2053,9 @@ section {
 .container__Calculations {
     width: 0px;
     height: 0px;
-    right: 0;
-    top: 0;
-    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    position: fixed;
     background: #fff;
     transition: 0.5s;
     border-radius: 25px;
@@ -2062,8 +2069,7 @@ section {
 }
 .container__Calculations.active {
     position: fixed;
-    top: 380px;
-    right: 230px;
+    right: -350px;
     width: 350px;
     height: 350px;
     z-index: 12;
@@ -2101,7 +2107,10 @@ section {
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 10px;
+    overflow-y: auto;
+    color: black;
 }
 .list__Calculations_div {
     display: flex;

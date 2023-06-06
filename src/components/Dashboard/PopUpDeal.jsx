@@ -1,7 +1,7 @@
 import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
 import { InputFile } from "../Elements/InputFile";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addComments, addDiscription, getDeals } from "../../Api";
 import { ReasonForFailure } from "./ReasonForFailure";
 import { Calculations } from "./Calculations";
@@ -13,27 +13,8 @@ function PopUpDeal({
     idFunnel,
     reasonForFailure,
     companiesL,
+    setCalc,
 }) {
-    useEffect(() => {
-        const fileInput = document.getElementById("popUp_InputFile");
-        const fileList = document.getElementById("content__PopUp_files");
-        if (fileInput) {
-            fileInput.addEventListener("change", (event) => {
-                fileList.innerHTML = "";
-                const files = event.target.files;
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const fileName = file.name;
-                    const fileSizeBytes = file.size;
-                    const fileSizeMB = fileSizeBytes / 1024 ** 2;
-                    const fileSizeMBSlice = fileSizeMB.toFixed(2);
-                    const listItem = document.createElement("div");
-                    listItem.innerHTML = `${fileName} (${fileSizeMBSlice} mb)`;
-                    fileList.appendChild(listItem);
-                }
-            });
-        }
-    }, []);
     function showPopUpNewDeal() {
         document.querySelector(".container__NewPopUp").classList.add("active");
     }
@@ -115,6 +96,8 @@ function PopUpDeal({
             form.classList.remove("red_border");
         }
     }
+    const [isMounted, setIsMounted] = useState(false);
+
     /*Валидация номера телефона */
     function validateInputPhone() {
         let form = document.getElementById("divPhoneClient");
@@ -178,172 +161,208 @@ function PopUpDeal({
     }
     function closePopUpDeal() {
         setCurrentDeal();
-        document
-            .querySelector(".container__Calculations")
-            .classList.remove("active");
     }
     function addComment() {
         let comment_content = document.getElementById("inputAddComments").value;
         let deal_id = currentDeal.id;
         addComments(deal_id, comment_content).then((responce) => {});
     }
-    console.log(currentDeal);
+
+    function M(e) {
+        {
+            if (!e.target.closest(".container__PopUp")) {
+                setCurrentDeal();
+            }
+        }
+    }
+    useEffect(() => {
+        const fileInput = document.getElementById("popUp_InputFile");
+        const fileList = document.getElementById("content__PopUp_files");
+        if (fileInput) {
+            fileInput.addEventListener("change", (event) => {
+                fileList.innerHTML = "";
+                const files = event.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const fileName = file.name;
+                    const fileSizeBytes = file.size;
+                    const fileSizeMB = fileSizeBytes / 1024 ** 2;
+                    const fileSizeMBSlice = fileSizeMB.toFixed(2);
+                    const listItem = document.createElement("div");
+                    listItem.innerHTML = `${fileName} (${fileSizeMBSlice} mb)`;
+                    fileList.appendChild(listItem);
+                }
+            });
+        }
+    }, []);
 
     return (
-        <div id="container__PopUp" className="container__PopUp">
-            <div className="content__PopUp">
-                <div className="content__PopUp_header">
-                    <p>{currentDeal.name}</p>
-                    <p>{currentDeal.date_create}</p>
-                </div>
-
-                <div className="content__PopUp_comments"></div>
-                <div className="content__PopUp_comment ">
-                    <Input
-                        setId="inputAddComments"
-                        name="Добавить комментарий"
-                        style="inputBox__standart"
-                    />
-                    <Button
-                        onClick={addComment}
-                        style="button_green addComment"
-                        name={<ion-icon name="arrow-up-outline"></ion-icon>}
-                    />
-                    <div className="content__PopUp_discription">
-                        {currentDeal.description}
+        <div onClick={M} className="popUp__body">
+            <div id="container__PopUp" className="container__PopUp">
+                <div className="content__PopUp">
+                    <div className="content__PopUp_header">
+                        <p>{currentDeal.name}</p>
+                        <p>{currentDeal.date_create}</p>
                     </div>
-                    <div className="content__PopUp_discriptionIn">
+
+                    <div className="content__PopUp_comments"></div>
+                    <div className="content__PopUp_comment ">
                         <Input
-                            setId="inputFieldDiscription"
-                            name="Добавить заметку"
+                            setId="inputAddComments"
+                            name="Добавить комментарий"
                             style="inputBox__standart"
                         />
                         <Button
-                            setId="submitButton"
-                            onClick={Discription}
-                            style="button_green  button_greenS"
+                            onClick={addComment}
+                            style="button_green addComment"
                             name={<ion-icon name="arrow-up-outline"></ion-icon>}
                         />
+                        <div className="content__PopUp_discription">
+                            {currentDeal.description}
+                        </div>
+                        <div className="content__PopUp_discriptionIn">
+                            <Input
+                                setId="inputFieldDiscription"
+                                name="Добавить заметку"
+                                style="inputBox__standart"
+                            />
+                            <Button
+                                setId="submitButton"
+                                onClick={Discription}
+                                style="button_green  button_greenS"
+                                name={
+                                    <ion-icon name="arrow-up-outline"></ion-icon>
+                                }
+                            />
+                        </div>
+                        <div className="content__PopUp_btnNew">
+                            <Button
+                                onClick={showReasonForFailure}
+                                style="button_red"
+                                name="В архив"
+                            />
+                            <Button
+                                onClick={showPopUpNewDeal}
+                                style="button_green"
+                                name="Оплачено"
+                            />
+
+                            <Button
+                                onClick={closePopUpDeal}
+                                style="toggleBtn"
+                                name="Отмена"
+                            />
+                        </div>
                     </div>
-                    <div className="content__PopUp_btnNew">
-                        <Button
-                            onClick={showReasonForFailure}
-                            style="button_red"
-                            name="В архив"
+
+                    <div className="content__PopUp_input">
+                        <Input
+                            value={currentDeal.price}
+                            name="Стоимость сделки"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            value={currentDeal.next_contact_date}
+                            name="Дата выполнения"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            value={currentDeal.policy.contact_person}
+                            name="ФИО клиента"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            setId="happyBithday"
+                            divId="divHappyBirthdayClient"
+                            name="Дата рождения клиента"
+                            style="inputBox__standart"
+                            onInput={checkDate}
+                            value={currentDeal.policy.policyholder.birthday}
+                        />
+                        <Input
+                            divId="divPhoneClient"
+                            setId="phoneClient"
+                            name="Телефон клиента"
+                            style="inputBox__standart"
+                            onInput={validateInputPhone}
+                            value={currentDeal.policy.policyholder.phone}
+                        />
+                        <Input
+                            divId="divEmailClient"
+                            setId="emailClient"
+                            name="Email Клиента"
+                            style="inputBox__standart"
+                            onInput={validateInputEmail}
+                            value={currentDeal.policy.policyholder.email}
+                        />
+                        <Input
+                            value={currentDeal.policy.policyholder.address}
+                            name="Регион клиента"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            value={currentDeal.policy.type.name}
+                            name="Тип полиса"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            value={currentDeal.policy.number}
+                            name="Серия и номер полиса"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            name="Объект страхования"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            value={currentDeal.policy.date_end}
+                            name="Дата окончания полиса"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            value={currentDeal.policy.company}
+                            name="Страховая компания"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            setId="popUpDealFioNew"
+                            name="ФИО страхователя"
+                            style="inputBox__standart popUpDealFioNew"
+                        />
+                        <Input
+                            name="Дополнительно"
+                            style="inputBox__standart"
+                        />
+                    </div>
+                    <div
+                        id="content__PopUp_files"
+                        className="content__PopUp_files"
+                    ></div>
+                    <div className="content__PopUp_InputFile">
+                        <InputFile
+                            setId="popUp_InputFile"
+                            name="Загрузить файл"
                         />
                         <Button
-                            onClick={showPopUpNewDeal}
+                            onClick={showPopUpCalculations}
+                            name="Расчёты"
                             style="button_green"
-                            name="Оплачено"
-                        />
-
-                        <Button
-                            onClick={closePopUpDeal}
-                            style="toggleBtn"
-                            name="Отмена"
                         />
                     </div>
-                </div>
-
-                <div className="content__PopUp_input">
-                    <Input
-                        value={currentDeal.price}
-                        name="Стоимость сделки"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        value={currentDeal.next_contact_date}
-                        name="Дата выполнения"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        value={currentDeal.policy.contact_person}
-                        name="ФИО клиента"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        setId="happyBithday"
-                        divId="divHappyBirthdayClient"
-                        name="Дата рождения клиента"
-                        style="inputBox__standart"
-                        onInput={checkDate}
-                        value={currentDeal.policy.policyholder.birthday}
-                    />
-                    <Input
-                        divId="divPhoneClient"
-                        setId="phoneClient"
-                        name="Телефон клиента"
-                        style="inputBox__standart"
-                        onInput={validateInputPhone}
-                        value={currentDeal.policy.policyholder.phone}
-                    />
-                    <Input
-                        divId="divEmailClient"
-                        setId="emailClient"
-                        name="Email Клиента"
-                        style="inputBox__standart"
-                        onInput={validateInputEmail}
-                        value={currentDeal.policy.policyholder.email}
-                    />
-                    <Input
-                        value={currentDeal.policy.policyholder.address}
-                        name="Регион клиента"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        value={currentDeal.policy.type.name}
-                        name="Тип полиса"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        value={currentDeal.policy.number}
-                        name="Серия и номер полиса"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        name="Объект страхования"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        value={currentDeal.policy.date_end}
-                        name="Дата окончания полиса"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        value={currentDeal.policy.company}
-                        name="Страховая компания"
-                        style="inputBox__standart"
-                    />
-                    <Input
-                        setId="popUpDealFioNew"
-                        name="ФИО страхователя"
-                        style="inputBox__standart popUpDealFioNew"
-                    />
-                    <Input name="Дополнительно" style="inputBox__standart" />
-                </div>
-                <div
-                    id="content__PopUp_files"
-                    className="content__PopUp_files"
-                ></div>
-                <div className="content__PopUp_InputFile">
-                    <InputFile setId="popUp_InputFile" name="Загрузить файл" />
-                    <Button
-                        onClick={showPopUpCalculations}
-                        name="Расчёты"
-                        style="button_green"
+                    <Calculations
+                        setCalc={setCalc}
+                        companiesL={companiesL}
+                        deal={deal}
+                        currentDeal={currentDeal}
+                        setCurrentDeal={setCurrentDeal}
                     />
                 </div>
+                <ReasonForFailure
+                    setCurrentDeal={setCurrentDeal}
+                    reasonForFailure={reasonForFailure}
+                    deal={deal}
+                />
             </div>
-            <ReasonForFailure
-                setCurrentDeal={setCurrentDeal}
-                reasonForFailure={reasonForFailure}
-                deal={deal}
-            />
-            <Calculations
-                companiesL={companiesL}
-                deal={deal}
-                currentDeal={currentDeal}
-            />
         </div>
     );
 }
