@@ -21,12 +21,12 @@ function Input({
             }
         >
             <input
+                defaultValue={value}
                 onInput={onInput}
                 onBlur={onBlur}
                 id={setId}
                 type={type ? type : "text"}
                 required
-                value={value}
                 step={step ? step : ""}
                 onKeyDown={onKeyDown}
             />

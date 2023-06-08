@@ -25,6 +25,7 @@ import {
     getReasonForFailure,
     getSD,
     getScrollDeals,
+    getFilterDeals,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
@@ -54,9 +55,11 @@ function Dashboard() {
     });
 
     useEffect(() => {
-        getManagers().then((data) => {
-            setManagers(data);
-        });
+        if (admin) {
+            getManagers().then((data) => {
+                setManagers(data);
+            });
+        }
         getFunnels().then((data) => {
             let funnelArr = data.results.filter((funnel) => {
                 let localId = localStorage.getItem("funnelId");
@@ -69,15 +72,6 @@ function Dashboard() {
             setIdFunnel(funnelArr[0]);
             setFunnels(data.results);
         });
-        // getDeals(idFunnel).then((data) => {
-        //     setDeals(data.results);
-        //     console.log(data);
-        //     if (data.results.next) {
-        //         setCurrentPage(data.results.next.split("?")[1]);
-        //     } else {
-        //         setCurrentPage(null);
-        //     }
-        // });
 
         getClients().then((data) => {});
         getClientsBirthdayCount().then((data) => {});
@@ -120,32 +114,35 @@ function Dashboard() {
         }
     }, [idFunnel]);
 
-    // const scrollHandler = (e) => {
-    //     if (
-    //         e.target.scrollHeight -
-    //             (e.target.scrollTop + e.target.offsetHeight) <
-    //             5 &&
-    //         currentPage &&
-    //         !loading
-    //     ) {
-    //         setLoading(true);
-    //         getScrollDeals(`?${currentPage}`).then((data) => {
-    //             setDeals([...deals, ...data.results]);
+    const scrollHandler = (e) => {
+        if (
+            e.target.scrollHeight -
+                (e.target.scrollTop + e.target.offsetHeight) <
+                5 &&
+            currentPage &&
+            !loading
+        ) {
+            setLoading(true);
+            getScrollDeals(`?${currentPage}`).then((data) => {
+                setDeals([...deals, ...data.results]);
 
-    //             if (data.next_page) {
-    //                 setCurrentPage(data.next_page.split("/")[2]);
-    //             } else {
-    //                 setCurrentPage(null);
-    //             }
-    //             setLoading(false);
-    //         });
-    //     }
-    // };
-    // if (document.querySelector(".container__dealCard_scroll")) {
-    //     document
-    //         .querySelector(".container__dealCard_scroll")
-    //         .addEventListener("scroll", scrollHandler);
-    // }
+                if (data.next_page) {
+                    setCurrentPage(data.next_page.split("/")[2]);
+                } else {
+                    setCurrentPage(null);
+                }
+                setLoading(false);
+            });
+        }
+    };
+
+    if (document.querySelector(".container__dealCard_scroll")) {
+        document.querySelector(".container__dealCard_scroll").onscroll = (
+            e
+        ) => {
+            scrollHandler(e);
+        };
+    }
 
     /*Склеивание имени и фамилии менеджера*/
     const newManagersArr = managers.map((item) => ({
@@ -205,17 +202,17 @@ function Dashboard() {
         });
     }
 
-    const admin = useContext(CustomContext);
+    const { admin } = useContext(CustomContext);
 
     /*Наполнение статичных select*/
     const status = [
-        { id: 1, name: "В архиве" },
-        { id: 2, name: "Оплачено" },
-        { id: 3, name: "Все" },
+        { id: "archived", name: "В архиве" },
+        { id: "paid", name: "Оплачено" },
+        { id: "all", name: "Все" },
     ];
     const label = [
-        { id: 1, name: "Новые" },
-        { id: 2, name: "Сегодня не звонили" },
+        { id: "new", name: "Новые" },
+        { id: "no_call", name: "Сегодня не звонили" },
     ];
 
     /*Отрисовка и стилизация div для смены статуса*/
@@ -260,6 +257,58 @@ function Dashboard() {
                 .classList.toggle("active");
         }
         chanageStatusDealCard(deal, status_deal).then((response) => {});
+    }
+
+    /*Функция фильтрации сделок по select*/
+
+    function filtrSelect() {
+        let labelValue = null;
+        if (document.getElementById("labelSelect").value != "all") {
+            labelValue = document.getElementById("labelSelect").value;
+        }
+        let statusValue = null;
+        if (document.getElementById("statusSelect").value != "all") {
+            statusValue = document.getElementById("statusSelect").value;
+        }
+        let typeValue = null;
+        if (document.getElementById("typeSelect").value != "") {
+            typeValue = document.getElementById("typeSelect").value;
+        }
+        let sdValue = null;
+        if (
+            document.getElementById("sdSelect") &&
+            document.getElementById("sdSelect").value != ""
+        ) {
+            sdValue = document.getElementById("sdSelect").value;
+        }
+
+        let managerValue = null;
+        if (
+            document.getElementById("managerSelect") &&
+            document.getElementById("managerSelect").value != ""
+        ) {
+            managerValue = document.getElementById("managerSelect").value;
+        }
+        let link = "";
+        if (labelValue) {
+            link = link + `&label=${labelValue}`;
+        }
+        if (statusValue) {
+            link = link + `&status=${statusValue}`;
+        }
+        if (typeValue) {
+            link = link + `&type_policy=${typeValue}`;
+        }
+        if (sdValue) {
+            link = link + `&sales_department=${sdValue}`;
+        }
+        if (managerValue) {
+            link = link + `&user=${managerValue}`;
+        }
+
+        getFilterDeals(idFunnel.id, link).then((data) => {
+            setDeals(data.results);
+        });
     }
 
     /*Drag and Drop сделок*/
@@ -332,18 +381,47 @@ function Dashboard() {
                     setIdFunnel={setIdFunnel}
                     idFunnel={idFunnel}
                 />
-                <Select first="В работе" name="Статус" options={status} />
-                <Select first="Все" name="Метка" options={label} />
-                <Select name="Тип полиса" options={typePolicies} />
+                <Select
+                    setId="statusSelect"
+                    onChange={filtrSelect}
+                    first="В работе"
+                    firstValue="in_work"
+                    name="Статус"
+                    options={status}
+                />
+                <Select
+                    setId="labelSelect"
+                    onChange={filtrSelect}
+                    first="Все"
+                    firstValue="all"
+                    name="Метка"
+                    options={label}
+                />
+                <Select
+                    setId="typeSelect"
+                    onChange={filtrSelect}
+                    name="Тип полиса"
+                    options={typePolicies}
+                />
 
                 {admin === true ? (
-                    <Select options={sd} name="Отдел продаж" />
+                    <Select
+                        setId="sdSelect"
+                        onChange={filtrSelect}
+                        options={sd}
+                        name="Отдел продаж"
+                    />
                 ) : (
                     ""
                 )}
 
                 {admin === true ? (
-                    <Select options={newManagersArr} name="Менеджер" />
+                    <Select
+                        setId="managerSelect"
+                        onChange={filtrSelect}
+                        options={newManagersArr}
+                        name="Менеджер"
+                    />
                 ) : (
                     ""
                 )}

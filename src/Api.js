@@ -33,7 +33,6 @@ async function loging() {
     let formData = new FormData();
     formData.append("username", "TAdmin");
     formData.append("password", "TAdmin");
-
     let response = await fetch(`${myHost}/j/api/token/`, {
         // credentials: "include",
         method: "POST",
@@ -46,7 +45,6 @@ async function loging() {
 async function getAccessToken() {
     let formData = new FormData();
     formData.append("refresh", localStorage.getItem("refresh"));
-
     let response = await fetch(`${myHost}/j/api/token/refresh/`, {
         method: "POST",
         body: formData,
@@ -137,7 +135,6 @@ async function createStages(id, name) {
 async function deleteStage(id, selectId) {
     let formData = new FormData();
     formData.append("stage", selectId);
-
     let response = await fetch(`${myHost}/stagefunnels/${id}/`, {
         method: "DELETE",
         headers: headers,
@@ -200,7 +197,7 @@ async function createDeals(
     return await response.json();
 }
 async function getDeals(funnel_id, search = "") {
-    let url = `${myHost}/deals/?funnel_id=${funnel_id}`;
+    let url = `${myHost}/deals/?funnel_id=${funnel_id}&status=in_work`;
     if (search != "") {
         url = url + `&search=${search}`;
     }
@@ -233,6 +230,16 @@ async function chanageStatusDealCard(deal, status_deal) {
     let formData = new FormData();
     formData.append("status", status_deal);
     let response = await fetch(`${myHost}/deals/${deal}/`, {
+        method: "PATCH",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
+async function redactorPopUpDeal(id, key, value) {
+    let formData = new FormData();
+    formData.append(key, value);
+    let response = await fetch(`${myHost}/deals/${id}/`, {
         method: "PATCH",
         headers: headers,
         body: formData,
@@ -331,11 +338,25 @@ async function getScrollDeals(currentPage) {
 }
 async function getFilterDeals(funnel_id, link) {
     let response = await fetch(
-        `${myHost}/deals/?funnel_id=${funnel_id}/?link`,
+        `${myHost}/deals/?funnel_id=${funnel_id}${link}`,
         {
             headers: headers,
         }
     );
+    return await response.json();
+}
+async function globalSearch(search) {
+    let url = `${myHost}/basepolicies/search/?search=${search}`;
+
+    let response = await fetch(url, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getScrollSearch(currentPage) {
+    let response = await fetch(`${myHost}${currentPage}`, {
+        headers: headers,
+    });
     return await response.json();
 }
 
@@ -372,4 +393,7 @@ export {
     getSD,
     getScrollDeals,
     getFilterDeals,
+    globalSearch,
+    getScrollSearch,
+    redactorPopUpDeal,
 };

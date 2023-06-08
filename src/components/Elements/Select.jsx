@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Input } from "./Input";
 
 function Select({
     divId,
@@ -11,6 +10,7 @@ function Select({
     name,
     onChange,
     first,
+    firstValue,
 }) {
     useEffect(() => {
         let inputBox__select = document.querySelectorAll(".inputBox__select");
@@ -37,7 +37,13 @@ function Select({
                 id={setId}
                 required="required"
             >
-                {first ? <option>{first}</option> : <option></option>}
+                {first ? (
+                    <option value={firstValue ? firstValue : null}>
+                        {first}
+                    </option>
+                ) : (
+                    <option></option>
+                )}
 
                 {options
                     ? options.map((i) => <option value={i.id}>{i.name}</option>)

@@ -14,14 +14,21 @@ import { ClientsBases } from "./pages/ClientsBases";
 import { Info } from "./components/Elements/Info";
 import { Authorization } from "./pages/Authorization";
 import { useEffect, useState } from "react";
-import { loging, getAccessToken } from "./Api";
+import { getAccessToken, loging } from "./Api";
 import { Context } from "./components/Service/Context";
+import { SearchResults } from "./pages/SearchResults";
 
 function App() {
+    const [admin, setAdmin] = useState();
+
     useEffect(() => {
         loging().then((data) => {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
+            setAdmin(data.a);
+
+            // getCookie("a");
+            // console.log(getCookie("a"));
         });
 
         // периодичное обновление access
@@ -32,9 +39,20 @@ function App() {
         }, 1000 * 60 * 4);
     }, []);
 
+    // function getCookie(name) {
+    //     const cookies = document.cookie.split(";");
+    //     for (let i = 0; i < cookies.length; i++) {
+    //         const cookie = cookies[i].trim();
+    //         if (cookie.split("=")[0] == name) {
+    //             return cookie.split("=")[1];
+    //         }
+    //     }
+    //     return null;
+    // }
+
     return (
         <div className="App">
-            <Context>
+            <Context admin={admin}>
                 <Router>
                     <SideBar />
                     <div className="main" id="main">
@@ -49,6 +67,10 @@ function App() {
                                 element={<Authorization />}
                             />
                             <Route path="/Analytics" element={<Analytics />} />
+                            <Route
+                                path="/SearchResults"
+                                element={<SearchResults />}
+                            />
                             <Route path="/Clients" element={<Clients />} />
                             <Route
                                 path="/ClientsBases"

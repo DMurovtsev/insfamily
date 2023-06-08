@@ -1,20 +1,31 @@
 import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
 import { InputFile } from "../Elements/InputFile";
-import { useEffect, useRef, useState } from "react";
-import { addComments, addDiscription, getDeals } from "../../Api";
+import { useEffect, useState } from "react";
+import {
+    addComments,
+    addDiscription,
+    getDeals,
+    redactorPopUpDeal,
+} from "../../Api";
 import { ReasonForFailure } from "./ReasonForFailure";
 import { Calculations } from "./Calculations";
 
 function PopUpDeal({
     currentDeal,
     setCurrentDeal,
-    setDeals,
     idFunnel,
     reasonForFailure,
     companiesL,
     setCalc,
 }) {
+    console.log(currentDeal);
+    function redactorDeal(e, i) {
+        let id = currentDeal.id;
+        let value = e.target.value;
+        let key = i;
+        redactorPopUpDeal(id, key, value).then((data) => {});
+    }
     function showPopUpNewDeal() {
         document.querySelector(".container__NewPopUp").classList.add("active");
     }
@@ -25,7 +36,6 @@ function PopUpDeal({
     }
 
     function showReasonForFailure() {
-        // setCurrentDeal();
         if (document.querySelector(".container__ReasonForFailure")) {
             document
                 .querySelector(".container__ReasonForFailure")
@@ -149,18 +159,11 @@ function PopUpDeal({
 
     /*Добавление заметки*/
     function Discription() {
-        let description = document.getElementById(
-            "inputFieldDiscription"
-        ).value;
+        let description = document.getElementById("textareaDiscription").value;
         let id = currentDeal.id;
         addDiscription(description, id).then((responce) => {
-            getDeals(idFunnel.id).then((data) => {
-                setDeals(data);
-            });
+            getDeals(idFunnel.id).then((data) => {});
         });
-    }
-    function closePopUpDeal() {
-        setCurrentDeal();
     }
     function addComment() {
         let comment_content = document.getElementById("inputAddComments").value;
@@ -218,22 +221,13 @@ function PopUpDeal({
                             name={<ion-icon name="arrow-up-outline"></ion-icon>}
                         />
                         <div className="content__PopUp_discription">
-                            {currentDeal.description}
-                        </div>
-                        <div className="content__PopUp_discriptionIn">
-                            <Input
-                                setId="inputFieldDiscription"
-                                name="Добавить заметку"
-                                style="inputBox__standart"
-                            />
-                            <Button
-                                setId="submitButton"
-                                onClick={Discription}
-                                style="button_green  button_greenS"
-                                name={
-                                    <ion-icon name="arrow-up-outline"></ion-icon>
-                                }
-                            />
+                            <textarea
+                                id="textareaDiscription"
+                                className="textareaDiscription"
+                                onBlur={Discription}
+                            >
+                                {currentDeal.description}
+                            </textarea>
                         </div>
                         <div className="content__PopUp_btnNew">
                             <Button
@@ -246,12 +240,6 @@ function PopUpDeal({
                                 style="button_green"
                                 name="Оплачено"
                             />
-
-                            <Button
-                                onClick={closePopUpDeal}
-                                style="toggleBtn"
-                                name="Отмена"
-                            />
                         </div>
                     </div>
 
@@ -260,11 +248,17 @@ function PopUpDeal({
                             value={currentDeal.price}
                             name="Стоимость сделки"
                             style="inputBox__standart"
+                            onBlur={(e, i) => {
+                                redactorDeal(e);
+                            }}
                         />
                         <Input
                             value={currentDeal.next_contact_date}
                             name="Дата выполнения"
                             style="inputBox__standart"
+                            onBlur={(e, i) => {
+                                redactorDeal(e, "next_contact_date");
+                            }}
                         />
                         <Input
                             value={currentDeal.policy.contact_person}
@@ -285,7 +279,6 @@ function PopUpDeal({
                             name="Телефон клиента"
                             style="inputBox__standart"
                             onInput={validateInputPhone}
-                            value={currentDeal.policy.policyholder.phone}
                         />
                         <Input
                             divId="divEmailClient"
@@ -293,7 +286,6 @@ function PopUpDeal({
                             name="Email Клиента"
                             style="inputBox__standart"
                             onInput={validateInputEmail}
-                            value={currentDeal.policy.policyholder.email}
                         />
                         <Input
                             value={currentDeal.policy.policyholder.address}
@@ -313,6 +305,9 @@ function PopUpDeal({
                         <Input
                             name="Объект страхования"
                             style="inputBox__standart"
+                            onBlur={(e, i) => {
+                                redactorDeal(e, "price");
+                            }}
                         />
                         <Input
                             value={currentDeal.policy.date_end}

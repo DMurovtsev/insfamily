@@ -25,6 +25,11 @@ function DealCard({ props, setDeal }) {
     function dragOverDeal(e) {
         e.preventDefault();
     }
+    const next_contact_date = props.next_contact_date;
+    let today = new Date();
+    let next = next_contact_date.split(".");
+    let newNext_contact_date = new Date(`${next[2]}-${next[1]}-${next[0]}`);
+    let classOpacity = newNext_contact_date > today;
 
     return (
         <div
@@ -34,7 +39,7 @@ function DealCard({ props, setDeal }) {
             <div
                 draggable
                 id={props.id}
-                className="card"
+                className={classOpacity ? "card opacity" : "card"}
                 onDragStart={(e) => {
                     dragStartDeal(e);
                 }}

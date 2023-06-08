@@ -8,8 +8,9 @@ import { HappyBirthdayClients } from "../Tools/HappyBirthdayClients";
 import { ProblemBook } from "../Tools/ProblemBook";
 import { LiveTape } from "../Tools/LiveTape";
 import { CustomContext } from "../Service/Context";
+import { globalSearch } from "../../Api";
 
-function SideBar() {
+function SideBar({}) {
     /*MenuToggle */
     const navigate = useNavigate();
     useEffect(() => {
@@ -44,7 +45,14 @@ function SideBar() {
             navigate(-1);
         };
     }, []);
-    const admin = useContext(CustomContext);
+    const { admin } = useContext(CustomContext);
+    console.log(admin);
+
+    function Search(e) {
+        if (document.getElementById("inputGlobalSearch").value) {
+            navigate("/SearchResults");
+        } else return;
+    }
 
     /*Добавление класса прпи новедении на list item*/
 
@@ -169,11 +177,18 @@ function SideBar() {
             </div>
             <div className="topbar">
                 <Input
+                    setId="inputGlobalSearch"
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск"
                     style="inputBox__standart_search"
+                    onBlur={Search}
+                    onKeyDown={(e) => {
+                        if (e.keyCode === 13) {
+                            Search(e);
+                        }
+                    }}
                 />
-                <Button name="Поиск" />
+
                 <Button setId="btnBack" name="Назад" />
             </div>
             <ToolsMenu />

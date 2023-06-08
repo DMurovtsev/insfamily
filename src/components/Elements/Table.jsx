@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { Loader } from "./Loader";
 
 function Table({ props, check, title, style }) {
-    useEffect(() => {}, []);
     if (props.length === 0) {
         return <Loader />;
     }

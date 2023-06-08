@@ -1,6 +1,5 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { InfoPopUp } from "../components/Service/InfoPopUp";
-import { Select_2 } from "../components/Elements/Select_2";
 
 function Administration() {
     useEffect(() => {

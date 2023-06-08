@@ -534,6 +534,9 @@ select:focus,
     bottom: 10px;
     z-index: 10;
 }
+.opacity {
+    opacity: 0.5;
+}
 
 .Select_2 .Select_2__Option {
     position: absolute;
@@ -737,17 +740,22 @@ button:hover i::after {
 /*Table*/
 
 .container__table {
-    position: absolute;
+    position: relative;
+    margin-top: 15px;
     /* min-height: 100vh; */
-    min-width: auto;
+    width: auto;
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .container__table_top {
     top: 100px;
 }
 .heading {
     text-align: start;
-    margin-bottom: 10px;
     color: var(--dark);
+    margin-bottom: 10px;
+    margin-top: 10px;
     width: auto;
     text-transform: uppercase;
     border-bottom: thick double var(--dark);
@@ -1478,7 +1486,7 @@ tbody tr:hover {
     flex-direction: column;
     align-items: end;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 9px;
 }
 .content__NewPopUp_container {
     align-items: flex-start;
@@ -1588,10 +1596,9 @@ tbody tr:hover {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
-    left: 200px;
+    left: 440px;
+    gap: 80px;
     bottom: -200px;
-    justify-content: space-around;
 }
 .content__PopUp_discriptionIn {
     position: absolute;
@@ -1637,19 +1644,27 @@ tbody tr:hover {
     box-shadow: 0 0 5px var(--dark);
 }
 .content__PopUp_discription {
-    top: 75px;
+    top: 70px;
     position: absolute;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     width: 400px;
     overflow-y: auto;
-    height: 95px;
+    height: 200px;
     color: var(--black1);
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 0 5px var(--dark);
     padding: 5px;
+    width: 400px;
+}
+.textareaDiscription {
+    border: none;
+    padding: 5px;
+    width: 400px;
+    height: 190px;
+    outline: none;
 }
 
 .content__PopUp_comment {
@@ -1678,7 +1693,8 @@ tbody tr:hover {
     border-radius: 25px;
     box-shadow: 0 0 15px var(--dark);
     position: fixed;
-    z-index: 10;
+    z-index: 20;
+    overflow-x: hidden;
 }
 .hover {
     border: 3px solid var(--green);
@@ -1695,7 +1711,7 @@ tbody tr:hover {
     justify-content: center;
     width: 370px;
     height: 780px;
-    z-index: 11;
+    z-index: 20;
 }
 
 .closeLiveTape {
@@ -1714,9 +1730,9 @@ tbody tr:hover {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
     top: 155px;
-    left: 410px;
+    left: 450px;
 }
 
 .content__NewPopUp_inputFile {
@@ -2599,7 +2615,7 @@ section {
 }
 .contenerDeleteStage {
     position: absolute;
-    left: -100px;
+    left: -150px;
     top: -60px;
     min-width: 100vw;
     min-height: 100vh;
@@ -2607,7 +2623,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2;
+    z-index: 12;
 }
 .contentDeleteStage {
     padding: 15px;
@@ -2654,4 +2670,9 @@ section {
 }
 .input__medium {
     width: 250px;
+}
+.table_thead {
+    position: sticky;
+    top: 0;
+    z-index: 15;
 }
