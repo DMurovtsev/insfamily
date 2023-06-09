@@ -3,13 +3,19 @@ import { Select } from "../Elements/Select";
 import { useContext, useEffect, useState } from "react";
 import { CustomContext } from "../Service/Context";
 import { Button } from "../Elements/Button";
-import { getBaseSource, createDeals, getDeals } from "../../Api";
+import {
+    getBaseSource,
+    createDeals,
+    getDeals,
+    createCar,
+    createIpoteca,
+} from "../../Api";
 import { InfoPopUp } from "../Service/InfoPopUp";
 
 function PopUpCreateDeal({
     typePolicies,
     stages,
-    newManagersArr,
+    managers,
     setDeals,
     setCurrentDeal,
 }) {
@@ -175,6 +181,7 @@ function PopUpCreateDeal({
             let email = document.getElementById("mailCreateDeals").value;
             let birthday = document.getElementById("dateCreateDeals").value;
             let address = document.getElementById("address").value;
+
             createDeals(
                 basesource_id,
                 type_policy,
@@ -198,6 +205,58 @@ function PopUpCreateDeal({
                     setDeals(data);
                 });
             });
+            if (document.getElementById("brandInput").value != "") {
+                let brand = document.getElementById("brandInput").value;
+                let year = document.getElementById("yearInput").value;
+                let vin = document.getElementById("vinInput").value;
+                let number = document.getElementById("gosNomerInput").value;
+                createCar(brand, number, vin, year).then((response) => {});
+            }
+            if (document.getElementById("ipotecaInput").value != "") {
+                let ipoteca = document.getElementById("ipotecaInput").value;
+                let bank = document.getElementById("bankInput").value;
+                createIpoteca(ipoteca, bank).then((response) => {});
+            }
+        }
+    }
+    const insObject = [
+        { id: "car", name: "Машина" },
+        { id: "ipoteca", name: "Ипотека" },
+    ];
+
+    function showCarObject() {
+        if (document.getElementById("selectInsObject")) {
+            if (document.getElementById("selectInsObject").value == "car") {
+                document
+                    .getElementById("brandDivInput")
+                    .classList.remove("none");
+
+                document
+                    .getElementById("gosNomerDivInput")
+                    .classList.remove("none");
+
+                document.getElementById("vinDivInput").classList.remove("none");
+
+                document
+                    .getElementById("yearDivInput")
+                    .classList.remove("none");
+            } else {
+                document.getElementById("brandDivInput").classList.add("none");
+                document
+                    .getElementById("gosNomerDivInput")
+                    .classList.add("none");
+
+                document.getElementById("vinDivInput").classList.add("none");
+
+                document.getElementById("yearDivInput").classList.add("none");
+            }
+        }
+        if (document.getElementById("selectInsObject").value == "ipoteca") {
+            document.getElementById("ipotecaDivInput").classList.remove("none");
+            document.getElementById("bankDivInput").classList.remove("none");
+        } else {
+            document.getElementById("ipotecaDivInput").classList.add("none");
+            document.getElementById("bankDivInput").classList.add("none");
         }
     }
 
@@ -228,9 +287,9 @@ function PopUpCreateDeal({
                 {admin ? (
                     <Select
                         setId="user"
-                        style="requared"
+                        style="requared "
                         name="Менеджер"
-                        options={newManagersArr}
+                        options={managers}
                     />
                 ) : (
                     ""
@@ -265,6 +324,49 @@ function PopUpCreateDeal({
                     style="input__medium"
                     name="Дата Рождения"
                     onInput={checkDate}
+                />
+                <Select
+                    setId="selectInsObject"
+                    style="inputBox__select_largest"
+                    name="Объект Страхования"
+                    options={insObject}
+                    onChange={showCarObject}
+                />
+                <Input
+                    divId="brandDivInput"
+                    setId="brandInput"
+                    style="input__medium none"
+                    name="Марка"
+                />
+                <Input
+                    setId="gosNomerInput"
+                    divId="gosNomerDivInput"
+                    style="input__medium none"
+                    name="Гос. Номер"
+                />
+                <Input
+                    setId="vinInput"
+                    divId="vinDivInput"
+                    style="input__medium none"
+                    name="VIN"
+                />
+                <Input
+                    setId="yearInput"
+                    divId="yearDivInput"
+                    style="input__medium none"
+                    name="Год выпуска"
+                />
+                <Input
+                    setId="ipotecaInput"
+                    divId="ipotecaDivInput"
+                    style="input__medium none"
+                    name="Ипотека"
+                />
+                <Input
+                    setId="bankInput"
+                    divId="bankDivInput"
+                    style="input__medium none"
+                    name="Банк"
                 />
 
                 <div className="content__PopUp_btn">

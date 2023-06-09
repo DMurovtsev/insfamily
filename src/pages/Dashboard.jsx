@@ -41,13 +41,12 @@ function Dashboard() {
     const [deal, setDeal] = useState();
     const [currentDeal, setCurrentDeal] = useState();
     const [deals, setDeals] = useState([]);
-    const [managers, setManagers] = useState([]);
+    const [managers, setManagers] = useState();
     const [funnels, setFunnels] = useState([]);
     const [typePolicies, setTypePolicies] = useState();
     const [id, setId] = useState();
     const [sd, setSd] = useState([]);
     const [loading, setLoading] = useState(false);
-
     const [currentStage, setCurrentStage] = useState({
         stage: {},
         target: "",
@@ -55,11 +54,6 @@ function Dashboard() {
     });
 
     useEffect(() => {
-        if (admin) {
-            getManagers().then((data) => {
-                setManagers(data);
-            });
-        }
         getFunnels().then((data) => {
             let funnelArr = data.results.filter((funnel) => {
                 let localId = localStorage.getItem("funnelId");
@@ -97,7 +91,6 @@ function Dashboard() {
         });
         list[1].classList.add("hovered");
     }, []);
-
     useEffect(() => {
         if (idFunnel) {
             getDeals(idFunnel.id).then((data) => {
@@ -145,10 +138,6 @@ function Dashboard() {
     }
 
     /*Склеивание имени и фамилии менеджера*/
-    const newManagersArr = managers.map((item) => ({
-        ...item,
-        name: `${item.first_name} ${item.last_name}`,
-    }));
 
     /*Отрисовка div создания этапа*/
     function showAddStage() {
@@ -201,8 +190,14 @@ function Dashboard() {
             };
         });
     }
-
     const { admin } = useContext(CustomContext);
+    useEffect(() => {
+        if (admin) {
+            getManagers().then((data) => {
+                setManagers(data);
+            });
+        }
+    }, [admin]);
 
     /*Наполнение статичных select*/
     const status = [
@@ -260,7 +255,6 @@ function Dashboard() {
     }
 
     /*Функция фильтрации сделок по select*/
-
     function filtrSelect() {
         let labelValue = null;
         if (document.getElementById("labelSelect").value != "all") {
@@ -340,6 +334,11 @@ function Dashboard() {
         e.preventDefault();
         e.currentTarget.classList.add("paid");
     }
+    if (managers) {
+        managers.forEach((user, i) => {
+            managers[i]["name"] = `${user.first_name} ${user.last_name}`;
+        });
+    }
 
     return (
         <div>
@@ -363,7 +362,7 @@ function Dashboard() {
 
             <PopUpCreateDeal
                 setCurrentDeal={setCurrentDeal}
-                newManagersArr={newManagersArr}
+                managers={managers}
                 typePolicies={typePolicies}
                 stages={stages}
                 setDeals={setDeals}
@@ -419,8 +418,8 @@ function Dashboard() {
                     <Select
                         setId="managerSelect"
                         onChange={filtrSelect}
-                        options={newManagersArr}
                         name="Менеджер"
+                        options={managers}
                     />
                 ) : (
                     ""

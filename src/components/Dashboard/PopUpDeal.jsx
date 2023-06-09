@@ -44,6 +44,8 @@ function PopUpDeal({
     }
     let deal = currentDeal.id;
 
+    console.log(currentDeal);
+
     /*Валидация даты*/
     function checkDate(e) {
         let happyB = document.getElementById("happyBithday");
@@ -304,6 +306,13 @@ function PopUpDeal({
                         />
                         <Input
                             name="Объект страхования"
+                            value={
+                                currentDeal.policy.car
+                                    ? currentDeal.policy.car.brand
+                                    : currentDeal.policy.ipoteka
+                                    ? currentDeal.policy.ipoteka
+                                    : ""
+                            }
                             style="inputBox__standart"
                             onBlur={(e, i) => {
                                 redactorDeal(e, "price");
@@ -315,7 +324,11 @@ function PopUpDeal({
                             style="inputBox__standart"
                         />
                         <Input
-                            value={currentDeal.policy.company}
+                            value={
+                                currentDeal.policy.company
+                                    ? currentDeal.policy.company.name
+                                    : ""
+                            }
                             name="Страховая компания"
                             style="inputBox__standart"
                         />
@@ -344,6 +357,7 @@ function PopUpDeal({
                             style="button_green"
                         />
                     </div>
+
                     <Calculations
                         setCalc={setCalc}
                         companiesL={companiesL}

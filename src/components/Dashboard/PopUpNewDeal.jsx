@@ -368,15 +368,6 @@ function PopUpNewDeal() {
     return (
         <div className="container__NewPopUp">
             <div className="content__NewPopUp">
-                <div className="content__NewPopUp_inputFile">
-                    {namesForFiles.map((item) => (
-                        <InputFile
-                            setId={Object.keys(item)[0]}
-                            name={Object.values(item)[0]}
-                            style="none"
-                        />
-                    ))}
-                </div>
                 <div className="content__PopUp_input content__NewPopUp_container">
                     <Select
                         setId="payId"
@@ -495,6 +486,15 @@ function PopUpNewDeal() {
                         onInput={checkDate}
                         setId="datePlusYear"
                     />
+                </div>
+                <div className="content__NewPopUp_inputFile">
+                    {namesForFiles.map((item) => (
+                        <InputFile
+                            setId={Object.keys(item)[0]}
+                            name={Object.values(item)[0]}
+                            style="none"
+                        />
+                    ))}
                 </div>
                 <div className="content__PopUp_btn">
                     <Button

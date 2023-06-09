@@ -359,6 +359,30 @@ async function getScrollSearch(currentPage) {
     });
     return await response.json();
 }
+async function createCar(brand, number, vin, year) {
+    let formData = new FormData();
+    formData.append("brand", brand);
+    formData.append("number", number);
+    formData.append("vin", vin);
+    formData.append("year", year);
+    let response = await fetch(`${myHost}/cars/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
+async function createIpoteca(ipoteca, bank) {
+    let formData = new FormData();
+    formData.append("ipoteca", ipoteca);
+    formData.append("bank", bank);
+    let response = await fetch(`${myHost}/mortgages/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -396,4 +420,6 @@ export {
     globalSearch,
     getScrollSearch,
     redactorPopUpDeal,
+    createCar,
+    createIpoteca,
 };
