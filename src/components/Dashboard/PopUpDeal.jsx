@@ -24,7 +24,7 @@ function PopUpDeal({
         let id = currentDeal.id;
         let value = e.target.value;
         let key = i;
-        redactorPopUpDeal(id, key, value).then((data) => {});
+        redactorPopUpDeal(key, value, id).then((data) => {});
     }
     function showPopUpNewDeal() {
         document.querySelector(".container__NewPopUp").classList.add("active");
@@ -43,8 +43,6 @@ function PopUpDeal({
         }
     }
     let deal = currentDeal.id;
-
-    console.log(currentDeal);
 
     /*Валидация даты*/
     function checkDate(e) {
@@ -251,7 +249,7 @@ function PopUpDeal({
                             name="Стоимость сделки"
                             style="inputBox__standart"
                             onBlur={(e, i) => {
-                                redactorDeal(e);
+                                redactorDeal(e, "price");
                             }}
                         />
                         <Input
@@ -315,7 +313,7 @@ function PopUpDeal({
                             }
                             style="inputBox__standart"
                             onBlur={(e, i) => {
-                                redactorDeal(e, "price");
+                                redactorDeal(e);
                             }}
                         />
                         <Input

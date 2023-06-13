@@ -236,9 +236,10 @@ async function chanageStatusDealCard(deal, status_deal) {
     });
     return await response.json();
 }
-async function redactorPopUpDeal(id, key, value) {
+async function redactorPopUpDeal(key, value, id) {
     let formData = new FormData();
     formData.append(key, value);
+
     let response = await fetch(`${myHost}/deals/${id}/`, {
         method: "PATCH",
         headers: headers,
