@@ -10,6 +10,7 @@ function Input({
     step,
     onBlur,
     onKeyDown,
+    none,
 }) {
     return (
         <div
@@ -21,6 +22,7 @@ function Input({
             }
         >
             <input
+                style={{ pointerEvents: none }}
                 defaultValue={value}
                 onInput={onInput}
                 onBlur={onBlur}

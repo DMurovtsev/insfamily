@@ -46,7 +46,6 @@ function SideBar({}) {
         };
     }, []);
     const { admin } = useContext(CustomContext);
-    console.log(admin);
 
     function Search(e) {
         if (document.getElementById("inputGlobalSearch").value) {

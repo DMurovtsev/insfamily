@@ -19,7 +19,6 @@ function PopUpDeal({
     companiesL,
     setCalc,
 }) {
-    console.log(currentDeal);
     function redactorDeal(e, i) {
         let id = currentDeal.id;
         let value = e.target.value;
@@ -30,9 +29,11 @@ function PopUpDeal({
         document.querySelector(".container__NewPopUp").classList.add("active");
     }
     function showPopUpCalculations() {
-        document
-            .querySelector(".container__Calculations")
-            .classList.toggle("active");
+        if (document.querySelector(".container__Calculations")) {
+            document
+                .querySelector(".container__Calculations")
+                .classList.toggle("active");
+        }
     }
 
     function showReasonForFailure() {
@@ -179,6 +180,15 @@ function PopUpDeal({
         }
     }
     useEffect(() => {
+        if (currentDeal.calcs[0]) {
+            document
+                .querySelector(".container__Calculations")
+                .classList.add("active");
+        } else {
+            document
+                .querySelector(".container__Calculations")
+                .classList.remove("active");
+        }
         const fileInput = document.getElementById("popUp_InputFile");
         const fileList = document.getElementById("content__PopUp_files");
         if (fileInput) {
@@ -198,6 +208,7 @@ function PopUpDeal({
             });
         }
     }, []);
+    console.log(currentDeal);
 
     return (
         <div onClick={M} className="popUp__body">
@@ -261,11 +272,13 @@ function PopUpDeal({
                             }}
                         />
                         <Input
+                            none="none"
                             value={currentDeal.policy.contact_person}
                             name="ФИО клиента"
                             style="inputBox__standart"
                         />
                         <Input
+                            none="none"
                             setId="happyBithday"
                             divId="divHappyBirthdayClient"
                             name="Дата рождения клиента"
@@ -274,6 +287,7 @@ function PopUpDeal({
                             value={currentDeal.policy.policyholder.birthday}
                         />
                         <Input
+                            none="none"
                             divId="divPhoneClient"
                             setId="phoneClient"
                             name="Телефон клиента"
@@ -281,6 +295,7 @@ function PopUpDeal({
                             onInput={validateInputPhone}
                         />
                         <Input
+                            none="none"
                             divId="divEmailClient"
                             setId="emailClient"
                             name="Email Клиента"
@@ -288,16 +303,19 @@ function PopUpDeal({
                             onInput={validateInputEmail}
                         />
                         <Input
+                            none="none"
                             value={currentDeal.policy.policyholder.address}
                             name="Регион клиента"
                             style="inputBox__standart"
                         />
                         <Input
+                            none="none"
                             value={currentDeal.policy.type.name}
                             name="Тип полиса"
                             style="inputBox__standart"
                         />
                         <Input
+                            none="none"
                             value={currentDeal.policy.number}
                             name="Серия и номер полиса"
                             style="inputBox__standart"
@@ -308,7 +326,7 @@ function PopUpDeal({
                                 currentDeal.policy.car
                                     ? currentDeal.policy.car.brand
                                     : currentDeal.policy.ipoteka
-                                    ? currentDeal.policy.ipoteka
+                                    ? currentDeal.policy.ipoteka.obj
                                     : ""
                             }
                             style="inputBox__standart"
@@ -316,12 +334,87 @@ function PopUpDeal({
                                 redactorDeal(e);
                             }}
                         />
+                        {currentDeal.policy.car ? (
+                            <Input
+                                name="Гос номер"
+                                value={
+                                    currentDeal.policy.car ? (
+                                        currentDeal.policy.car.number
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+                        {currentDeal.policy.car ? (
+                            <Input
+                                name="VIN"
+                                value={
+                                    currentDeal.policy.car ? (
+                                        currentDeal.policy.car.vin
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+                        {currentDeal.policy.car ? (
+                            <Input
+                                name="Год выпуска"
+                                value={
+                                    currentDeal.policy.car ? (
+                                        currentDeal.policy.car.year
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+                        {currentDeal.policy.ipoteka ? (
+                            <Input
+                                none="none"
+                                name="БАНК"
+                                value={
+                                    currentDeal.policy.ipoteka ? (
+                                        currentDeal.policy.ipoteka.bank.name
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+                        {currentDeal.policy.ipoteka ? (
+                            <Input
+                                none="none"
+                                name="Остаток"
+                                value={
+                                    currentDeal.policy.ipoteka ? (
+                                        currentDeal.policy.ipoteka.balance
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+
                         <Input
+                            none="none"
                             value={currentDeal.policy.date_end}
                             name="Дата окончания полиса"
                             style="inputBox__standart"
                         />
                         <Input
+                            none="none"
                             value={
                                 currentDeal.policy.company
                                     ? currentDeal.policy.company.name
@@ -331,11 +424,13 @@ function PopUpDeal({
                             style="inputBox__standart"
                         />
                         <Input
+                            none="none"
                             setId="popUpDealFioNew"
                             name="ФИО страхователя"
                             style="inputBox__standart popUpDealFioNew"
                         />
                         <Input
+                            none="none"
                             name="Дополнительно"
                             style="inputBox__standart"
                         />

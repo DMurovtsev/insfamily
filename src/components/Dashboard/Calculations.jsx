@@ -42,7 +42,7 @@ function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
             <div className="content__Calculations">
                 <h3>Расчёты</h3>
                 <div className="list__Calculations">
-                    {currentDeal.calcs > 0
+                    {currentDeal.calcs[0]
                         ? currentDeal.calcs.map((item) => (
                               <div className="list__Calculations_div">
                                   {item.company.name} {item.value}{" "}

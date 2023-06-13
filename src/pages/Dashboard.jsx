@@ -54,6 +54,7 @@ function Dashboard() {
     });
 
     useEffect(() => {
+        const socket = new WebSocket("wss://app.insfamily.ru:8001/ws/deals/");
         getFunnels().then((data) => {
             let funnelArr = data.results.filter((funnel) => {
                 let localId = localStorage.getItem("funnelId");
@@ -116,7 +117,7 @@ function Dashboard() {
             !loading
         ) {
             setLoading(true);
-            getScrollDeals(`?${currentPage}`).then((data) => {
+            getScrollDeals(`${currentPage}`).then((data) => {
                 setDeals([...deals, ...data.results]);
 
                 if (data.next_page) {
@@ -136,8 +137,6 @@ function Dashboard() {
             scrollHandler(e);
         };
     }
-
-    /*Склеивание имени и фамилии менеджера*/
 
     /*Отрисовка div создания этапа*/
     function showAddStage() {
@@ -436,12 +435,6 @@ function Dashboard() {
                         }
                     }}
                 />
-
-                <Button
-                    setId="createStage"
-                    name="Создать сделку"
-                    onClick={showCreateDeal}
-                />
             </div>
 
             <div className="containerFlex">
@@ -469,7 +462,11 @@ function Dashboard() {
                     ) : (
                         ""
                     )}
-
+                    <Button
+                        setId="createStage"
+                        name="Создать сделку"
+                        onClick={showCreateDeal}
+                    />
                     <AddStage
                         setDeals={setDeals}
                         setStage={setStage}

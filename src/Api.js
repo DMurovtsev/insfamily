@@ -171,7 +171,15 @@ async function createDeals(
     phone,
     email,
     birthday,
-    address
+    address,
+    brand,
+    number,
+    vin,
+    year,
+    ipoteca,
+    bank,
+    risk,
+    remainder
 ) {
     let formData = new FormData();
     formData.append("basesource_id", basesource_id);
@@ -188,6 +196,30 @@ async function createDeals(
     }
     if (address != "") {
         formData.append("address", address);
+    }
+    if (brand != "") {
+        formData.append("brand", brand);
+    }
+    if (number != "") {
+        formData.append("number", number);
+    }
+    if (vin != "") {
+        formData.append("vin", vin);
+    }
+    if (year != "") {
+        formData.append("year", year);
+    }
+    if (ipoteca != "") {
+        formData.append("ipoteca", ipoteca);
+    }
+    if (bank != "") {
+        formData.append("bank", bank);
+    }
+    if (risk != "") {
+        formData.append("obj", risk);
+    }
+    if (remainder != "") {
+        formData.append("remainder", remainder);
     }
     let response = await fetch(`${myHost}/deals/`, {
         method: "POST",
@@ -360,26 +392,32 @@ async function getScrollSearch(currentPage) {
     });
     return await response.json();
 }
-async function createCar(brand, number, vin, year) {
-    let formData = new FormData();
-    formData.append("brand", brand);
-    formData.append("number", number);
-    formData.append("vin", vin);
-    formData.append("year", year);
-    let response = await fetch(`${myHost}/cars/`, {
-        method: "POST",
-        body: formData,
-        headers: headers,
-    });
-    return await response.json();
-}
-async function createIpoteca(ipoteca, bank) {
-    let formData = new FormData();
-    formData.append("ipoteca", ipoteca);
-    formData.append("bank", bank);
-    let response = await fetch(`${myHost}/mortgages/`, {
-        method: "POST",
-        body: formData,
+// async function createCar(brand, number, vin, year) {
+//     let formData = new FormData();
+//     formData.append("brand", brand);
+//     formData.append("number", number);
+//     formData.append("vin", vin);
+//     formData.append("year", year);
+//     let response = await fetch(`${myHost}/cars/`, {
+//         method: "POST",
+//         body: formData,
+//         headers: headers,
+//     });
+//     return await response.json();
+// }
+// async function createIpoteca(ipoteca, idBank, valueBank) {
+//     let formData = new FormData();
+//     formData.append("ipoteca", ipoteca);
+//     formData.append(idBank, valueBank);
+//     let response = await fetch(`${myHost}/mortgages/`, {
+//         method: "POST",
+//         body: formData,
+//         headers: headers,
+//     });
+//     return await response.json();
+// }
+async function getBanks() {
+    let response = await fetch(`${myHost}/banks/l/`, {
         headers: headers,
     });
     return await response.json();
@@ -421,6 +459,5 @@ export {
     globalSearch,
     getScrollSearch,
     redactorPopUpDeal,
-    createCar,
-    createIpoteca,
+    getBanks,
 };
