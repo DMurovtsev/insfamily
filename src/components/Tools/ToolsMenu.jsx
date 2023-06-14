@@ -1,7 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getClientsBirthdayCount } from "../../Api";
 
 function ToolsMenu() {
+    const [clientsBirhday, setClientsBirhday] = useState();
+
     useEffect(() => {
+        getClientsBirthdayCount().then((data) => {
+            setClientsBirhday(data.count);
+        });
+
         let navigationToolsMenu = document.querySelector(
             ".navigationToolsMenu"
         );
@@ -9,11 +16,17 @@ function ToolsMenu() {
         if (navigationToolsMenu) {
             navigationToolsMenu.onclick = function () {
                 navigationToolsMenu.classList.add("active");
+                document
+                    .querySelector(".clientsBirhday")
+                    .classList.add("active");
             };
         }
         if (closeToolsMenu) {
             closeToolsMenu.onclick = function () {
                 navigationToolsMenu.classList.remove("active");
+                document
+                    .querySelector(".clientsBirhday")
+                    .classList.remove("active");
             };
         }
         let giftSpan = document.getElementById("giftSpan");
@@ -39,6 +52,7 @@ function ToolsMenu() {
             };
         }
     }, []);
+    console.log(clientsBirhday);
 
     return (
         <div className="mainToolsMenu">
@@ -46,6 +60,7 @@ function ToolsMenu() {
                 <span id="giftSpan" style={{ "--i": 0, "--x": -1, "--y": 0 }}>
                     <ion-icon name="gift-outline"></ion-icon>
                 </span>
+                <div className="clientsBirhday none">{clientsBirhday}</div>
 
                 <span id="createSpan" style={{ "--i": 1, "--x": 1, "--y": 0 }}>
                     <ion-icon name="create-outline"></ion-icon>

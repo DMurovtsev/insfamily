@@ -1,7 +1,7 @@
 import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
 import { InputFile } from "../Elements/InputFile";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
     addComments,
     addDiscription,
@@ -23,6 +23,7 @@ function PopUpDeal({
     setCalc,
     banks,
     insObjectRisk,
+    sockets,
 }) {
     function redactorDeal(e, i) {
         let id = currentDeal.id;
@@ -125,7 +126,6 @@ function PopUpDeal({
             form.classList.remove("red_border");
         }
     }
-    const [isMounted, setIsMounted] = useState(false);
 
     /*Валидация номера телефона */
     function validateInputPhone() {
@@ -181,7 +181,15 @@ function PopUpDeal({
         let description = document.getElementById("textareaDiscription").value;
         let id = currentDeal.id;
         addDiscription(description, id).then((responce) => {
-            getDeals(idFunnel.id).then((data) => {});
+            sockets.send(
+                JSON.stringify({
+                    type: "deals_upgrade",
+                    deal_id: id,
+                })
+            );
+            getDeals(idFunnel.id).then((data) => {
+                // setDeals(data);
+            });
         });
     }
     function addComment() {
@@ -226,7 +234,6 @@ function PopUpDeal({
             });
         }
     }, []);
-    console.log(currentDeal);
 
     return (
         <div onClick={M} className="popUp__body">
@@ -304,6 +311,7 @@ function PopUpDeal({
                             onInput={checkDate}
                             value={currentDeal.policy.policyholder.birthday}
                         />
+
                         <Input
                             none="none"
                             divId="divPhoneClient"
@@ -311,7 +319,9 @@ function PopUpDeal({
                             name="Телефон клиента"
                             style="inputBox__standart"
                             onInput={validateInputPhone}
+                            ion_icon="ion_icon"
                         />
+
                         <Input
                             none="none"
                             divId="divEmailClient"
@@ -487,6 +497,7 @@ function PopUpDeal({
                             style="inputBox__standart"
                         />
                     </div>
+
                     <div
                         id="content__PopUp_files"
                         className="content__PopUp_files"

@@ -412,6 +412,7 @@ async function getBanks() {
     });
     return await response.json();
 }
+
 async function redactorPopUpDealCars(carsId, key, value) {
     let formData = new FormData();
     formData.append(key, value);

@@ -34,6 +34,7 @@ import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
 
 function Dashboard() {
     const [banks, setBanks] = useState([]);
+    const [sockets, setSockets] = useState();
     const [currentPage, setCurrentPage] = useState("");
     const [stages, setStage] = useState([]);
     const [companiesL, setCompaniesL] = useState([]);
@@ -55,11 +56,29 @@ function Dashboard() {
         position: "",
     });
 
+    // if (sockets) {
+    //     sockets.onmessage = (e) => {
+    //         const data = JSON.parse(e.data);
+    //         const { type } = data;
+
+    //         if (type == "deals_upgrade") {
+    //             let newDeals = deals.map((deal) => {
+    //                 if (deal.id == data.deal.id) {
+    //                     return data.deal;
+    //                 } else {
+    //                     return deal;
+    //                 }
+    //             });
+    //             setDeals(newDeals);
+    //         }
+    //     };
+    // }
+
     useEffect(() => {
-        const socket = new WebSocket("wss://app.insfamily.ru:8001/ws/deals/");
         getBanks().then((data) => {
             setBanks(data);
         });
+
         getFunnels().then((data) => {
             let funnelArr = data.results.filter((funnel) => {
                 let localId = localStorage.getItem("funnelId");
@@ -97,6 +116,7 @@ function Dashboard() {
         });
         list[1].classList.add("hovered");
     }, []);
+
     useEffect(() => {
         if (idFunnel) {
             getDeals(idFunnel.id).then((data) => {
@@ -111,6 +131,31 @@ function Dashboard() {
                 setStage(data);
             });
         }
+        const socket = new WebSocket(
+            `wss://app.insfamily.ru:8001/ws/deals/?${localStorage.getItem(
+                "access"
+            )}`
+        );
+        socket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            const { type } = data;
+
+            if (type == "deals_upgrade") {
+                console.log(deals);
+                setDeals((prevDeals) => {
+                    return prevDeals.map((j) => {
+                        return j.map((deal) => {
+                            if (deal.id == data.deal.id) {
+                                return data.deal;
+                            } else {
+                                return deal;
+                            }
+                        });
+                    });
+                });
+            }
+        };
+        setSockets(socket);
     }, [idFunnel]);
 
     const scrollHandler = (e) => {
@@ -357,9 +402,6 @@ function Dashboard() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
-    useEffect(() => {
-        console.log(deals);
-    }, [deals]);
 
     return (
         <div>
@@ -378,6 +420,7 @@ function Dashboard() {
                     idFunnel={idFunnel}
                     reasonForFailure={reasonForFailure}
                     companiesL={companiesL}
+                    sockets={sockets}
                 />
             ) : (
                 <></>
@@ -391,7 +434,6 @@ function Dashboard() {
                 typePolicies={typePolicies}
                 stages={stages}
                 setDeals={setDeals}
-                deals={deals}
             />
             <PopUpNewDeal />
 
@@ -500,31 +542,35 @@ function Dashboard() {
                     />
                 </div>
                 <div className="container__dealCard_scroll">
-                    {deals.map((item) => (
-                        <div
-                            onDragEnter={(e) => {
-                                onEnter(e);
-                            }}
-                            onDragLeave={(e) => {
-                                onleave(e);
-                            }}
-                            className="dealColumn"
-                            onDrop={drop}
-                            onDragOver={dragOver}
-                        >
-                            {item.map((dial) => {
-                                return (
-                                    <DealCard
-                                        stageId={stageId}
-                                        deal={deal}
-                                        setDeal={setDeal}
-                                        props={dial}
-                                        setDeals={setDeals}
-                                    />
-                                );
-                            })}
-                        </div>
-                    ))}
+                    {deals ? (
+                        deals.map((item) => (
+                            <div
+                                onDragEnter={(e) => {
+                                    onEnter(e);
+                                }}
+                                onDragLeave={(e) => {
+                                    onleave(e);
+                                }}
+                                className="dealColumn"
+                                onDrop={drop}
+                                onDragOver={dragOver}
+                            >
+                                {item.map((dial) => {
+                                    return (
+                                        <DealCard
+                                            stageId={stageId}
+                                            deal={deal}
+                                            setDeal={setDeal}
+                                            props={dial}
+                                            setDeals={setDeals}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ))
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </div>
             <div className="main__bottom none">

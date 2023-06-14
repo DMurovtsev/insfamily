@@ -11,6 +11,7 @@ function Input({
     onBlur,
     onKeyDown,
     none,
+    ion_icon,
 }) {
     return (
         <div
@@ -35,6 +36,12 @@ function Input({
             <span>
                 {logo}
                 {name}
+                <div className="watsUp">
+                    {ion_icon ? <ion-icon name="logo-whatsapp"></ion-icon> : ""}
+                </div>
+                <div className="watsUpI">
+                    {ion_icon ? <ion-icon name="call-outline"></ion-icon> : ""}
+                </div>
             </span>
         </div>
     );
