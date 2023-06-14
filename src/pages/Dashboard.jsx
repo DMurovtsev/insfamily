@@ -26,12 +26,14 @@ import {
     getSD,
     getScrollDeals,
     getFilterDeals,
+    getBanks,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
 import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
 
 function Dashboard() {
+    const [banks, setBanks] = useState([]);
     const [currentPage, setCurrentPage] = useState("");
     const [stages, setStage] = useState([]);
     const [companiesL, setCompaniesL] = useState([]);
@@ -55,6 +57,9 @@ function Dashboard() {
 
     useEffect(() => {
         const socket = new WebSocket("wss://app.insfamily.ru:8001/ws/deals/");
+        getBanks().then((data) => {
+            setBanks(data);
+        });
         getFunnels().then((data) => {
             let funnelArr = data.results.filter((funnel) => {
                 let localId = localStorage.getItem("funnelId");
@@ -117,8 +122,15 @@ function Dashboard() {
             !loading
         ) {
             setLoading(true);
+
             getScrollDeals(`${currentPage}`).then((data) => {
-                setDeals([...deals, ...data.results]);
+                let newDeals = deals.map((j, i) => {
+                    return [...j, ...data.results[i]];
+                });
+                setDeals(newDeals);
+                // prevState.map((j, i) => {
+                //     return [...j, ...data.results[i]];
+                // });
 
                 if (data.next_page) {
                     setCurrentPage(data.next_page.split("/")[2]);
@@ -207,6 +219,13 @@ function Dashboard() {
     const label = [
         { id: "new", name: "Новые" },
         { id: "no_call", name: "Сегодня не звонили" },
+    ];
+    const insObjectRisk = [
+        { id: "Жизнь", name: "Жизнь" },
+        { id: "Жизнь Имущество", name: "Жизнь Имущество" },
+        { id: "Жизнь Имущество Титул", name: "Жизнь Имущество Титул" },
+        { id: "Имущество", name: "Имущество" },
+        { id: "Имущество Титул", name: "Имущество Титул" },
     ];
 
     /*Отрисовка и стилизация div для смены статуса*/
@@ -338,6 +357,9 @@ function Dashboard() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
+    useEffect(() => {
+        console.log(deals);
+    }, [deals]);
 
     return (
         <div>
@@ -348,6 +370,8 @@ function Dashboard() {
             )}
             {currentDeal ? (
                 <PopUpDeal
+                    insObjectRisk={insObjectRisk}
+                    banks={banks}
                     currentDeal={currentDeal}
                     setCurrentDeal={setCurrentDeal}
                     setDeals={setDeals}
@@ -360,6 +384,8 @@ function Dashboard() {
             )}
 
             <PopUpCreateDeal
+                insObjectRisk={insObjectRisk}
+                banks={banks}
                 setCurrentDeal={setCurrentDeal}
                 managers={managers}
                 typePolicies={typePolicies}

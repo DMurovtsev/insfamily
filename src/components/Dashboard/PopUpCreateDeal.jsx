@@ -3,7 +3,7 @@ import { Select } from "../Elements/Select";
 import { useContext, useEffect, useState } from "react";
 import { CustomContext } from "../Service/Context";
 import { Button } from "../Elements/Button";
-import { getBaseSource, createDeals, getDeals, getBanks } from "../../Api";
+import { getBaseSource, createDeals, getDeals } from "../../Api";
 import { InfoPopUp } from "../Service/InfoPopUp";
 
 function PopUpCreateDeal({
@@ -12,17 +12,15 @@ function PopUpCreateDeal({
     managers,
     setDeals,
     setCurrentDeal,
+    banks,
+    insObjectRisk,
 }) {
     const [baseSource, setBaseSource] = useState([]);
-    const [banks, setBanks] = useState([]);
     const admin = useContext(CustomContext);
 
     useEffect(() => {
         getBaseSource().then((list) => {
             setBaseSource(list.results);
-        });
-        getBanks().then((data) => {
-            setBanks(data);
         });
     }, []);
 
@@ -231,13 +229,6 @@ function PopUpCreateDeal({
     const insObject = [
         { id: "car", name: "МАШИНА" },
         { id: "ipoteca", name: "ИПОТЕКА" },
-    ];
-    const insObjectRisk = [
-        { id: "Жизнь", name: "Жизнь" },
-        { id: "Жизнь Имущество", name: "Жизнь Имущество" },
-        { id: "Жизнь Имущество Титул", name: "Жизнь Имущество Титул" },
-        { id: "Имущество", name: "Имущество" },
-        { id: "Имущество Титул", name: "Имущество Титул" },
     ];
 
     function showCarObject() {

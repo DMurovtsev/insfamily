@@ -405,19 +405,29 @@ async function getScrollSearch(currentPage) {
 //     });
 //     return await response.json();
 // }
-// async function createIpoteca(ipoteca, idBank, valueBank) {
-//     let formData = new FormData();
-//     formData.append("ipoteca", ipoteca);
-//     formData.append(idBank, valueBank);
-//     let response = await fetch(`${myHost}/mortgages/`, {
-//         method: "POST",
-//         body: formData,
-//         headers: headers,
-//     });
-//     return await response.json();
-// }
+
 async function getBanks() {
     let response = await fetch(`${myHost}/banks/l/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function redactorPopUpDealCars(carsId, key, value) {
+    let formData = new FormData();
+    formData.append(key, value);
+    let response = await fetch(`${myHost}/cars/${carsId}/`, {
+        method: "PATCH",
+        headers: headers,
+        body: formData,
+    });
+    return await response.json();
+}
+async function redactorIpoteca(mortagesId, key, value) {
+    let formData = new FormData();
+    formData.append(key, value);
+    let response = await fetch(`${myHost}/mortgages/${mortagesId}/`, {
+        method: "PATCH",
+        body: formData,
         headers: headers,
     });
     return await response.json();
@@ -460,4 +470,6 @@ export {
     getScrollSearch,
     redactorPopUpDeal,
     getBanks,
+    redactorPopUpDealCars,
+    redactorIpoteca,
 };

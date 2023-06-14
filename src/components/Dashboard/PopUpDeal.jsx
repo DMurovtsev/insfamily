@@ -6,10 +6,13 @@ import {
     addComments,
     addDiscription,
     getDeals,
+    redactorIpoteca,
     redactorPopUpDeal,
+    redactorPopUpDealCars,
 } from "../../Api";
 import { ReasonForFailure } from "./ReasonForFailure";
 import { Calculations } from "./Calculations";
+import { Select } from "../Elements/Select";
 
 function PopUpDeal({
     currentDeal,
@@ -18,12 +21,27 @@ function PopUpDeal({
     reasonForFailure,
     companiesL,
     setCalc,
+    banks,
+    insObjectRisk,
 }) {
     function redactorDeal(e, i) {
         let id = currentDeal.id;
         let value = e.target.value;
         let key = i;
         redactorPopUpDeal(key, value, id).then((data) => {});
+    }
+    function redactorCars(e) {
+        let carsId = currentDeal.policy.car.id;
+        let key = e.target.id.split("-")[0];
+        let value = e.target.value;
+        redactorPopUpDealCars(carsId, key, value).then((response) => {});
+    }
+    function redactorMortages(e) {
+        let mortagesId = currentDeal.policy.ipoteka.id;
+        let key = e.target.id.split("-")[0];
+        let value = e.target.value;
+        console.log(key);
+        redactorIpoteca(mortagesId, key, value).then((response) => {});
     }
     function showPopUpNewDeal() {
         document.querySelector(".container__NewPopUp").classList.add("active");
@@ -320,22 +338,40 @@ function PopUpDeal({
                             name="Серия и номер полиса"
                             style="inputBox__standart"
                         />
-                        <Input
-                            name="Объект страхования"
-                            value={
-                                currentDeal.policy.car
-                                    ? currentDeal.policy.car.brand
-                                    : currentDeal.policy.ipoteka
-                                    ? currentDeal.policy.ipoteka.obj
-                                    : ""
-                            }
-                            style="inputBox__standart"
-                            onBlur={(e, i) => {
-                                redactorDeal(e);
-                            }}
-                        />
                         {currentDeal.policy.car ? (
                             <Input
+                                setId="brand-Cars"
+                                name="Объект страхования"
+                                value={currentDeal.policy.car.brand}
+                                style="inputBox__standart"
+                                onBlur={(e) => {
+                                    redactorCars(e);
+                                }}
+                            />
+                        ) : (
+                            <Select
+                                setId="obj-Ipoteka"
+                                onChange={(e) => {
+                                    redactorMortages(e);
+                                }}
+                                options={insObjectRisk}
+                                style="input__medium input__medium_xl"
+                                first={
+                                    currentDeal.policy.ipoteka ? (
+                                        currentDeal.policy.ipoteka.obj
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            />
+                        )}
+
+                        {currentDeal.policy.car ? (
+                            <Input
+                                setId="number-Cars"
+                                onBlur={(e) => {
+                                    redactorCars(e);
+                                }}
                                 name="Гос номер"
                                 value={
                                     currentDeal.policy.car ? (
@@ -350,6 +386,10 @@ function PopUpDeal({
                         )}
                         {currentDeal.policy.car ? (
                             <Input
+                                setId="vin-Cars"
+                                onBlur={(e) => {
+                                    redactorCars(e);
+                                }}
                                 name="VIN"
                                 value={
                                     currentDeal.policy.car ? (
@@ -364,6 +404,10 @@ function PopUpDeal({
                         )}
                         {currentDeal.policy.car ? (
                             <Input
+                                setId="year-Cars"
+                                onBlur={(e) => {
+                                    redactorCars(e);
+                                }}
                                 name="Год выпуска"
                                 value={
                                     currentDeal.policy.car ? (
@@ -377,10 +421,15 @@ function PopUpDeal({
                             <></>
                         )}
                         {currentDeal.policy.ipoteka ? (
-                            <Input
-                                none="none"
+                            <Select
+                                setId="bank-Ipoteka"
+                                onChange={(e) => {
+                                    redactorMortages(e);
+                                }}
+                                style="input__medium input__medium_xl"
+                                options={banks}
                                 name="БАНК"
-                                value={
+                                first={
                                     currentDeal.policy.ipoteka ? (
                                         currentDeal.policy.ipoteka.bank.name
                                     ) : (
@@ -393,7 +442,10 @@ function PopUpDeal({
                         )}
                         {currentDeal.policy.ipoteka ? (
                             <Input
-                                none="none"
+                                setId="balance-Ipoteka"
+                                onBlur={(e) => {
+                                    redactorMortages(e);
+                                }}
                                 name="Остаток"
                                 value={
                                     currentDeal.policy.ipoteka ? (

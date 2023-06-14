@@ -2695,3 +2695,6 @@ section {
     top: 0;
     z-index: 15;
 }
+.input__medium_xl {
+    width: 300px;
+}
