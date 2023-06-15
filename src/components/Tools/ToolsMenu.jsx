@@ -52,7 +52,6 @@ function ToolsMenu() {
             };
         }
     }, []);
-    console.log(clientsBirhday);
 
     return (
         <div className="mainToolsMenu">

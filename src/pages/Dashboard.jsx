@@ -223,27 +223,23 @@ function Dashboard() {
     }
 
     /*onClick на сделки для открытия подробной сделки*/
-    if (document.querySelector(".card")) {
-        document.querySelectorAll(".card").forEach((card) => {
-            card.onclick = () => {
-                deals.forEach((item) => {
-                    let currentCard = item.filter((deal) => deal.id == card.id);
-                    if (currentCard.length > 0) {
-                        setCurrentDeal(currentCard[0]);
-                        if (currentCard[0].label == "new") {
-                            let label_deal = "no_call";
-                            let label_id = currentCard[0].id;
-                            chanageLabelDealCard(label_id, label_deal).then(
-                                (response) => {
-                                    getDeals(idFunnel.id).then((data) => {
-                                        setDeals(data.results);
-                                    });
-                                }
-                            );
+    function openDeal(e) {
+        deals.forEach((item) => {
+            let currentCard = item.filter((deal) => deal.id == e.target.id);
+            if (currentCard.length > 0) {
+                setCurrentDeal(currentCard[0]);
+                if (currentCard[0].label == "new") {
+                    let label_deal = "no_call";
+                    let label_id = currentCard[0].id;
+                    chanageLabelDealCard(label_id, label_deal).then(
+                        (response) => {
+                            getDeals(idFunnel.id).then((data) => {
+                                setDeals(data.results);
+                            });
                         }
-                    }
-                });
-            };
+                    );
+                }
+            }
         });
     }
     const { admin } = useContext(CustomContext);
@@ -558,6 +554,7 @@ function Dashboard() {
                                 {item.map((dial) => {
                                     return (
                                         <DealCard
+                                            openDeal={openDeal}
                                             stageId={stageId}
                                             deal={deal}
                                             setDeal={setDeal}

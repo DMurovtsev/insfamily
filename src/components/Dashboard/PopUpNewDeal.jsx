@@ -24,7 +24,7 @@ function PopUpNewDeal() {
         if (document.querySelector(".toggleNewBtn")) {
             document.querySelector(".toggleNewBtn").onclick = () => {
                 document
-                    .querySelector(".container__NewPopUp")
+                    .querySelector(".content__NewPopUp")
                     .classList.remove("active");
             };
         }
