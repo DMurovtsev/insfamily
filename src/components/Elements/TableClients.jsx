@@ -6,11 +6,14 @@ function TableClients({
     setCurrentPageClients,
     loading,
     setLoading,
+    setSearchResponses,
 }) {
     const newClientsNameArr = searchResponse.map((item) => ({
         ...item,
         name: `${item.last_name} ${item.first_name} ${item.middle_name}`,
     }));
+
+    console.log(searchResponse);
     return (
         <div
             onScroll={(e) => {
@@ -24,7 +27,12 @@ function TableClients({
             }}
             className="container__table"
         >
-            <h2 className="heading">{heading}</h2>
+            <h2 className="heading">
+                {heading}{" "}
+                <span className="count">
+                    {setSearchResponses.clients.count}
+                </span>
+            </h2>
             <table className="table">
                 <thead className="table_thead">
                     <tr>

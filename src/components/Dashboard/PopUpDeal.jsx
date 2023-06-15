@@ -13,6 +13,7 @@ import {
 import { ReasonForFailure } from "./ReasonForFailure";
 import { Calculations } from "./Calculations";
 import { Select } from "../Elements/Select";
+import { Link } from "react-router-dom";
 
 function PopUpDeal({
     currentDeal,
@@ -63,6 +64,8 @@ function PopUpDeal({
         }
     }
     let deal = currentDeal.id;
+
+    console.log(currentDeal);
 
     /*Валидация даты*/
     function checkDate(e) {
@@ -198,6 +201,11 @@ function PopUpDeal({
         addComments(deal_id, comment_content).then((responce) => {});
     }
 
+    function whatsUp() {
+        let phone = currentDeal.policy.policyholder.phone;
+        window.location.href = `https://web.whatsapp.com/send?phone=${phone}`;
+    }
+
     function M(e) {
         {
             if (!e.target.closest(".container__PopUp")) {
@@ -319,7 +327,17 @@ function PopUpDeal({
                             name="Телефон клиента"
                             style="inputBox__standart"
                             onInput={validateInputPhone}
-                            ion_icon="ion_icon"
+                            whatsUp={whatsUp}
+                            ion_icon={
+                                currentDeal.policy.policyholder.phone != ""
+                                    ? "ion_icon"
+                                    : ""
+                            }
+                            value={
+                                currentDeal.policy.policyholder.phone
+                                    ? currentDeal.policy.policyholder.phone
+                                    : ""
+                            }
                         />
 
                         <Input
@@ -329,6 +347,11 @@ function PopUpDeal({
                             name="Email Клиента"
                             style="inputBox__standart"
                             onInput={validateInputEmail}
+                            value={
+                                currentDeal.policy.policyholder.email
+                                    ? currentDeal.policy.policyholder.email
+                                    : ""
+                            }
                         />
                         <Input
                             none="none"
@@ -359,6 +382,9 @@ function PopUpDeal({
                                 }}
                             />
                         ) : (
+                            <></>
+                        )}
+                        {currentDeal.policy.ipoteka ? (
                             <Select
                                 setId="obj-Ipoteka"
                                 onChange={(e) => {
@@ -374,6 +400,8 @@ function PopUpDeal({
                                     )
                                 }
                             />
+                        ) : (
+                            <></>
                         )}
 
                         {currentDeal.policy.car ? (
@@ -490,6 +518,11 @@ function PopUpDeal({
                             setId="popUpDealFioNew"
                             name="ФИО страхователя"
                             style="inputBox__standart popUpDealFioNew"
+                            value={
+                                currentDeal.policy.policyholder_text
+                                    ? currentDeal.policy.policyholder_text
+                                    : ""
+                            }
                         />
                         <Input
                             none="none"

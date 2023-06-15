@@ -1,4 +1,4 @@
-function DealCard({ props, setDeal, openDeal }) {
+function DealCard({ props, setDeal }) {
     let discription = props.description;
     let user = props.user;
     let manager = {
@@ -37,9 +37,6 @@ function DealCard({ props, setDeal, openDeal }) {
             className="container__dealCarde"
         >
             <div
-                onClick={(e) => {
-                    openDeal(e);
-                }}
                 draggable
                 id={props.id}
                 className={classOpacity ? "card opacity" : "card"}

@@ -6,6 +6,7 @@ function TableBasePolicies({
     setCurrentPageBaseSource,
     loading,
     setLoading,
+    setSearchResponses,
 }) {
     return (
         <div
@@ -20,7 +21,12 @@ function TableBasePolicies({
             }}
             className="container__table"
         >
-            <h2 className="heading">{heading}</h2>
+            <h2 className="heading">
+                {heading}{" "}
+                <span className="count">
+                    {setSearchResponses.base_policies.count}
+                </span>
+            </h2>
             <table className="table">
                 <thead className="table_thead">
                     <tr>

@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    SearchTable,
-    TableBasePolicies,
-} from "../components/Elements/TableBasePolicies";
+import { TableBasePolicies } from "../components/Elements/TableBasePolicies";
 import { getScrollSearch, globalSearch } from "../Api";
 import { TableClients } from "../components/Elements/TableClients";
 import { TableDeals } from "../components/Elements/TableDeals";
@@ -21,7 +18,16 @@ function SearchResults() {
     const [policies, setPolicies] = useState();
 
     useEffect(() => {
-        let search = document.getElementById("inputGlobalSearch").value;
+        updateSearch();
+        document.getElementById("inputGlobalSearch").onblur = () => {
+            updateSearch();
+        };
+    }, []);
+    if (!searchResponse) {
+        return;
+    }
+    function updateSearch() {
+        let search = document.getElementById("inputGlobalSearch").value.trim();
         if (search) {
             globalSearch(search).then((response) => {
                 setSearchResponse(response);
@@ -33,12 +39,11 @@ function SearchResults() {
                 setClients(response.clients.results);
                 setDeals(response.deals.results);
                 setPolicies(response.policies.results);
+                document.getElementById("inputGlobalSearch").value = "";
             });
-        } else return;
-    }, []);
-    if (!searchResponse) {
-        return;
+        }
     }
+
     const scrollHandler = (
         e,
         currentPage,
@@ -46,8 +51,6 @@ function SearchResults() {
         loading,
         setLoading
     ) => {
-        // console.log(currentPage);
-        // console.log(loading);
         if (
             e.target.scrollHeight -
                 (e.target.scrollTop + e.target.offsetHeight) <
@@ -91,45 +94,64 @@ function SearchResults() {
     };
     return (
         <div>
-            <TableBasePolicies
-                heading="База полисов"
-                searchResponse={base_policies}
-                scrollHandler={scrollHandler}
-                currentPageBaseSource={currentPageBaseSource}
-                setCurrentPageBaseSource={setCurrentPageBaseSource}
-                loading={loading}
-                setLoading={setLoading}
-            />
+            {searchResponse.base_policies.count == 0 ? (
+                <></>
+            ) : (
+                <TableBasePolicies
+                    heading="База полисов"
+                    searchResponse={base_policies}
+                    scrollHandler={scrollHandler}
+                    currentPageBaseSource={currentPageBaseSource}
+                    setCurrentPageBaseSource={setCurrentPageBaseSource}
+                    loading={loading}
+                    setLoading={setLoading}
+                    setSearchResponses={searchResponse}
+                />
+            )}
+            {searchResponse.clients.count == 0 ? (
+                <></>
+            ) : (
+                <TableClients
+                    heading="Клиенты"
+                    searchResponse={clients}
+                    scrollHandler={scrollHandler}
+                    currentPageClients={currentPageClients}
+                    setCurrentPageClients={setCurrentPageClients}
+                    loading={loading}
+                    setLoading={setLoading}
+                    setSearchResponses={searchResponse}
+                />
+            )}
 
-            <TableClients
-                heading="Клиенты"
-                searchResponse={clients}
-                scrollHandler={scrollHandler}
-                currentPageClients={currentPageClients}
-                setCurrentPageClients={setCurrentPageClients}
-                loading={loading}
-                setLoading={setLoading}
-            />
+            {searchResponse.deals.count == 0 ? (
+                <></>
+            ) : (
+                <TableDeals
+                    heading="Сделки"
+                    searchResponse={deals}
+                    scrollHandler={scrollHandler}
+                    currentPageDeals={currentPageDeals}
+                    setCurrentPageDeals={setCurrentPageDeals}
+                    loading={loading}
+                    setLoading={setLoading}
+                    setSearchResponses={searchResponse}
+                />
+            )}
 
-            <TableDeals
-                heading="Сделки"
-                searchResponse={deals}
-                scrollHandler={scrollHandler}
-                currentPageDeals={currentPageDeals}
-                setCurrentPageDeals={setCurrentPageDeals}
-                loading={loading}
-                setLoading={setLoading}
-            />
-
-            <TablePolicies
-                heading="Полисы"
-                searchResponse={policies}
-                scrollHandler={scrollHandler}
-                currentPagePolicies={currentPagePolicies}
-                setCurrentPagePolicies={setCurrentPagePolicies}
-                loading={loading}
-                setLoading={setLoading}
-            />
+            {searchResponse.deals.policies == 0 ? (
+                <></>
+            ) : (
+                <TablePolicies
+                    heading="Полисы"
+                    searchResponse={policies}
+                    scrollHandler={scrollHandler}
+                    currentPagePolicies={currentPagePolicies}
+                    setCurrentPagePolicies={setCurrentPagePolicies}
+                    loading={loading}
+                    setLoading={setLoading}
+                    setSearchResponses={searchResponse}
+                />
+            )}
         </div>
     );
 }

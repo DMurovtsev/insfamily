@@ -6,6 +6,7 @@ function TableDeals({
     setCurrentPageDeals,
     loading,
     setLoading,
+    setSearchResponses,
 }) {
     let object = {
         in_work: "В работе",
@@ -25,7 +26,10 @@ function TableDeals({
             }}
             className="container__table"
         >
-            <h2 className="heading">{heading}</h2>
+            <h2 className="heading">
+                {heading}{" "}
+                <span className="count">{setSearchResponses.deals.count}</span>
+            </h2>
             <table className="table">
                 <thead className="table_thead">
                     <tr>

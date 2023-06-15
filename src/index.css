@@ -57,6 +57,7 @@ body {
     width: 1700px;
     height: 40px;
     font-weight: 600;
+    z-index: 20;
 }
 
 .main__botton_arhive {
@@ -68,12 +69,10 @@ body {
     border-right: 1px solid var(--dark);
 }
 .arhive {
-    /* box-shadow: 0px 0px 5px var(--red), 0px 0px 20px var(--red); */
     background: #e08080;
     color: var(--white);
 }
 .sales {
-    /* box-shadow: 0px 0px 5px var(--red), 0px 0px 20px var(--red); */
     background: #86d43e;
     color: var(--white);
 }
@@ -88,8 +87,6 @@ body {
 .paid {
     border: 2px solid #93ff2d;
     box-shadow: 0 0 5px #93ff2d;
-
-    /* box-shadow: 0px 0px 5px var(--green), 0px 0px 20px var(--green); */
 }
 
 .container__header {
@@ -744,11 +741,11 @@ button:hover i::after {
 .container__table {
     position: relative;
     margin-top: 15px;
-    /* min-height: 100vh; */
     width: auto;
-    height: 300px;
+    height: 400px;
     overflow-x: hidden;
     overflow-y: auto;
+    margin-bottom: 15px;
 }
 .container__table_top {
     top: 100px;
@@ -761,6 +758,10 @@ button:hover i::after {
     width: auto;
     text-transform: uppercase;
     border-bottom: thick double var(--dark);
+    position: sticky;
+    top: 0;
+    display: block;
+    background-color: var(--grey);
 }
 .table {
     min-width: 550px;
@@ -2692,21 +2693,23 @@ section {
 }
 .table_thead {
     position: sticky;
-    top: 0;
+    top: 32px;
     z-index: 15;
+    background-color: var(--grey);
 }
 .input__medium_xl {
     width: 300px;
 }
 
 .watsUp {
-    width: 50px;
-    position: relative;
+    width: 25px;
+    position: absolute;
     z-index: 22;
     font-size: 25px;
-    right: -210px;
-    bottom: 18px;
+    right: 35px;
+    bottom: 2px;
     pointer-events: all;
+    color: var(--dark);
 }
 .watsUp:hover {
     color: #00d600;
@@ -2715,18 +2718,17 @@ section {
     cursor: pointer;
 }
 .watsUpI {
-    width: 20px;
-    position: relative;
+    width: 25px;
+    position: absolute;
     z-index: 22;
     font-size: 25px;
-    right: -180px;
+    right: 5px;
+    bottom: 2px;
     pointer-events: all;
-    top: -48px;
-    left: 250px;
+    color: var(--dark);
 }
 .watsUpI:hover {
     color: #00d600;
-
     transform: scale(1.3);
     transition: 0.5s;
     cursor: pointer;
@@ -2751,4 +2753,13 @@ section {
     transition: 0.8s;
     visibility: visible;
     opacity: 1;
+}
+.count {
+    padding: 2px;
+    border-radius: 5px;
+    font-size: 20px;
+    background-color: var(--green);
+    /* border-radius: 50%; */
+    color: #fff;
+    min-width: 130px;
 }

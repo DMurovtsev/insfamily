@@ -12,6 +12,7 @@ function Input({
     onKeyDown,
     none,
     ion_icon,
+    whatsUp,
 }) {
     return (
         <div
@@ -36,13 +37,14 @@ function Input({
             <span>
                 {logo}
                 {name}
-                <div className="watsUp">
-                    {ion_icon ? <ion-icon name="logo-whatsapp"></ion-icon> : ""}
-                </div>
-                <div className="watsUpI">
-                    {ion_icon ? <ion-icon name="call-outline"></ion-icon> : ""}
-                </div>
             </span>
+
+            <div onClick={whatsUp ? whatsUp : ""} className="watsUp">
+                {ion_icon ? <ion-icon name="logo-whatsapp"></ion-icon> : ""}
+            </div>
+            <div className="watsUpI">
+                {ion_icon ? <ion-icon name="call-outline"></ion-icon> : ""}
+            </div>
         </div>
     );
 }

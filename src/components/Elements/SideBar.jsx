@@ -10,7 +10,7 @@ import { LiveTape } from "../Tools/LiveTape";
 import { CustomContext } from "../Service/Context";
 import { globalSearch } from "../../Api";
 
-function SideBar({}) {
+function SideBar({ setSearchResponse }) {
     /*MenuToggle */
     const navigate = useNavigate();
     useEffect(() => {
@@ -48,9 +48,11 @@ function SideBar({}) {
     const { admin } = useContext(CustomContext);
 
     function Search(e) {
-        if (document.getElementById("inputGlobalSearch").value) {
+        if (document.getElementById("inputGlobalSearch").value.trim()) {
             navigate("/SearchResults");
-        } else return;
+        } else {
+            document.getElementById("inputGlobalSearch").value = "";
+        }
     }
 
     /*Добавление класса прпи новедении на list item*/

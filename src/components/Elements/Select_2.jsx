@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { addFunnels, getStages, getDeals } from "../../Api";
+import { CustomContext } from "../Service/Context";
 
 function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
+    const { admin } = useContext(CustomContext);
+
     useEffect(() => {
         if (document.getElementById("Select_2__text")) {
             document.getElementById("Select_2__text").onclick = () => {
@@ -52,15 +55,16 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
             getDeals(idFunnel.id).then((data) => {
                 setDeals(data.results);
             });
-            getStages(idFunnel.id).then((data) => {
-                setStage(data);
-            });
         }
     }
 
     function addSalesFunnel() {
         let funnelName = document.getElementById("addFunnelInput").value;
-        addFunnels(funnelName).then((response) => {});
+        addFunnels(funnelName).then((response) => {
+            getStages(idFunnel.id).then((data) => {
+                setStage(data);
+            });
+        });
     }
 
     return (
@@ -82,20 +86,22 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
                           </div>
                       ))
                     : ""}
-                <div className="input__select2">
-                    <input
-                        id="addFunnelInput"
-                        style={{ outline: "none" }}
-                        type="text"
-                        placeholder="Добавить воронку"
-                    />
-                    <span className="addVoronka">
-                        <ion-icon
-                            onClick={addSalesFunnel}
-                            name="add-outline"
-                        ></ion-icon>
-                    </span>
-                </div>
+                {admin === true ? (
+                    <div className="input__select2">
+                        <input
+                            id="addFunnelInput"
+                            style={{ outline: "none" }}
+                            type="text"
+                            placeholder="Добавить воронку"
+                        />
+
+                        <span onClick={addSalesFunnel} className="addVoronka">
+                            <ion-icon name="add-outline"></ion-icon>
+                        </span>
+                    </div>
+                ) : (
+                    <></>
+                )}
             </div>
         </div>
     );
