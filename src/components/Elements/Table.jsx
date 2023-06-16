@@ -1,11 +1,10 @@
 import { Loader } from "./Loader";
 
-function Table({ props, check, title, style }) {
+function Table({ props, check, title, style, header }) {
     if (props.length === 0) {
         return <Loader />;
     }
-
-    let clientName = Object.keys(props[0]);
+    let propsTd = Object.keys(props[0]);
 
     return (
         <div
@@ -16,9 +15,7 @@ function Table({ props, check, title, style }) {
                 <thead>
                     <tr>
                         {check ? <th>{check}</th> : <></>}
-                        {clientName.map((item) => (
-                            <th>{item}</th>
-                        ))}
+                        {header ? header.map((item) => <th>{item}</th>) : <></>}
                     </tr>
                 </thead>
 
@@ -26,7 +23,7 @@ function Table({ props, check, title, style }) {
                     {props.map((item) => (
                         <tr>
                             {check ? <td data-label="+">{check}</td> : <></>}
-                            {clientName.map((i) => (
+                            {propsTd.map((i) => (
                                 <td data-label="Наименоваие"> {item[i]}</td>
                             ))}
                         </tr>

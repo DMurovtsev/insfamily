@@ -61,14 +61,11 @@ async function getTypiesPolicies() {
 }
 
 /*Получение клиентов*/
-async function getClients() {
-    let response = await fetch(`${myHost}/clients/`, {
-        headers: headers,
-    });
-    return await response.json();
-}
-async function getClientsBirthday() {
-    let response = await fetch(`${myHost}/clients/birthday_count/`, {
+async function getClients(values = null) {
+    let link = values
+        ? `${myHost}/clients/?values=${values}`
+        : `${myHost}/clients/`;
+    let response = await fetch(link, {
         headers: headers,
     });
     return await response.json();
@@ -429,6 +426,12 @@ async function redactorIpoteca(mortagesId, key, value) {
     let response = await fetch(`${myHost}/mortgages/${mortagesId}/`, {
         method: "PATCH",
         body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getClientsBirthday() {
+    let response = await fetch(`${myHost}/clients/birthday_count/`, {
         headers: headers,
     });
     return await response.json();

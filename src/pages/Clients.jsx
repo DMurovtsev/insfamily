@@ -12,7 +12,9 @@ import { Loader } from "../components/Elements/Loader";
 
 function Clients() {
     useEffect(() => {
-        getClients().then((data) => {
+        getClients(
+            "address,first_name,middle_name,last_name,phone,email,birthday"
+        ).then((data) => {
             setClients(data.results);
         });
         let list = document.querySelectorAll(".navigation li");
@@ -33,6 +35,15 @@ function Clients() {
             .querySelector(".container__ClientsCard")
             .classList.toggle("active");
     }
+    let clientsHeaderArray = [
+        "Адресс",
+        "Имя",
+        "Отчество",
+        "Фамилия",
+        "Телефон",
+        "Email",
+        "День рождения",
+    ];
 
     return (
         <div>
@@ -55,6 +66,7 @@ function Clients() {
             </div>
             {clients.length == 0 ? <Loader /> : ""}
             <Table
+                header={clientsHeaderArray}
                 props={clients}
                 check={<CheckBox />}
                 title="Клиенты"

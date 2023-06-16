@@ -65,8 +65,6 @@ function PopUpDeal({
     }
     let deal = currentDeal.id;
 
-    console.log(currentDeal);
-
     /*Валидация даты*/
     function checkDate(e) {
         let happyB = document.getElementById("happyBithday");

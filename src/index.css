@@ -462,6 +462,11 @@ select:focus,
 .inputBox select:focus {
     border: 1px solid var(--dark);
 }
+.table__thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
 /*Select2_0*/
 
 .Select_2 {
@@ -2180,7 +2185,7 @@ section {
 
 .HappyBirthdayClients ul {
     position: absolute;
-    min-width: 250px;
+    min-width: 200px;
     bottom: 55px;
     background: var(--dark);
     color: var(--grey);
@@ -2196,13 +2201,12 @@ section {
     position: absolute;
     opacity: 1;
     visibility: visible;
-
     transition: 0.5s;
 }
 .HappyBirthdayClients ul li {
     list-style: none;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     padding: 5px 0;
     transition: 0.3s;
@@ -2733,7 +2737,7 @@ section {
     transition: 0.5s;
     cursor: pointer;
 }
-.clientsBirhday {
+.clientsBirhdays {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2749,10 +2753,15 @@ section {
     opacity: 0;
     transition: 0.8s;
 }
-.clientsBirhday.active {
+.clientsBirhdays.active {
     transition: 0.8s;
     visibility: visible;
     opacity: 1;
+}
+.clientsBirhday {
+    position: relative;
+    display: flex;
+    justify-content: end;
 }
 .count {
     padding: 2px;
@@ -2763,3 +2772,36 @@ section {
     color: #fff;
     min-width: 130px;
 }
+.PopUpClientsBirhday {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 5;
+}
+.PopUpClientsBirhday__container {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+.PopUpClientsBirhday__content {
+    background-color: var(--grey);
+    box-shadow: 0 0 15px var(--dark);
+    width: 700px;
+    height: 300px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    color: var(--dark);
+    transition: 0.5s;
+    z-index: 5;
+}
+
+/* .PopUpClientsBirhday__content.active {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+    transition: 0.5s;
+    z-index: 5;
+} */
