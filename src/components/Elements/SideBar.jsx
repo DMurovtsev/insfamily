@@ -9,6 +9,7 @@ import { ProblemBook } from "../Tools/ProblemBook";
 import { LiveTape } from "../Tools/LiveTape";
 import { CustomContext } from "../Service/Context";
 import { globalSearch } from "../../Api";
+import { Loader } from "./Loader";
 
 function SideBar({ setSearchResponse }) {
     /*MenuToggle */

@@ -19,6 +19,7 @@ body {
     overflow-x: hidden;
     background: var(--grey);
     box-sizing: border-box;
+    overflow: auto;
 }
 
 .logo {
@@ -42,7 +43,7 @@ body {
     min-height: 85vh;
 }
 .main.active {
-    width: 100%;
+    width: 100vw;
     left: 350px;
 }
 .main__bottom {
@@ -94,6 +95,13 @@ body {
     display: flex;
     top: 20px;
     left: 220px;
+    gap: 10px;
+}
+.container__header_sales {
+    position: absolute;
+    display: flex;
+    top: 20px;
+    left: -110px;
     gap: 10px;
 }
 .container__header_relative {
@@ -350,9 +358,11 @@ body {
     width: 200px;
 }
 .inputBox__select_largest {
-    width: 250px;
+    width: 240px;
 }
-
+.inputBox__select_s {
+    width: 220px;
+}
 .inputBox__standart_search {
     position: relative;
     width: 40%;
@@ -575,20 +585,23 @@ select:focus,
 
 /*Checkbox*/
 
-/* version 1.0
-<div className="center">
-<input type="checkbox" name="" />
-</div>
- .center {
+.center {
+    top: 10px;
+    position: relative;
+    /* transform: translate(-50%, -50%); */
+}
+.center label {
+    top: -25px;
+    left: 5px;
     position: absolute;
-    top: 300px;
-    left: 50%;
-    transform: translate(-50%, -50%);
+}
+.center p {
+    padding-bottom: 5px;
 }
 input[type="checkbox"] {
     position: relative;
-    width: 120px;
-    height: 40px;
+    width: 60px;
+    height: 25px;
     appearance: none;
     background: linear-gradient(0deg, var(--dark), #000);
     outline: none;
@@ -597,19 +610,28 @@ input[type="checkbox"] {
         inset 0 0 10px rgba(0, 0, 0, 1), 0 5px 20px rgba(0, 0, 0, 0.5),
         inset 0 0 15px rgba(0, 0, 0, 0.2);
 }
+input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+
 input:checked[type="checkbox"] {
     background: linear-gradient(0deg, var(--white), var(--white));
     box-shadow: 0 0 2px var(--dark), 0 0 0 4px #353535, 0 0 0 5px #3e3e3e,
         inset 0 0 10px rgba(0, 0, 0, 1), 0 5px 20px rgba(0, 0, 0, 0.5),
         inset 0 0 15px rgba(0, 0, 0, 0.2);
 }
+input:checked[type="checkbox"] ~ label {
+    transition: 0.4s;
+
+    color: var(--green);
+}
 input[type="checkbox"]:before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
-    width: 80px;
-    height: 40px;
+    width: 40px;
+    height: 25px;
     background: linear-gradient(0deg, #000, var(--dark));
     border-radius: 20px;
     box-shadow: 0 0 0 1px #232323;
@@ -617,13 +639,13 @@ input[type="checkbox"]:before {
     transition: 0.4s;
 }
 input:checked[type="checkbox"]:before {
-    left: 40px;
+    left: 20px;
 }
 input[type="checkbox"]:after {
     content: "";
     position: absolute;
     top: calc(50% - 2px);
-    left: 65px;
+    left: 25px;
     width: 4px;
     height: 4px;
     background: linear-gradient(0deg, var(--dark), #000);
@@ -631,10 +653,10 @@ input[type="checkbox"]:after {
     transition: 0.4s;
 }
 input:checked[type="checkbox"]:after {
-    left: 105px;
+    left: 45px;
     background: var(--grey);
     box-shadow: 0 0 5px var(--white), 0 0 10px var(--white);
-} */
+}
 
 /*Checkbox*/
 /*version 1.02*/
@@ -755,21 +777,30 @@ button:hover i::after {
 .container__table_top {
     top: 100px;
 }
+.container__table_tops {
+    top: 50px;
+    left: -100px;
+    height: 700px;
+    overflow: auto;
+    width: 1600px;
+}
 .heading {
     text-align: start;
     color: var(--dark);
     margin-bottom: 10px;
     margin-top: 10px;
-    width: auto;
+    width: 1920px;
     text-transform: uppercase;
     border-bottom: thick double var(--dark);
     position: sticky;
     top: 0;
     display: block;
     background-color: var(--grey);
+    z-index: 5;
 }
 .table {
     min-width: 550px;
+    overflow: auto;
     border-collapse: collapse;
 }
 .table thead {
@@ -785,6 +816,7 @@ button:hover i::after {
     opacity: 1;
     padding: 12px;
     border: 1px solid var(--dark);
+    white-space: nowrap;
 }
 .table tbody tr td {
     font-size: 14px;
@@ -795,6 +827,9 @@ button:hover i::after {
     padding: 8px;
     text-align: center;
     border: 1px solid var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 tr {
     transition: all 0.2s ease-in;
@@ -935,13 +970,21 @@ tbody tr:hover {
     }
 }
 /*Loader*/
-
+.container_flex_loader {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .container_flex {
-    position: fixed;
+    position: absolute;
     width: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 100;
 }
 .container__flex {
     position: absolute;
@@ -1395,6 +1438,7 @@ tbody tr:hover {
     align-items: center;
     justify-content: center;
 }
+
 .Calculations {
     position: absolute;
     left: 0;
@@ -1410,7 +1454,14 @@ tbody tr:hover {
     background: #fff;
     z-index: 11;
 }
-
+.content__PopUp_Sales {
+    width: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    height: 770px;
+}
 .container__PopUpCreateDeal {
     background: #fff;
     width: 350px;
@@ -1522,6 +1573,9 @@ tbody tr:hover {
 .content__PopUp_input input {
     background: #fff;
     border: 1px solid var(--black2);
+}
+.inputBox__medium {
+    width: 240px;
 }
 .inputBox__select select:focus ~ span,
 .content__PopUp_input input:focus ~ span,
@@ -2715,6 +2769,17 @@ section {
     pointer-events: all;
     color: var(--dark);
 }
+.watsUp__opacity {
+    width: 25px;
+    position: absolute;
+    z-index: 22;
+    font-size: 25px;
+    right: 35px;
+    bottom: 2px;
+    pointer-events: all;
+    color: var(--dark);
+    opacity: 0.5;
+}
 .watsUp:hover {
     color: #00d600;
     transform: scale(1.3);
@@ -2730,6 +2795,17 @@ section {
     bottom: 2px;
     pointer-events: all;
     color: var(--dark);
+}
+.watsUpI__opacity {
+    width: 25px;
+    position: absolute;
+    z-index: 22;
+    font-size: 25px;
+    right: 5px;
+    bottom: 2px;
+    pointer-events: all;
+    color: var(--dark);
+    opacity: 0.5;
 }
 .watsUpI:hover {
     color: #00d600;
@@ -2779,9 +2855,14 @@ section {
     z-index: 5;
 }
 .PopUpClientsBirhday__container {
+    height: 600px;
+    /* width: 800px; */
+    overflow-y: auto;
     position: fixed;
     display: flex;
     align-items: center;
+    right: 0;
+    bottom: 200px;
     justify-content: center;
     z-index: 5;
 }
@@ -2796,6 +2877,9 @@ section {
     color: var(--dark);
     transition: 0.5s;
     z-index: 5;
+}
+.green__hover:hover {
+    color: var(--green);
 }
 
 /* .PopUpClientsBirhday__content.active {

@@ -4,6 +4,7 @@ import { getScrollSearch, globalSearch } from "../Api";
 import { TableClients } from "../components/Elements/TableClients";
 import { TableDeals } from "../components/Elements/TableDeals";
 import { TablePolicies } from "../components/Elements/TablePolicies";
+import { Loader } from "../components/Elements/Loader";
 
 function SearchResults() {
     const [searchResponse, setSearchResponse] = useState();
@@ -16,19 +17,25 @@ function SearchResults() {
     const [clients, setClients] = useState();
     const [deals, setDeals] = useState();
     const [policies, setPolicies] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        updateSearch();
         document.getElementById("inputGlobalSearch").onblur = () => {
             updateSearch();
         };
+        updateSearch();
     }, []);
+    if (isLoading) {
+        return <Loader />;
+    }
     if (!searchResponse) {
         return;
     }
+
     function updateSearch() {
         let search = document.getElementById("inputGlobalSearch").value.trim();
         if (search) {
+            setIsLoading(true);
             globalSearch(search).then((response) => {
                 setSearchResponse(response);
                 setCurrentPageBaseSource(response.base_policies.next_page);
@@ -40,6 +47,7 @@ function SearchResults() {
                 setDeals(response.deals.results);
                 setPolicies(response.policies.results);
                 document.getElementById("inputGlobalSearch").value = "";
+                setIsLoading(false);
             });
         }
     }
@@ -58,7 +66,7 @@ function SearchResults() {
             currentPage &&
             !loading
         ) {
-            setLoading(true);
+            setLoading(false);
             getScrollSearch(`${currentPage}`).then((data) => {
                 if (Object.keys(data)[0] == "clients") {
                     setClients((prevState) => [
@@ -92,6 +100,7 @@ function SearchResults() {
             });
         }
     };
+
     return (
         <div>
             {searchResponse.base_policies.count == 0 ? (

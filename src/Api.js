@@ -377,7 +377,6 @@ async function getFilterDeals(funnel_id, link) {
 }
 async function globalSearch(search) {
     let url = `${myHost}/basepolicies/search/?search=${search}`;
-
     let response = await fetch(url, {
         headers: headers,
     });
@@ -436,6 +435,53 @@ async function getClientsBirthday() {
     });
     return await response.json();
 }
+async function oneForAll(
+    values = null,
+    model = null,
+    next = null,
+    link = null
+) {
+    let url = "";
+    if (next) {
+        url = `${myHost}${next}`;
+    } else {
+        url = values
+            ? `${myHost}/ofa/?values=${values}&model=${model}&${link}`
+            : `${myHost}/policies/`;
+    }
+    let response = await fetch(url, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getChannels() {
+    let response = await fetch(`${myHost}/channels/l/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getCompanies() {
+    let response = await fetch(`${myHost}/companies/l/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getFilterSels(link) {
+    let response = await fetch(`${myHost}/policies/?${link}`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getPolicies(search) {
+    let url = `${myHost}/policies/`;
+    if (search != "") {
+        url = url + `&search=${search}`;
+    }
+    let response = await fetch(url, {
+        headers: headers,
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -476,4 +522,9 @@ export {
     getBanks,
     redactorPopUpDealCars,
     redactorIpoteca,
+    oneForAll,
+    getChannels,
+    getCompanies,
+    getFilterSels,
+    getPolicies,
 };

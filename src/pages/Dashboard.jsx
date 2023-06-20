@@ -31,9 +31,11 @@ import {
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
 import { PopUpCreateDeal } from "../components/Dashboard/PopUpCreateDeal";
+import { Loader } from "../components/Elements/Loader";
 
 function Dashboard() {
     const [banks, setBanks] = useState([]);
+    const [loader, setLoader] = useState(false);
     const [sockets, setSockets] = useState();
     const [currentPage, setCurrentPage] = useState("");
     const [stages, setStage] = useState([]);
@@ -60,7 +62,6 @@ function Dashboard() {
     //     sockets.onmessage = (e) => {
     //         const data = JSON.parse(e.data);
     //         const { type } = data;
-
     //         if (type == "deals_upgrade") {
     //             let newDeals = deals.map((deal) => {
     //                 if (deal.id == data.deal.id) {
@@ -131,6 +132,7 @@ function Dashboard() {
                 setStage(data);
             });
         }
+
         const socket = new WebSocket(
             `wss://app.insfamily.ru:8001/ws/deals/?${localStorage.getItem(
                 "access"
@@ -141,7 +143,6 @@ function Dashboard() {
             const { type } = data;
 
             if (type == "deals_upgrade") {
-                console.log(deals);
                 setDeals((prevDeals) => {
                     return prevDeals.map((j) => {
                         return j.map((deal) => {
@@ -319,6 +320,8 @@ function Dashboard() {
 
     /*Функция фильтрации сделок по select*/
     function filtrSelect() {
+        setLoader(true);
+
         let labelValue = null;
         if (document.getElementById("labelSelect").value != "all") {
             labelValue = document.getElementById("labelSelect").value;
@@ -365,6 +368,7 @@ function Dashboard() {
 
         getFilterDeals(idFunnel.id, link).then((data) => {
             setDeals(data.results);
+            setLoader(false);
         });
     }
 
@@ -541,37 +545,41 @@ function Dashboard() {
                         idFunnel={idFunnel}
                     />
                 </div>
-                <div className="container__dealCard_scroll">
-                    {deals ? (
-                        deals.map((item) => (
-                            <div
-                                onDragEnter={(e) => {
-                                    onEnter(e);
-                                }}
-                                onDragLeave={(e) => {
-                                    onleave(e);
-                                }}
-                                className="dealColumn"
-                                onDrop={drop}
-                                onDragOver={dragOver}
-                            >
-                                {item.map((dial) => {
-                                    return (
-                                        <DealCard
-                                            stageId={stageId}
-                                            deal={deal}
-                                            setDeal={setDeal}
-                                            props={dial}
-                                            setDeals={setDeals}
-                                        />
-                                    );
-                                })}
-                            </div>
-                        ))
-                    ) : (
-                        <></>
-                    )}
-                </div>
+                {loader ? (
+                    <Loader />
+                ) : (
+                    <div className="container__dealCard_scroll">
+                        {deals ? (
+                            deals.map((item) => (
+                                <div
+                                    onDragEnter={(e) => {
+                                        onEnter(e);
+                                    }}
+                                    onDragLeave={(e) => {
+                                        onleave(e);
+                                    }}
+                                    className="dealColumn"
+                                    onDrop={drop}
+                                    onDragOver={dragOver}
+                                >
+                                    {item.map((dial) => {
+                                        return (
+                                            <DealCard
+                                                stageId={stageId}
+                                                deal={deal}
+                                                setDeal={setDeal}
+                                                props={dial}
+                                                setDeals={setDeals}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            ))
+                        ) : (
+                            <></>
+                        )}
+                    </div>
+                )}
             </div>
             <div className="main__bottom none">
                 <div

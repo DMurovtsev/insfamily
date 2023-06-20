@@ -42,7 +42,6 @@ function PopUpDeal({
         let mortagesId = currentDeal.policy.ipoteka.id;
         let key = e.target.id.split("-")[0];
         let value = e.target.value;
-        console.log(key);
         redactorIpoteca(mortagesId, key, value).then((response) => {});
     }
     function showPopUpNewDeal() {
@@ -106,6 +105,34 @@ function PopUpDeal({
                 } else {
                     form.classList.remove("red_border");
                 }
+            }
+        }
+    }
+    function validateOnlyDate(e) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+        if (2 < e.target.value.length && e.target.value.length < 5) {
+            e.target.value =
+                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
+        } else if (e.target.value.length > 4) {
+            e.target.value =
+                e.target.value.slice(0, 2) +
+                "." +
+                e.target.value.slice(2, 4) +
+                "." +
+                e.target.value.slice(4, 8);
+            if (e.target.value.length == 10) {
+                let newDate = new Date(
+                    e.target.value.slice(6, 10),
+                    Number(e.target.value.slice(3, 5) - 1),
+                    e.target.value.slice(0, 2)
+                );
+                let inputDate = newDate.toLocaleDateString("ru-RU");
+                let dateNow = new Date();
+                let now = dateNow.toLocaleDateString("ru-RU");
+                const date1 = new Date(now.split(".").reverse().join("-"));
+                const date2 = new Date(
+                    inputDate.split(".").reverse().join("-")
+                );
             }
         }
     }
@@ -201,9 +228,8 @@ function PopUpDeal({
 
     function whatsUp() {
         let phone = currentDeal.policy.policyholder.phone;
-        window.location.href = `https://web.whatsapp.com/send?phone=${phone}`;
+        window.open(`https://web.whatsapp.com/send?phone=${phone}, "_blank"`);
     }
-
     function M(e) {
         {
             if (!e.target.closest(".container__PopUp")) {
@@ -301,6 +327,7 @@ function PopUpDeal({
                             onBlur={(e, i) => {
                                 redactorDeal(e, "next_contact_date");
                             }}
+                            onInput={validateOnlyDate}
                         />
                         <Input
                             none="none"
@@ -329,7 +356,7 @@ function PopUpDeal({
                             ion_icon={
                                 currentDeal.policy.policyholder.phone != ""
                                     ? "ion_icon"
-                                    : ""
+                                    : undefined
                             }
                             value={
                                 currentDeal.policy.policyholder.phone

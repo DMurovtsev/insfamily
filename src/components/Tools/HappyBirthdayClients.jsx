@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { getClientsBirthday, getManagers } from "../../Api";
 import { PopUpClientsBirhday } from "./PopUpClientsBirhday";
 
-function HappyBirthdayClients() {
+function HappyBirthdayClients({ setClientsBirhday, clientsBirhday }) {
     const [clientsBirhdayCount, setClientsBirhdayCount] = useState([]);
     const [managerss, setManagerss] = useState([]);
-    const [clientsBirhday, setClientsBirhday] = useState();
     useEffect(() => {
         getClientsBirthday().then((data) => {
             setClientsBirhdayCount(data.clients);

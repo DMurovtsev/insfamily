@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getClientsBirthdayCount } from "../../Api";
+import { HappyBirthdayClients } from "./HappyBirthdayClients";
 
 function ToolsMenu() {
     const [clientsBirhdayCount, setClientsBirhdayCount] = useState();
+    const [clientsBirhday, setClientsBirhday] = useState();
 
     useEffect(() => {
         getClientsBirthdayCount().then((data) => {
@@ -56,6 +58,7 @@ function ToolsMenu() {
             .classList.remove("active");
         document.getElementById("ProblemBook").classList.remove("active");
         document.getElementById("LiveTape").classList.remove("active");
+        setClientsBirhday();
     }
 
     return (
@@ -91,6 +94,10 @@ function ToolsMenu() {
             <div onClick={closeAllTools} className="closeToolsMenu">
                 <ion-icon name="close-outline"></ion-icon>
             </div>
+            <HappyBirthdayClients
+                setClientsBirhday={setClientsBirhday}
+                clientsBirhday={clientsBirhday}
+            />
         </div>
     );
 }

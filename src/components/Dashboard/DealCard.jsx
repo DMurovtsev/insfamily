@@ -39,7 +39,11 @@ function DealCard({ props, setDeal }) {
             <div
                 draggable
                 id={props.id}
-                className={classOpacity ? "card opacity" : "card"}
+                className={
+                    props.status === "archived" || classOpacity
+                        ? "card opacity"
+                        : "card"
+                }
                 onDragStart={(e) => {
                     dragStartDeal(e);
                 }}

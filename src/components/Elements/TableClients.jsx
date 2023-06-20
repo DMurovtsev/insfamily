@@ -13,7 +13,6 @@ function TableClients({
         name: `${item.last_name} ${item.first_name} ${item.middle_name}`,
     }));
 
-    console.log(searchResponse);
     return (
         <div
             onScroll={(e) => {
