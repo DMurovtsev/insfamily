@@ -404,7 +404,11 @@ function PopUpCreateDeal({
                         onClick={handleClick}
                         name="Создать"
                     />
-                    <Button onClick={cancelCreateDeal} name="Отмена" />
+                    <Button
+                        style="button_red"
+                        onClick={cancelCreateDeal}
+                        name="Отмена"
+                    />
                 </div>
             </div>
         </div>

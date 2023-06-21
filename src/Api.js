@@ -268,7 +268,6 @@ async function chanageStatusDealCard(deal, status_deal) {
 async function redactorPopUpDeal(key, value, id) {
     let formData = new FormData();
     formData.append(key, value);
-
     let response = await fetch(`${myHost}/deals/${id}/`, {
         method: "PATCH",
         headers: headers,
@@ -482,6 +481,21 @@ async function getPolicies(search) {
     });
     return await response.json();
 }
+async function getSelsDocuments(id) {
+    let response = await fetch(`${myHost}/files/?policy=${id}`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function oneForAllPost(model, values, id) {
+    headers["Content-Type"] = "application/json";
+    let response = await fetch(`${myHost}/ofa/`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ model: model, values: values, id: id }),
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -527,4 +541,6 @@ export {
     getCompanies,
     getFilterSels,
     getPolicies,
+    getSelsDocuments,
+    oneForAllPost,
 };

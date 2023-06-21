@@ -99,7 +99,7 @@ function PopUpNewDeal() {
             }
         }
     }
-
+    /*Валидация даты*/
     function checkDate(e) {
         e.target.value = e.target.value.replace(/[^0-9]/g, "");
         if (2 < e.target.value.length && e.target.value.length < 5) {
@@ -174,6 +174,19 @@ function PopUpNewDeal() {
         { id: "VTB", name: "ВТБ" },
         { id: "Tinkoff", name: "Тинькофф" },
     ];
+    let namesForFiles = [
+        { review: "Отзыв" },
+        { policy: "Полис" },
+        { check: "Чек" },
+        { zaya: "Заявление" },
+        { passport: "Паспорт" },
+        { pts: "ПТС" },
+        { sts: "СТС" },
+        { prava: "Права" },
+        { ocenka: "Оценка" },
+        { egrn: "ЕГРН" },
+        { creditn: "Кредитный" },
+    ];
 
     /*Снятие disabled с канала продаж*/
     function channelUndisable() {
@@ -200,19 +213,6 @@ function PopUpNewDeal() {
             document.getElementById("kvBnakId").value = 0;
         }
     }
-    let namesForFiles = [
-        { review: "Отзыв" },
-        { policy: "Полис" },
-        { check: "Чек" },
-        { zaya: "Заявление" },
-        { passport: "Паспорт" },
-        { pts: "ПТС" },
-        { sts: "СТС" },
-        { prava: "Права" },
-        { ocenka: "Оценка" },
-        { egrn: "ЕГРН" },
-        { creditn: "Кредитный" },
-    ];
 
     /*Всё что связано с изменением типа полиса*/
     /*Добавление input file и классов для них*/
@@ -364,6 +364,11 @@ function PopUpNewDeal() {
             document.getElementById("incomingCommissionId").value = "";
         }
     }
+    function hidePopUpNewDeal() {
+        document
+            .querySelector(".container__NewPopUp")
+            .classList.remove("active");
+    }
 
     return (
         <div className="container__NewPopUp">
@@ -503,7 +508,7 @@ function PopUpNewDeal() {
                         name="Сохранить"
                     />
                     <div className="toggleNewBtn">
-                        <Button name="Отмена" />
+                        <Button onClick={hidePopUpNewDeal} name="Отмена" />
                     </div>
                 </div>
             </div>

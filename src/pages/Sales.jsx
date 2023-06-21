@@ -24,10 +24,13 @@ function Sales() {
     const [loading, setLoading] = useState(false);
     const { admin } = useContext(CustomContext);
     const [loader, setLoader] = useState(false);
+    const [currentSales, setCurrentSales] = useState();
+
     const values =
-        "status,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end";
+        "accept,status,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,id";
 
     let policiesHeaderArray = [
+        "Статус",
         "Тип продажи",
         "Тип полиса",
         "Серия и номер",
@@ -41,6 +44,7 @@ function Sales() {
         "Оформлен",
         "Начало действия",
         "Окончание действия",
+        "ID",
     ];
 
     const scrollHandler = (
@@ -60,7 +64,7 @@ function Sales() {
         ) {
             setLoading(true);
             let next = currentPagePolicy;
-            oneForAll(undefined, undefined, next).then((data) => {
+            oneForAll(undefined, undefined, next, undefined).then((data) => {
                 setPolicies((prevState) => [...prevState, ...data.results]);
                 if (data.next_page) {
                     setCurrentPagePolicy(data.next_page);
@@ -71,6 +75,7 @@ function Sales() {
             });
         }
     };
+
     /*Фильтрация продаж по селектам*/
     function filtrSelects() {
         setLoader(true);
@@ -117,9 +122,15 @@ function Sales() {
         }
         oneForAll(values, "policy", undefined, link).then((data) => {
             setPolicies(data.results);
+            if (data.next_page) {
+                setCurrentPagePolicy(data.next_page);
+            } else {
+                setCurrentPagePolicy();
+            }
             setLoader(false);
         });
     }
+
     function validateDate(e) {
         e.target.value = e.target.value.replace(/[^0-9]/g, "");
         if (2 < e.target.value.length && e.target.value.length < 5) {
@@ -161,6 +172,7 @@ function Sales() {
         getTypiesPolicies().then((data) => {
             setTypePolicies(data);
         });
+
         getCompanies().then((data) => {
             setInsCompany(data);
         });
@@ -213,26 +225,37 @@ function Sales() {
         { id: "all", name: "Все" },
         { id: "true", name: "Проведён" },
     ];
-    function click(e) {
-        console.log(e.currentTarget);
+
+    if (document.querySelector(".trTableSales")) {
+        document.querySelectorAll(".trTableSales").forEach((tr) => {
+            tr.onclick = () => {
+                let currentCard = policies.filter((sels) => sels.id == tr.id);
+
+                if (currentCard.length > 0) {
+                    setCurrentSales(currentCard[0]);
+                }
+            };
+        });
     }
 
     return (
         <div className="main" id="main">
-            {/* {typePolicies ? (
+            {currentSales ? (
                 <PopUpRedactorSales
                     typePolicies={typePolicies}
                     setTypePolicies={setTypePolicies}
                     channel={channel}
                     insCompany={insCompany}
                     managers={managers}
+                    currentSales={currentSales}
+                    setCurrentSales={setCurrentSales}
                 />
             ) : (
                 <></>
-            )} */}
+            )}
 
             <div className="container__header_sales">
-                <Button name="Создать АТК" />
+                <Button name="Добавить полис" />
 
                 <Select
                     onChange={filtrSelects}
@@ -323,7 +346,7 @@ function Sales() {
                         }
                     }}
                 />
-                <Button name="Добавить полис" />
+                {admin ? <Button name="Создать АКТ" /> : <></>}
             </div>
             <div className="container__body_sales">
                 {loader ? (

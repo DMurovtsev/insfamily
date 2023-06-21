@@ -46,7 +46,14 @@ function Select({
                 )}
 
                 {options
-                    ? options.map((i) => <option value={i.id}>{i.name}</option>)
+                    ? options.map((i) => (
+                          <option
+                              selected={firstValue == i.id ? true : false}
+                              value={i.id}
+                          >
+                              {i.name}
+                          </option>
+                      ))
                     : ""}
             </select>
             <span>{name}</span>

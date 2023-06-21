@@ -47,7 +47,7 @@ function Table({
 
                 <tbody>
                     {props.map((item) => (
-                        <tr>
+                        <tr id={item ? item.id : ""} className="trTableSales">
                             {check ? <td data-label="+">{check}</td> : <></>}
                             {propsTd.map((i) => (
                                 <td data-label="Наименоваие"> {item[i]}</td>
