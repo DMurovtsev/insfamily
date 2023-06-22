@@ -5,6 +5,7 @@ import { TableClients } from "../components/Elements/TableClients";
 import { TableDeals } from "../components/Elements/TableDeals";
 import { TablePolicies } from "../components/Elements/TablePolicies";
 import { Loader } from "../components/Elements/Loader";
+import { PopUpRedactorSales } from "../components/Sales/PopUpRedactorSales";
 
 function SearchResults() {
     const [searchResponse, setSearchResponse] = useState();
@@ -18,6 +19,7 @@ function SearchResults() {
     const [deals, setDeals] = useState();
     const [policies, setPolicies] = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [currentSales, setCurrentSales] = useState();
 
     useEffect(() => {
         document.getElementById("inputGlobalSearch").onblur = () => {
@@ -102,7 +104,16 @@ function SearchResults() {
     };
 
     return (
-        <div>
+        <div className="search__conteiner">
+            {currentSales ? (
+                <PopUpRedactorSales
+                    currentSales={currentSales}
+                    setCurrentSales={setCurrentSales}
+                />
+            ) : (
+                <></>
+            )}
+
             {searchResponse.base_policies.count == 0 ? (
                 <></>
             ) : (
@@ -159,6 +170,8 @@ function SearchResults() {
                     loading={loading}
                     setLoading={setLoading}
                     setSearchResponses={searchResponse}
+                    currentSales={currentSales}
+                    setCurrentSales={setCurrentSales}
                 />
             )}
         </div>

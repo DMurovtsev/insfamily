@@ -281,26 +281,26 @@ function PopUpCreateDeal({
             <div className="content__PopUp_CreateDeal">
                 <Select
                     setId="basesource_id"
-                    style="requared"
+                    style="requared inputBox__select_largest"
                     name="Источник"
                     options={baseSource}
                 />
                 <Select
                     setId="type_policy"
-                    style="requared"
+                    style="requared inputBox__select_largest"
                     name="Тип полиса"
                     options={typePolicies}
                 />
                 <Select
                     setId="stage_id"
-                    style="requared"
+                    style="requared inputBox__select_largest"
                     options={optionsStage}
                     name="Этап"
                 />
                 {admin ? (
                     <Select
                         setId="user"
-                        style="requared "
+                        style="requared inputBox__select_largest"
                         name="Менеджер"
                         options={managers}
                     />
@@ -309,7 +309,7 @@ function PopUpCreateDeal({
                 )}
                 <Input
                     setId="full_name"
-                    style="input__medium requared"
+                    style="input__medium  requared"
                     name="ФИО клиента"
                 />
                 <Input

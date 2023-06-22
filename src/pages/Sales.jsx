@@ -9,10 +9,13 @@ import {
     getManagers,
     getTypiesPolicies,
     oneForAll,
+    oneForAllPost,
 } from "../Api";
 import { CustomContext } from "../components/Service/Context";
 import { Loader } from "../components/Elements/Loader";
 import { PopUpRedactorSales } from "../components/Sales/PopUpRedactorSales";
+import { PopUpNewDeal } from "../components/Dashboard/PopUpNewDeal";
+import { type } from "@testing-library/user-event/dist/type";
 
 function Sales() {
     const [policies, setPolicies] = useState([]);
@@ -24,6 +27,7 @@ function Sales() {
     const [loading, setLoading] = useState(false);
     const { admin } = useContext(CustomContext);
     const [loader, setLoader] = useState(false);
+    const [dateValid, setDateValid] = useState(true);
     const [currentSales, setCurrentSales] = useState();
 
     const values =
@@ -78,7 +82,11 @@ function Sales() {
 
     /*Фильтрация продаж по селектам*/
     function filtrSelects() {
+        if (!dateValid) {
+            return;
+        }
         setLoader(true);
+
         let typeValue = document.getElementById("typeSelectSels");
         let channelValue = document.getElementById("channelSelectSels");
         let insCompanyValue = document.getElementById("insCompanySelectSels");
@@ -105,10 +113,11 @@ function Sales() {
         if (statusValue && statusValue.value != "all") {
             link = link + `&accept=${statusValue.value}`;
         }
-        if (dataStartValue && dataStartValue.value != "") {
+
+        if (dataStartValue && dataStartValue.value != "" && dateValid == true) {
             link = link + `&date_start=${dataStartValue.value}`;
         }
-        if (dataEndValue && dataEndValue.value != "") {
+        if (dataEndValue && dataEndValue.value != "" && dateValid == true) {
             link = link + `&data_end=${dataEndValue.value}`;
         }
         if (checkbox) {
@@ -143,7 +152,15 @@ function Sales() {
                 e.target.value.slice(2, 4) +
                 "." +
                 e.target.value.slice(4, 8);
+            if (e.target.value.length != 10) {
+                e.target.classList.add("red_border");
+                setDateValid(false);
+            }
+
             if (e.target.value.length == 10) {
+                e.target.classList.remove("red_border");
+                setDateValid(true);
+
                 let newDate = new Date(
                     e.target.value.slice(6, 10),
                     Number(e.target.value.slice(3, 5) - 1),
@@ -207,6 +224,7 @@ function Sales() {
     /*Поиск по Sels
     Удаление пробелов в начале и конце строки*/
     function Search(e) {
+        setLoader(true);
         let search = e.target.value.trim().replace(/\s+/g, " ");
         if (search == "") {
             filtrSelects();
@@ -217,6 +235,7 @@ function Sales() {
         oneForAll(values, "policy", undefined, `search=${search}`).then(
             (response) => {
                 setPolicies(response.results);
+                setLoader(false);
             }
         );
     }
@@ -226,15 +245,56 @@ function Sales() {
         { id: "true", name: "Проведён" },
     ];
 
-    if (document.querySelector(".trTableSales")) {
-        document.querySelectorAll(".trTableSales").forEach((tr) => {
-            tr.onclick = () => {
-                let currentCard = policies.filter((sels) => sels.id == tr.id);
+    function addPolicy() {
+        document.querySelector(".container__NewPopUp").classList.add("active");
+    }
+    /*Выгрузка*/
+    function unloadPolicy() {
+        let typeValue = document.getElementById("typeSelectSels");
+        let channelValue = document.getElementById("channelSelectSels");
+        let insCompanyValue = document.getElementById("insCompanySelectSels");
+        let managerValue = document.getElementById("managerSelectSels");
+        let statusValue = document.getElementById("statusSelectSels");
+        let dataStartValue = document.getElementById("inputDateStartSels");
+        let dataEndValue = document.getElementById("inputDateEndSels");
+        let checkbox = document.getElementById("checkBoxSales");
 
-                if (currentCard.length > 0) {
-                    setCurrentSales(currentCard[0]);
-                }
-            };
+        let body = { upload: "policy" };
+        if (typeValue && typeValue.value != "") {
+            body["type"] = typeValue.value;
+        }
+        if (channelValue && channelValue.value != "") {
+            body["channel"] = channelValue.value;
+        }
+        if (insCompanyValue && insCompanyValue.value != "") {
+            body["company"] = insCompanyValue.value;
+        }
+        if (managerValue && managerValue.value != "") {
+            body["user"] = managerValue.value;
+        }
+        if (statusValue && statusValue.value != "all") {
+            body["accept"] = statusValue.value;
+        }
+
+        if (dataStartValue && dataStartValue.value != "" && dateValid == true) {
+            body["date_start"] = dataStartValue.value;
+        }
+        if (dataEndValue && dataEndValue.value != "" && dateValid == true) {
+            body["date_end"] = dataEndValue.value;
+        }
+        if (checkbox) {
+            if (checkbox.checked) {
+                body["f"] = checkbox.value;
+            }
+        }
+        oneForAllPost(body).then((data) => {
+            const url = window.URL.createObjectURL(data);
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "policy.xlsx");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
     }
 
@@ -253,9 +313,10 @@ function Sales() {
             ) : (
                 <></>
             )}
+            <PopUpNewDeal />
 
             <div className="container__header_sales">
-                <Button name="Добавить полис" />
+                <Button onClick={addPolicy} name="Добавить полис" />
 
                 <Select
                     onChange={filtrSelects}
@@ -302,6 +363,7 @@ function Sales() {
                 ) : (
                     <></>
                 )}
+
                 <Input
                     setId="inputDateStartSels"
                     onInput={validateDate}
@@ -321,6 +383,12 @@ function Sales() {
                     style="inputBox__select_s"
                     name="Дата оформления по"
                     value={month}
+                    onBlur={filtrSelects}
+                    onKeyDown={(e) => {
+                        if (e.keyCode === 13) {
+                            filtrSelects();
+                        }
+                    }}
                 />
                 {admin ? (
                     <div className="center">
@@ -347,6 +415,11 @@ function Sales() {
                     }}
                 />
                 {admin ? <Button name="Создать АКТ" /> : <></>}
+                {admin ? (
+                    <Button onClick={unloadPolicy} name="Выгрузить" />
+                ) : (
+                    <></>
+                )}
             </div>
             <div className="container__body_sales">
                 {loader ? (
@@ -363,6 +436,7 @@ function Sales() {
                         loading={loading}
                         setLoading={setLoading}
                         setPolicies={setPolicies}
+                        setCurrentSales={setCurrentSales}
                     />
                 )}
             </div>

@@ -11,10 +11,11 @@ function Table({
     setLoading,
     currentPage,
     setCurrentPage,
+    setCurrentSales,
     setPolicies,
 }) {
     let propsTd = "";
-    if (props.length != 0) {
+    if (props && props.length != 0) {
         propsTd = Object.keys(props[0]);
     }
 
@@ -47,7 +48,13 @@ function Table({
 
                 <tbody>
                     {props.map((item) => (
-                        <tr id={item ? item.id : ""} className="trTableSales">
+                        <tr
+                            onClick={() => {
+                                setCurrentSales(item);
+                            }}
+                            id={item ? item.id : ""}
+                            className="trTableSales"
+                        >
                             {check ? <td data-label="+">{check}</td> : <></>}
                             {propsTd.map((i) => (
                                 <td data-label="Наименоваие"> {item[i]}</td>

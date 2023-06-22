@@ -1,12 +1,36 @@
 import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { InfoPopUp } from "../Service/InfoPopUp";
 import { Select } from "../Elements/Select";
 import { InputFile } from "../Elements/InputFile";
+import {
+    getBanks,
+    getChannels,
+    getCompaniesL,
+    getTypiesPolicies,
+} from "../../Api";
 
-function PopUpNewDeal() {
+function PopUpNewDeal({ currentDeal }) {
+    const [banks, setBanks] = useState([]);
+    const [channel, setChannel] = useState([]);
+    const [typePolicies, setTypePolicies] = useState();
+    const [companiesL, setCompaniesL] = useState([]);
+
     useEffect(() => {
+        getChannels().then((data) => {
+            setChannel(data);
+        });
+        getTypiesPolicies().then((data) => {
+            setTypePolicies(data);
+        });
+        getCompaniesL().then((data) => {
+            setCompaniesL(data);
+        });
+        getBanks().then((data) => {
+            setBanks(data);
+        });
+
         let input_labels = document.querySelectorAll(
             ".content__NewPopUp_inputFile"
         );
@@ -75,9 +99,7 @@ function PopUpNewDeal() {
             }
         });
     }
-
     /*Валидация на ввод трёх заглавных русских букв*/
-
     function validateInputSeries() {
         let selectTypePolicy = document.getElementById("typeId");
         if (
@@ -143,36 +165,16 @@ function PopUpNewDeal() {
         { id: "Cash", name: "Наличные" },
         { id: "NoCash", name: "Безналичный" },
     ];
-    let selectOptionsTypeSales = [
-        { id: "NewBisnes", name: "Новый бизнес" },
-        { id: "Prolongation", name: "Пролонгация" },
-        { id: "Transition", name: "Переход" },
-        { id: "Addendum", name: "Аддендум" },
-        { id: "NextInstallment", name: "Очередной взнос" },
-    ];
     let selectOptionsCreditVehicle = [
         { id: "Yes", name: "Да" },
         { id: "No", name: "Нет" },
     ];
-    let selectOptionsType = [
-        { id: "OSAGO", name: "ОСАГО" },
-        { id: "KASKO", name: "КАСКО" },
-        { id: "Ipotechnyi", name: "Ипотечный" },
-        { id: "Lichnye veshi", name: "Личные вещи" },
-    ];
-    let selectOptionsCompany = [
-        { id: "Sberbank", name: "Сбербанк" },
-        { id: "Alfa", name: "Альфа" },
-    ];
-    let selectOptionsChannel = [
-        { id: "IpPodshymalskiy", name: "ИП подшумальский" },
-        { id: "NEP", name: "ООО НЭП" },
-        { id: "Pampadu", name: "Пампаду" },
-    ];
-    let selectOptionsBank = [
-        { id: "Sber", name: "Сбербанк" },
-        { id: "VTB", name: "ВТБ" },
-        { id: "Tinkoff", name: "Тинькофф" },
+    let selectOptionsTypeSales = [
+        { id: "newbiz", name: "Новый бизнес" },
+        { id: "prolongation", name: "Пролонгация" },
+        { id: "transition", name: "Переход" },
+        { id: "addendum", name: "Аддендум" },
+        { id: "payment", name: "Очередной взнос" },
     ];
     let namesForFiles = [
         { review: "Отзыв" },
@@ -391,14 +393,14 @@ function PopUpNewDeal() {
                         setId="typeId"
                         name="Тип полиса"
                         style="inputBox__standart_popUp requared"
-                        options={selectOptionsType}
+                        options={typePolicies}
                         onChange={selectType}
                     />
                     <Select
                         divId="divBankId"
                         setId="bankId"
                         name="Банк"
-                        options={selectOptionsBank}
+                        options={banks}
                         style="inputBox__standart_popUp none"
                     />
                     <Input
@@ -452,7 +454,7 @@ function PopUpNewDeal() {
                         name="Компания"
                         style="inputBox__standart_popUp requared"
                         onChange={channelUndisable}
-                        options={selectOptionsCompany}
+                        options={companiesL}
                     />
                     <Select
                         setId="channelId"
@@ -460,7 +462,7 @@ function PopUpNewDeal() {
                         style="inputBox__standart_popUp requared"
                         disabled="true"
                         onClick={channelInfo}
-                        options={selectOptionsChannel}
+                        options={channel}
                         onChange={selectChannel}
                     />
                     <Input
@@ -500,6 +502,56 @@ function PopUpNewDeal() {
                             style="none"
                         />
                     ))}
+                </div>
+                <div style={{ textAlign: "center" }} className="clientInfa">
+                    <h3>
+                        Страхователь<ion-icon name="person-outline"></ion-icon>
+                    </h3>
+                    <Input
+                        style="inputBox__standart_popUp "
+                        value={
+                            currentDeal
+                                ? currentDeal.policy.policyholder.full_name
+                                : ""
+                        }
+                        name="ФИО"
+                    />
+                    <Input
+                        value={
+                            currentDeal
+                                ? currentDeal.policy.policyholder.birthday
+                                : ""
+                        }
+                        style="inputBox__standart_popUp "
+                        name="Дата Рождения"
+                    />
+                    <Input
+                        value={
+                            currentDeal
+                                ? currentDeal.policy.policyholder.phone
+                                : ""
+                        }
+                        style="inputBox__standart_popUp "
+                        name="Телефон"
+                    />
+                    <Input
+                        value={
+                            currentDeal
+                                ? currentDeal.policy.policyholder.email
+                                : ""
+                        }
+                        style="inputBox__standart_popUp "
+                        name="Почта"
+                    />
+                    <Input
+                        value={
+                            currentDeal
+                                ? currentDeal.policy.policyholder.address
+                                : ""
+                        }
+                        style="inputBox__standart_popUp "
+                        name="Адресс"
+                    />
                 </div>
                 <div className="content__PopUp_btn">
                     <Button

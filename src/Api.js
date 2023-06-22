@@ -487,13 +487,16 @@ async function getSelsDocuments(id) {
     });
     return await response.json();
 }
-async function oneForAllPost(model, values, id) {
+async function oneForAllPost(body) {
     headers["Content-Type"] = "application/json";
     let response = await fetch(`${myHost}/ofa/`, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify({ model: model, values: values, id: id }),
+        body: JSON.stringify(body),
     });
+    if (body.upload) {
+        return await response.blob();
+    }
     return await response.json();
 }
 

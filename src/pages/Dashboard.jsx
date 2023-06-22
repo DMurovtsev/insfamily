@@ -27,6 +27,7 @@ import {
     getScrollDeals,
     getFilterDeals,
     getBanks,
+    getChannels,
 } from "../Api";
 import { AddStage } from "../components/Dashboard/AddStage";
 import { DeleteStage } from "../components/Dashboard/DeleteStage";
@@ -35,6 +36,7 @@ import { Loader } from "../components/Elements/Loader";
 
 function Dashboard() {
     const [banks, setBanks] = useState([]);
+    const [channel, setChannel] = useState([]);
     const [loader, setLoader] = useState(false);
     const [sockets, setSockets] = useState();
     const [currentPage, setCurrentPage] = useState("");
@@ -93,6 +95,9 @@ function Dashboard() {
             setFunnels(data.results);
         });
 
+        getChannels().then((data) => {
+            setChannel(data);
+        });
         getClients().then((data) => {});
         getClientsBirthdayCount().then((data) => {});
         getClientsBirthday().then((data) => {});
@@ -439,7 +444,7 @@ function Dashboard() {
                 stages={stages}
                 setDeals={setDeals}
             />
-            <PopUpNewDeal />
+            <PopUpNewDeal currentDeal={currentDeal} />
 
             <div className="container__header">
                 <Select_2

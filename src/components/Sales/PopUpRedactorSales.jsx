@@ -49,16 +49,41 @@ function PopUpRedactorSales({
         }
     }
     function editPolicy(e, key) {
-        console.log(e.target.value);
         if (e.target.value == "") {
             return;
         }
-        let id = currentSales.id;
-        let model = "policy";
-        let values = {
-            [key]: e.target.value,
+        let body = {
+            id: currentSales.id,
+            model: "policy",
+            values: {
+                [key]: e.target.value,
+            },
         };
-        // oneForAllPost(model, values, id).then((response) => {});
+
+        // oneForAllPost(body).then((response) => {});
+    }
+    /*Валидация дат */
+    function checkDate(e) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+        if (2 < e.target.value.length && e.target.value.length < 5) {
+            e.target.value =
+                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
+        } else if (e.target.value.length > 4) {
+            e.target.value =
+                e.target.value.slice(0, 2) +
+                "." +
+                e.target.value.slice(2, 4) +
+                "." +
+                e.target.value.slice(4, 8);
+
+            if (e.target.value.length == 10) {
+                let newDate = new Date(
+                    e.target.value.slice(6, 10),
+                    Number(e.target.value.slice(3, 5) - 1),
+                    e.target.value.slice(0, 2)
+                );
+            }
+        }
     }
 
     return (
@@ -75,8 +100,10 @@ function PopUpRedactorSales({
                                 style="button_green"
                                 name={
                                     currentSales.accept === true
-                                        ? "Сверка"
-                                        : "Проведён"
+                                        ? "Вернуть в сверки"
+                                        : currentSales.accept === false
+                                        ? "Провести"
+                                        : ""
                                 }
                             />
                         ) : (
@@ -116,6 +143,7 @@ function PopUpRedactorSales({
                         options={typePolicies}
                     />
                     <Input
+                        style="inputBox__standart_popUp"
                         onBlur={(e) => {
                             editPolicy(e, "number");
                         }}
@@ -146,6 +174,7 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.commission}
                         name="Премия"
+                        style="inputBox__standart_popUp"
                     />
                     <Input
                         onBlur={(e) => {
@@ -153,6 +182,7 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.commission_discont}
                         name="Вход. КВ %"
+                        style="inputBox__standart_popUp"
                     />
                     <Input
                         onBlur={(e) => {
@@ -160,6 +190,7 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.commission_rur}
                         name="Вход. КВ РУБ."
+                        style="inputBox__standart_popUp"
                     />
                     <Input
                         onBlur={(e) => {
@@ -167,6 +198,7 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.client__full_name}
                         name="Клиент"
+                        style="inputBox__standart_popUp"
                     />
                     <Select
                         onChange={(e) => {
@@ -183,6 +215,8 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.date_registration}
                         name="Оформлен"
+                        onInput={checkDate}
+                        style="inputBox__standart_popUp"
                     />
                     <Input
                         onBlur={(e) => {
@@ -190,6 +224,8 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.date_start}
                         name="Начало действия"
+                        onInput={checkDate}
+                        style="inputBox__standart_popUp"
                     />
                     <Input
                         onBlur={(e) => {
@@ -197,6 +233,8 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.date_end}
                         name="Окончание действия"
+                        onInput={checkDate}
+                        style="inputBox__standart_popUp"
                     />
 
                     <Button

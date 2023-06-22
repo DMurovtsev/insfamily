@@ -1,3 +1,5 @@
+import { oneForAll } from "../../Api";
+
 function TablePolicies({
     searchResponse,
     heading,
@@ -7,7 +9,11 @@ function TablePolicies({
     loading,
     setLoading,
     setSearchResponses,
+    setCurrentSales,
 }) {
+    const values =
+        "accept,status,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,id";
+
     return (
         <div
             onScroll={(e) => {
@@ -48,8 +54,19 @@ function TablePolicies({
                 <tbody>
                     {searchResponse.length > 0
                         ? searchResponse.map((item) => (
-                              <tr>
-                                  <td>{}</td>
+                              <tr
+                                  onClick={() => {
+                                      oneForAll(
+                                          values,
+                                          "policy",
+                                          undefined,
+                                          `id=${item.id}`
+                                      ).then((response) => {
+                                          setCurrentSales(response.results[0]);
+                                      });
+                                  }}
+                              >
+                                  <td>{item.status}</td>
                                   <td>{item.type.name}</td>
                                   <td>
                                       {item.series} {item.number}

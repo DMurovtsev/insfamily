@@ -98,11 +98,12 @@ body {
     gap: 10px;
 }
 .container__header_sales {
+    transform: scale(0.8);
     position: absolute;
     display: flex;
     top: 20px;
-    left: -110px;
-    gap: 10px;
+    right: -70px;
+    gap: 7px;
 }
 .container__header_relative {
     position: relative;
@@ -417,7 +418,8 @@ select {
     font-size: 1em;
     transition: 0.5s;
 }
-.inputBox__standart_popUp select {
+.inputBox__standart_popUp select,
+.inputBox__standart_popUp input {
     background-color: var(--white);
 }
 .carNone {
@@ -769,7 +771,7 @@ button:hover i::after {
     margin-top: 15px;
     width: auto;
     height: 400px;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     margin-bottom: 15px;
 }
@@ -1576,6 +1578,7 @@ tbody tr:hover {
 .inputBox__medium {
     width: 240px;
 }
+.inputBox__standart_popUp input:focus ~ span,
 .inputBox__select select:focus ~ span,
 .content__PopUp_input input:focus ~ span,
 .content__PopUp_input span:valid ~ span,
@@ -1617,11 +1620,12 @@ tbody tr:hover {
 
 /* .content__PopUp_comment input:valid, */
 /* .content__PopUp_input input:valid, */
-/* .inputBox__standart_popUp select:focus ~ span,
-.inputBox__standart_popUp select:valid ~ span, */
+.inputBox__standart_popUp select:focus ~ span,
+.inputBox__standart_popUp select:valid ~ span,
 .content__PopUp_comment input:valid ~ span {
     background: #fff;
 }
+.inputBox__standart_popUp input:valid ~ span,
 .content__PopUp_input input:valid ~ span {
     background: #fff;
 }
@@ -1633,6 +1637,7 @@ tbody tr:hover {
 .content__PopUp_header input:valid,
 .content__PopUp_CreateDeal input:focus,
 /* .content__PopUp_CreateDeal input:valid, */
+.inputBox__standart_popUp input:focus,
 .content__PopUp_header input:focus,
 .container__flex_calc select:focus,
 .container__flex_calc input:focus {
@@ -1785,7 +1790,7 @@ tbody tr:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 550px;
+    width: 650px;
     height: 780px;
     z-index: 20;
 }
@@ -1814,7 +1819,7 @@ tbody tr:hover {
 .content__NewPopUp_inputFile {
     position: absolute;
     margin-top: 25px;
-    margin-right: 20px;
+    margin-right: 80px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -2200,7 +2205,7 @@ section {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-around;
     gap: 10px;
     overflow-y: auto;
     color: black;
@@ -2751,7 +2756,7 @@ section {
 .table_thead {
     position: sticky;
     top: 32px;
-    z-index: 15;
+    z-index: 5;
     background-color: var(--grey);
 }
 .input__medium_xl {
@@ -2913,8 +2918,8 @@ section {
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    min-width: 200px;
-    min-height: 250px;
+    width: 200px;
+    height: 250px;
     box-shadow: 0 0 5px var(--dark);
     border-radius: 15px;
 }
@@ -2931,4 +2936,28 @@ section {
     display: flex;
     padding: 10px;
     gap: 50px;
+}
+.content__SelsDocuments_li {
+    width: 190px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    height: 200px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+.clientInfa {
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    right: 0;
+    top: 435px;
+    margin-right: 10px;
+}
+.search__conteiner {
+    width: auto;
 }

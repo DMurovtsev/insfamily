@@ -28,21 +28,22 @@ function SelsDocuments({ documents }) {
         <div className="container__SelsDocuments">
             <div className="content__SelsDocuments">
                 <h3>Документы</h3>
-                {documents ? (
-                    documents.map((k) => (
-                        <li
-                            onClick={() => {
-                                viewDocs(k.file);
-                            }}
-                            className="liSales"
-                        >
-                            {k.name} {k.date_add}
-                        </li>
-                    ))
-                ) : (
-                    <></>
-                )}
-
+                <div className="content__SelsDocuments_li">
+                    {documents ? (
+                        documents.map((k) => (
+                            <li
+                                onClick={() => {
+                                    viewDocs(k.file);
+                                }}
+                                className="liSales"
+                            >
+                                {k.name} {k.date_add}
+                            </li>
+                        ))
+                    ) : (
+                        <></>
+                    )}
+                </div>
                 <InputFile setId="inputFileSels" name="Загрузить документы" />
             </div>
         </div>
