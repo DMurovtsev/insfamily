@@ -31,7 +31,7 @@ function Sales() {
     const [currentSales, setCurrentSales] = useState();
 
     const values =
-        "accept,status,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,id";
+        "accept_display,status_display,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,id,half_com_display";
 
     let policiesHeaderArray = [
         "Статус",
@@ -49,6 +49,7 @@ function Sales() {
         "Начало действия",
         "Окончание действия",
         "ID",
+        "50% КВ",
     ];
 
     const scrollHandler = (
@@ -299,7 +300,7 @@ function Sales() {
     }
 
     return (
-        <div className="main" id="main">
+        <>
             {currentSales ? (
                 <PopUpRedactorSales
                     typePolicies={typePolicies}
@@ -313,134 +314,136 @@ function Sales() {
             ) : (
                 <></>
             )}
-            <PopUpNewDeal />
+            <div className="main" id="main">
+                <PopUpNewDeal />
 
-            <div className="container__header_sales">
-                <Button onClick={addPolicy} name="Добавить полис" />
+                <div className="container__header_sales">
+                    <Button onClick={addPolicy} name="Добавить полис" />
 
-                <Select
-                    onChange={filtrSelects}
-                    setId="typeSelectSels"
-                    options={typePolicies}
-                    name="Тип полиса"
-                    style="inputBox__select_larg"
-                />
-                <Select
-                    onChange={filtrSelects}
-                    setId="channelSelectSels"
-                    options={channel}
-                    name="Канал продаж"
-                    style="inputBox__select_larg"
-                />
-                <Select
-                    onChange={filtrSelects}
-                    setId="insCompanySelectSels"
-                    options={insCompany}
-                    name="Страховая компания"
-                    style="inputBox__select_largest"
-                />
-                {admin ? (
                     <Select
                         onChange={filtrSelects}
-                        setId="managerSelectSels"
-                        options={managers}
-                        name="Менеджер"
-                        style="inputBox__select"
+                        setId="typeSelectSels"
+                        options={typePolicies}
+                        name="Тип полиса"
+                        style="inputBox__select_larg"
                     />
-                ) : (
-                    <></>
-                )}
-                {admin ? (
                     <Select
-                        first="Сверка"
-                        firstValue="false"
                         onChange={filtrSelects}
-                        setId="statusSelectSels"
-                        options={statusSelectSels}
-                        name="Статус"
-                        style="inputBox__small"
+                        setId="channelSelectSels"
+                        options={channel}
+                        name="Канал продаж"
+                        style="inputBox__select_larg"
                     />
-                ) : (
-                    <></>
-                )}
-
-                <Input
-                    setId="inputDateStartSels"
-                    onInput={validateDate}
-                    style="inputBox__select_s"
-                    name="Дата оформления с"
-                    value={now}
-                    onBlur={filtrSelects}
-                    onKeyDown={(e) => {
-                        if (e.keyCode === 13) {
-                            filtrSelects();
-                        }
-                    }}
-                />
-                <Input
-                    setId="inputDateEndSels"
-                    onInput={validateDate}
-                    style="inputBox__select_s"
-                    name="Дата оформления по"
-                    value={month}
-                    onBlur={filtrSelects}
-                    onKeyDown={(e) => {
-                        if (e.keyCode === 13) {
-                            filtrSelects();
-                        }
-                    }}
-                />
-                {admin ? (
-                    <div className="center">
-                        <input
+                    <Select
+                        onChange={filtrSelects}
+                        setId="insCompanySelectSels"
+                        options={insCompany}
+                        name="Страховая компания"
+                        style="inputBox__select_largest"
+                    />
+                    {admin ? (
+                        <Select
                             onChange={filtrSelects}
-                            id="checkBoxSales"
-                            type="checkbox"
-                            name=""
+                            setId="managerSelectSels"
+                            options={managers}
+                            name="Менеджер"
+                            style="inputBox__select"
                         />
-                        <label id="labelCheckBox">50%КВ</label>
-                    </div>
-                ) : (
-                    <></>
-                )}
+                    ) : (
+                        <></>
+                    )}
+                    {admin ? (
+                        <Select
+                            first="Сверка"
+                            firstValue="false"
+                            onChange={filtrSelects}
+                            setId="statusSelectSels"
+                            options={statusSelectSels}
+                            name="Статус"
+                            style="inputBox__small"
+                        />
+                    ) : (
+                        <></>
+                    )}
 
-                <Input
-                    logo={<ion-icon name="search-outline"></ion-icon>}
-                    name="Поиск по полисам"
-                    style="inputBox__standart"
-                    onKeyDown={(e) => {
-                        if (e.keyCode === 13) {
-                            Search(e);
-                        }
-                    }}
-                />
-                {admin ? <Button name="Создать АКТ" /> : <></>}
-                {admin ? (
-                    <Button onClick={unloadPolicy} name="Выгрузить" />
-                ) : (
-                    <></>
-                )}
-            </div>
-            <div className="container__body_sales">
-                {loader ? (
-                    <Loader />
-                ) : (
-                    <Table
-                        header={policiesHeaderArray}
-                        props={policies}
-                        title="Продажи"
-                        style="container__table_tops"
-                        scrollHandler={scrollHandler}
-                        currentPage={currentPagePolicy}
-                        setCurrentPage={setCurrentPagePolicy}
-                        loading={loading}
-                        setLoading={setLoading}
-                        setPolicies={setPolicies}
-                        setCurrentSales={setCurrentSales}
+                    <Input
+                        setId="inputDateStartSels"
+                        onInput={validateDate}
+                        style="inputBox__select_s"
+                        name="Дата оформления с"
+                        value={now}
+                        onBlur={filtrSelects}
+                        onKeyDown={(e) => {
+                            if (e.keyCode === 13) {
+                                filtrSelects();
+                            }
+                        }}
                     />
-                )}
+                    <Input
+                        setId="inputDateEndSels"
+                        onInput={validateDate}
+                        style="inputBox__select_s"
+                        name="Дата оформления по"
+                        value={month}
+                        onBlur={filtrSelects}
+                        onKeyDown={(e) => {
+                            if (e.keyCode === 13) {
+                                filtrSelects();
+                            }
+                        }}
+                    />
+                    {admin ? (
+                        <div className="center">
+                            <input
+                                onChange={filtrSelects}
+                                id="checkBoxSales"
+                                type="checkbox"
+                                name=""
+                            />
+                            <label id="labelCheckBox">50%КВ</label>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+
+                    <Input
+                        logo={<ion-icon name="search-outline"></ion-icon>}
+                        name="Поиск по полисам"
+                        style="inputBox__standart"
+                        onKeyDown={(e) => {
+                            if (e.keyCode === 13) {
+                                Search(e);
+                            }
+                        }}
+                    />
+                    {admin ? <Button name="Создать АКТ" /> : <></>}
+                    {admin ? (
+                        <Button onClick={unloadPolicy} name="Выгрузить" />
+                    ) : (
+                        <></>
+                    )}
+                </div>
+                <div className="container__body_sales">
+                    {loader ? (
+                        <Loader />
+                    ) : (
+                        <Table
+                            header={policiesHeaderArray}
+                            props={policies}
+                            title="Продажи"
+                            style="container__table_tops"
+                            scrollHandler={scrollHandler}
+                            currentPage={currentPagePolicy}
+                            setCurrentPage={setCurrentPagePolicy}
+                            loading={loading}
+                            setLoading={setLoading}
+                            setPolicies={setPolicies}
+                            setCurrentSales={setCurrentSales}
+                        />
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 export { Sales };

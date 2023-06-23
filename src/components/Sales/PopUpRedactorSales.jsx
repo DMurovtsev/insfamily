@@ -3,7 +3,7 @@ import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
 import { Select } from "../Elements/Select";
 import { SelsDocuments } from "./SelsDocuments";
-import { getSelsDocuments, oneForAllPost } from "../../Api";
+import { deletePolicy, getSelsDocuments, oneForAllPost } from "../../Api";
 import { CustomContext } from "../Service/Context";
 
 function PopUpRedactorSales({
@@ -18,6 +18,10 @@ function PopUpRedactorSales({
     const { admin } = useContext(CustomContext);
 
     useEffect(() => {
+        if (currentSales.half_com_display != "-") {
+            let checkbox = document.getElementById("checkBoxSales");
+            checkbox.checked = true;
+        }
         let id = currentSales.id;
         getSelsDocuments(id).then((file) => {
             setDocuments(file.results);
@@ -39,7 +43,10 @@ function PopUpRedactorSales({
         }
     }
     function closeRedactorSales() {
-        setCurrentSales();
+        let id = currentSales.id;
+        deletePolicy(id).then((response) => {
+            setCurrentSales();
+        });
     }
     function showDocuments() {
         if (document.querySelector(".content__SelsDocuments")) {
@@ -48,7 +55,7 @@ function PopUpRedactorSales({
                 .classList.add("active");
         }
     }
-    function editPolicy(e, key) {
+    function editPolicy(e, key, value = null) {
         if (e.target.value == "") {
             return;
         }
@@ -56,11 +63,10 @@ function PopUpRedactorSales({
             id: currentSales.id,
             model: "policy",
             values: {
-                [key]: e.target.value,
+                [key]: value != null ? value : e.target.value,
             },
         };
-
-        // oneForAllPost(body).then((response) => {});
+        oneForAllPost(body).then((response) => {});
     }
     /*Валидация дат */
     function checkDate(e) {
@@ -86,34 +92,61 @@ function PopUpRedactorSales({
         }
     }
 
+    function check() {
+        let checkbox = document.getElementById("checkBoxSales");
+        if (checkbox.checked) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return (
         <div onClick={M} className="popUp__body">
             <div id="container__PopUp" className="container__PopUp ">
-                {currentSales ? <SelsDocuments documents={documents} /> : <></>}
+                {currentSales ? (
+                    <SelsDocuments
+                        currentSales={currentSales}
+                        documents={documents}
+                    />
+                ) : (
+                    <></>
+                )}
                 <div className="content__PopUp content__PopUp_Sales">
                     <div className="content__Sales_btn">
                         {admin ? (
                             <Button
                                 onClick={(e) => {
-                                    editPolicy(e, "accept");
+                                    editPolicy(
+                                        e,
+                                        "accept",
+                                        currentSales.accept_display ==
+                                            "Проведён"
+                                            ? false
+                                            : currentSales.accept_display ==
+                                              "Сверки"
+                                            ? true
+                                            : null
+                                    );
                                 }}
                                 style="button_green"
                                 name={
-                                    currentSales.accept === true
+                                    currentSales.accept_display == "Проведён"
                                         ? "Вернуть в сверки"
-                                        : currentSales.accept === false
+                                        : currentSales.accept_display ==
+                                          "Сверки"
                                         ? "Провести"
                                         : ""
                                 }
                             />
                         ) : (
-                            <></>
+                            "Статус"
                         )}
                         {admin ? (
                             <div className="center">
                                 <input
                                     onChange={(e) => {
-                                        editPolicy(e, "half_com");
+                                        editPolicy(e, "half_com", check());
                                     }}
                                     id="checkBoxSales"
                                     type="checkbox"
@@ -128,15 +161,17 @@ function PopUpRedactorSales({
                         onChange={(e) => {
                             editPolicy(e, "status");
                         }}
-                        firstValue={currentSales.status}
+                        firstValue={currentSales.status_display}
+                        first={currentSales.status_display}
                         style="inputBox__standart_popUp"
                         name="Тип продажи"
                         options={selectOptionsTypeSales}
                     />
                     <Select
                         onChange={(e) => {
-                            editPolicy(e, "type__name");
+                            editPolicy(e, "type");
                         }}
+                        firstValue={currentSales.type}
                         first={currentSales.type__name}
                         style="inputBox__standart_popUp"
                         name="Тип полиса"
@@ -152,7 +187,7 @@ function PopUpRedactorSales({
                     />
                     <Select
                         onChange={(e) => {
-                            editPolicy(e, "company__name");
+                            editPolicy(e, "company");
                         }}
                         first={currentSales.company__name}
                         style="inputBox__standart_popUp"
@@ -161,7 +196,7 @@ function PopUpRedactorSales({
                     />
                     <Select
                         onChange={(e) => {
-                            editPolicy(e, "channel__name");
+                            editPolicy(e, "channel");
                         }}
                         first={currentSales.channel__name}
                         style="inputBox__standart_popUp"
@@ -202,7 +237,7 @@ function PopUpRedactorSales({
                     />
                     <Select
                         onChange={(e) => {
-                            editPolicy(e, "user__full_name");
+                            editPolicy(e, "user");
                         }}
                         first={currentSales.user__full_name}
                         style="inputBox__standart_popUp"

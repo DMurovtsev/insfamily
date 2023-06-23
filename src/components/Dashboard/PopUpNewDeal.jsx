@@ -5,6 +5,7 @@ import { InfoPopUp } from "../Service/InfoPopUp";
 import { Select } from "../Elements/Select";
 import { InputFile } from "../Elements/InputFile";
 import {
+    addPolicy,
     getBanks,
     getChannels,
     getCompaniesL,
@@ -75,9 +76,23 @@ function PopUpNewDeal({ currentDeal }) {
         document.getElementById("creditVehicleId").selectedIndex = 2;
         document.getElementById("kvBnakId").value = 0;
         document.getElementById("insurancePremiumId").value = 0;
+        document.getElementById("incomingCommissionId").value = 0;
         document.getElementById("discountCV").value = 0;
     }, []);
 
+    let namesForFile = {
+        review: "Отзыв",
+        policy: "Полис",
+        check: "Чек",
+        zaya: "Заявление",
+        passport: "Паспорт",
+        pts: "ПТС",
+        sts: "СТС",
+        prava: "Права",
+        ocenka: "Оценка",
+        egrn: "ЕГРН",
+        creditn: "Кредитный",
+    };
     /*Подсветка незаполненных полей*/
     function handleClick() {
         document.querySelectorAll(".requared select").forEach((item) => {
@@ -87,6 +102,7 @@ function PopUpNewDeal({ currentDeal }) {
                     "Поля обязательные для заполнения",
                     "popup__Info_red"
                 );
+                return;
             }
         });
         document.querySelectorAll(".requared input").forEach((item) => {
@@ -96,8 +112,73 @@ function PopUpNewDeal({ currentDeal }) {
                     "Поля обязательные для заполнения",
                     "popup__Info_red"
                 );
+                return;
             }
         });
+        let formData = new FormData();
+
+        formData.append("type_pay", document.getElementById("payId").value);
+        formData.append("status", document.getElementById("typeSalesId").value);
+        formData.append("type_policy", document.getElementById("typeId").value);
+        formData.append(
+            "commission",
+            document.getElementById("incomingCommissionId").value
+        );
+        formData.append("bank", document.getElementById("bankId").value);
+        formData.append("series", document.getElementById("seriesId").value);
+        formData.append("number", document.getElementById("numberId").value);
+        formData.append(
+            "credit",
+            document.getElementById("creditVehicleId").value
+        );
+        formData.append(
+            "bank_commission",
+            document.getElementById("kvBnakId").value
+        );
+        formData.append(
+            "sp",
+            document.getElementById("insurancePremiumId").value
+        );
+        formData.append("company", document.getElementById("companyId").value);
+        formData.append("channel", document.getElementById("channelId").value);
+        formData.append(
+            "commission_discont",
+            document.getElementById("discountCV").value
+        );
+        formData.append(
+            "date_registration",
+            document.getElementById("dataRegistrationId").value
+        );
+        formData.append("date_start", document.getElementById("dateNow").value);
+        formData.append(
+            "date_end",
+            document.getElementById("datePlusYear").value
+        );
+        formData.append(
+            "full_name",
+            document.getElementById("full_nameId").value
+        );
+        formData.append(
+            "birthday",
+            document.getElementById("birthdayId").value
+        );
+        formData.append("email", document.getElementById("emailId").value);
+        formData.append("phone", document.getElementById("phoneId").value);
+        formData.append("address", document.getElementById("addressId").value);
+        let input_files = document.querySelectorAll(
+            ".input-file__input > input"
+        );
+        input_files.forEach((item) => {
+            if (item.files.length > 0) {
+                for (let i = 0; i < item.files.length; i++) {
+                    formData.append(
+                        `${namesForFile[item.id]}_${i}_${item.files[i].name}`,
+                        item.files[i]
+                    );
+                }
+            }
+        });
+        addPolicy(formData).then((response) => {});
     }
     /*Валидация на ввод трёх заглавных русских букв*/
     function validateInputSeries() {
@@ -162,8 +243,8 @@ function PopUpNewDeal({ currentDeal }) {
 
     /*Наполнение статичных select*/
     let selectOptionsPay = [
-        { id: "Cash", name: "Наличные" },
-        { id: "NoCash", name: "Безналичный" },
+        { id: "cash", name: "Наличные" },
+        { id: "no_cash", name: "Безналичный" },
     ];
     let selectOptionsCreditVehicle = [
         { id: "Yes", name: "Да" },
@@ -242,8 +323,6 @@ function PopUpNewDeal({ currentDeal }) {
                 .classList.remove("none");
         } else {
             document.getElementById("divBankId").classList.add("none");
-            selectBank.selectedIndex = 0;
-
             document
                 .getElementById("divIncomingCommissionId")
                 .classList.add("none");
@@ -348,17 +427,26 @@ function PopUpNewDeal({ currentDeal }) {
     }
 
     function selectChannel() {
-        const selectChannel = document.getElementById("channelId");
-        const selectType = document.getElementById("typeId");
+        let selectChannel = document.getElementById("channelId");
+        let selectType = document.getElementById("typeId");
+
         if (
-            (selectType[selectType.selectedIndex].textContent == "ОСАГО" &&
-                selectChannel[selectChannel.selectedIndex].textContent ==
-                    "Пампаду") ||
-            selectChannel[selectChannel.selectedIndex].textContent == "ООО НЭП"
+            selectType[selectType.selectedIndex].textContent == "ОСАГО" &&
+            selectChannel[selectChannel.selectedIndex].textContent == "Пампаду"
         ) {
             document
                 .getElementById("divIncomingCommissionId")
                 .classList.remove("none");
+            document.getElementById("incomingCommissionId").value = 0;
+        } else if (
+            selectType[selectType.selectedIndex].textContent == "ОСАГО" &&
+            selectChannel[selectChannel.selectedIndex].textContent ==
+                'ООО "НЭП"'
+        ) {
+            document
+                .getElementById("divIncomingCommissionId")
+                .classList.remove("none");
+            document.getElementById("incomingCommissionId").value = 0;
         } else {
             document
                 .getElementById("divIncomingCommissionId")
@@ -370,6 +458,33 @@ function PopUpNewDeal({ currentDeal }) {
         document
             .querySelector(".container__NewPopUp")
             .classList.remove("active");
+    }
+    /*Валидация номера телефона */
+    function validateInputPhone() {
+        let form = document.getElementById("divPhoneId");
+        let phone = document.getElementById("phoneId");
+        let pattern = /^((\9)+([0-9]){9})$/;
+        let regex = /[^\d]/g;
+        let index = phone.value.indexOf("9");
+        if (index != -1) {
+            phone.value = phone.value.slice(index);
+        } else {
+            phone.value = "";
+        }
+        phone.value = phone.value.replace(regex, "");
+        if (phone.value.length > 10) {
+            phone.value = phone.value.slice(0, 10);
+        }
+        if (phone.value.match(pattern)) {
+            form.classList.remove("red_border");
+        } else {
+            form.classList.remove("green_border");
+            form.classList.add("red_border");
+        }
+        if (phone.value == "") {
+            form.classList.remove("green_border");
+            form.classList.remove("red_border");
+        }
     }
 
     return (
@@ -474,6 +589,7 @@ function PopUpNewDeal({ currentDeal }) {
                     />
 
                     <Input
+                        setId="dataRegistrationId"
                         name="Дата оформления"
                         value={now}
                         style="inputBox__standart_popUp requared"
@@ -499,7 +615,7 @@ function PopUpNewDeal({ currentDeal }) {
                         <InputFile
                             setId={Object.keys(item)[0]}
                             name={Object.values(item)[0]}
-                            style="none"
+                            style="input-file__input none"
                         />
                     ))}
                 </div>
@@ -508,7 +624,8 @@ function PopUpNewDeal({ currentDeal }) {
                         Страхователь<ion-icon name="person-outline"></ion-icon>
                     </h3>
                     <Input
-                        style="inputBox__standart_popUp "
+                        setId="full_nameId"
+                        style="inputBox__standart_popUp requared"
                         value={
                             currentDeal
                                 ? currentDeal.policy.policyholder.full_name
@@ -517,24 +634,30 @@ function PopUpNewDeal({ currentDeal }) {
                         name="ФИО"
                     />
                     <Input
+                        setId="birthdayId"
                         value={
                             currentDeal
                                 ? currentDeal.policy.policyholder.birthday
                                 : ""
                         }
-                        style="inputBox__standart_popUp "
+                        style="inputBox__standart_popUp requared"
                         name="Дата Рождения"
+                        onInput={checkDate}
                     />
                     <Input
+                        divId="divPhoneId"
+                        setId="phoneId"
                         value={
                             currentDeal
                                 ? currentDeal.policy.policyholder.phone
                                 : ""
                         }
-                        style="inputBox__standart_popUp "
+                        style="inputBox__standart_popUp requared"
                         name="Телефон"
+                        onInput={validateInputPhone}
                     />
                     <Input
+                        setId="emailId"
                         value={
                             currentDeal
                                 ? currentDeal.policy.policyholder.email
@@ -544,6 +667,7 @@ function PopUpNewDeal({ currentDeal }) {
                         name="Почта"
                     />
                     <Input
+                        setId="addressId"
                         value={
                             currentDeal
                                 ? currentDeal.policy.policyholder.address

@@ -499,6 +499,28 @@ async function oneForAllPost(body) {
     }
     return await response.json();
 }
+async function addPolicy(formData) {
+    let response = await fetch(`${myHost}/pn/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
+async function deletePolicy(id) {
+    return await fetch(`${myHost}/pn/${id}/`, {
+        method: "DELETE",
+        headers: headers,
+    });
+}
+async function addFiles(formData) {
+    let response = await fetch(`${myHost}/files/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -546,4 +568,7 @@ export {
     getPolicies,
     getSelsDocuments,
     oneForAllPost,
+    addPolicy,
+    deletePolicy,
+    addFiles,
 };

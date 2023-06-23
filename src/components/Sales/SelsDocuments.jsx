@@ -3,8 +3,11 @@ import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
 import { InputFile } from "../Elements/InputFile";
 import { Select } from "../Elements/Select";
+import { useState } from "react";
+import { addFiles } from "../../Api";
 
-function SelsDocuments({ documents }) {
+function SelsDocuments({ documents, currentSales }) {
+    const [inputFile, setInputFile] = useState();
     const fileInput = document.getElementById("inputFileSels");
     if (fileInput) {
         fileInput.addEventListener("change", (event) => {
@@ -22,6 +25,28 @@ function SelsDocuments({ documents }) {
     }
     function viewDocs(link) {
         window.open(link, "_blank");
+    }
+    function addFile() {
+        if (document.getElementById("inputFileSels").files.length == 0) {
+            return;
+        }
+        if (document.getElementById("addFileId").value.trim() == "") {
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append("policy", currentSales.id);
+        formData.append("name", document.getElementById("addFileId").value);
+        let file = document.getElementById("inputFileSels");
+        for (let i = 0; i < file.files.length; i++) {
+            formData.append(
+                `${document.getElementById("addFileId").value}_${i}_${
+                    file.files[i].name
+                }`,
+                file.files[i]
+            );
+        }
+        addFiles(formData).then((response) => {});
     }
 
     return (
@@ -44,7 +69,32 @@ function SelsDocuments({ documents }) {
                         <></>
                     )}
                 </div>
-                <InputFile setId="inputFileSels" name="Загрузить документы" />
+                <div className="content__SelsDocuments_inputs">
+                    <InputFile
+                        onChange={() => {
+                            setInputFile(true);
+                        }}
+                        setId="inputFileSels"
+                        name="Загрузить документы"
+                    />
+                    {inputFile ? (
+                        <Input setId="addFileId" name="Название документа" />
+                    ) : (
+                        <></>
+                    )}
+                    {inputFile ? (
+                        <Button
+                            onClick={addFile}
+                            name={
+                                <div className="big">
+                                    <ion-icon name="cloud-upload-outline"></ion-icon>
+                                </div>
+                            }
+                        />
+                    ) : (
+                        <></>
+                    )}
+                </div>
             </div>
         </div>
     );
