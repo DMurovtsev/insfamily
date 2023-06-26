@@ -5,7 +5,7 @@ import { CustomContext } from "../Service/Context";
 function PopUpClientsBirhday({ clientsBirhday, managerss, setClientsBirhday }) {
     const { admin } = useContext(CustomContext);
     function closeHB(e) {
-        if (!e.target.closest(".table")) {
+        if (!e.target.closest(".container__table")) {
             setClientsBirhday();
         }
     }
@@ -18,51 +18,53 @@ function PopUpClientsBirhday({ clientsBirhday, managerss, setClientsBirhday }) {
         );
     }
     return (
-        <div onClick={closeHB} className="PopUpClientsBirhday">
-            <div className="PopUpClientsBirhday PopUpClientsBirhday__container">
-                <table className="table">
-                    <thead className="table__thead">
-                        <tr>
-                            <th>ФИО клиента</th>
-                            <th>Дата рождения</th>
-                            <th>Телефон</th>
-                            <th>Менеджер</th>
-                            {admin ? <th>Ответственный</th> : <></>}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {clientsBirhday ? (
-                            clientsBirhday.map((client) => (
-                                <tr>
-                                    <td>{client.full_name}</td>
-                                    <td>{client.birthday}</td>
-                                    <td
-                                        className="green__hover"
-                                        onClick={() => {
-                                            whatsUpHB(
-                                                client.full_name,
-                                                client.phone,
-                                                client.manager
-                                            );
-                                        }}
-                                    >
-                                        {client.phone}
-                                    </td>
-                                    <td>{client.manager}</td>
-                                    {admin ? (
-                                        <td>
-                                            <Select options={managerss} />
+        <div onClick={closeHB} className="popUp__body">
+            <div className="container__table">
+                <div>
+                    <table className="table">
+                        <thead className="table__thead">
+                            <tr>
+                                <th>ФИО клиента</th>
+                                <th>Дата рождения</th>
+                                <th>Телефон</th>
+                                <th>Менеджер</th>
+                                {admin ? <th>Ответственный</th> : <></>}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {clientsBirhday ? (
+                                clientsBirhday.map((client) => (
+                                    <tr className="trTableSales">
+                                        <td>{client.full_name}</td>
+                                        <td>{client.birthday}</td>
+                                        <td
+                                            className="green__hover"
+                                            onClick={() => {
+                                                whatsUpHB(
+                                                    client.full_name,
+                                                    client.phone,
+                                                    client.manager
+                                                );
+                                            }}
+                                        >
+                                            {client.phone}
                                         </td>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </tr>
-                            ))
-                        ) : (
-                            <></>
-                        )}
-                    </tbody>
-                </table>
+                                        <td>{client.manager}</td>
+                                        {admin ? (
+                                            <td>
+                                                <Select options={managerss} />
+                                            </td>
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </tr>
+                                ))
+                            ) : (
+                                <></>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

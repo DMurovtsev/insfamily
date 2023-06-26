@@ -479,6 +479,7 @@ select:focus,
     top: 0;
     z-index: 10;
 }
+
 /*Select2_0*/
 
 .Select_2 {
@@ -1432,7 +1433,7 @@ tbody tr:hover {
     justify-content: center;
     top: 0;
     left: 0;
-    z-index: 20;
+    z-index: 15;
 }
 .container__PopUp {
     display: flex;
@@ -1455,6 +1456,7 @@ tbody tr:hover {
     background: #fff;
     z-index: 11;
 }
+
 .content__PopUp_Sales {
     width: 350px;
     display: flex;
@@ -1555,6 +1557,21 @@ tbody tr:hover {
     justify-content: flex-start;
     gap: 9px;
 }
+.content__NewPopUp {
+    z-index: 20;
+    width: 100%;
+    height: 100%;
+}
+.content__Acts {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    gap: 15px;
+}
 .content__NewPopUp_container {
     margin-top: 10px;
     left: 0px;
@@ -1562,10 +1579,6 @@ tbody tr:hover {
     position: relative;
     height: 710px;
     align-items: flex-start;
-}
-.content__NewPopUp {
-    width: 100%;
-    height: 100%;
 }
 .content__PopUp span {
     color: var(--black2);
@@ -1761,40 +1774,53 @@ tbody tr:hover {
     color: var(--black2);
 }
 /*NewPopUp*/
-
-.container__NewPopUp {
-    left: 0px;
-    opacity: 0;
-    visibility: hidden;
-    width: 0px;
-    height: 0px;
-    position: fixed;
-    background: #fff;
-    transition: 0.5s;
-    border-radius: 25px;
-    box-shadow: 0 0 15px var(--dark);
-    position: fixed;
-    z-index: 20;
-    overflow-x: hidden;
-}
-.hover {
-    border: 3px solid var(--green);
-}
-.container__NewPopUp.active {
-    position: absolute;
-    left: 700px;
-    opacity: 1;
-    visibility: visible;
-    top: 60px;
+.main__container {
+    width: 100vw;
+    height: 100vh;
     position: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.5);
+}
+.container__NewPopUp {
+    position: relative;
+    display: flex;
+    align-items: center;
     width: 650px;
     height: 780px;
     z-index: 20;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 0 5px var(--dark);
 }
-
+.container__Acts {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: auto;
+    height: auto;
+    z-index: 20;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 0 5px var(--dark);
+}
+.hover {
+    border: 3px solid var(--green);
+}
+/* .container__NewPopUp.active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    display: flex;
+    align-items: center;
+    width: 650px;
+    height: 780px;
+    z-index: 20;
+} */
 .closeLiveTape {
     position: absolute;
     z-index: 12;
@@ -1816,16 +1842,6 @@ tbody tr:hover {
     left: 450px;
 }
 
-.content__NewPopUp_inputFile {
-    position: absolute;
-    margin-top: 25px;
-    margin-right: 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    top: 0;
-    right: 0;
-}
 .content__PopUp_files {
     padding-top: 5px;
     position: absolute;
@@ -2853,8 +2869,8 @@ section {
     min-width: 130px;
 }
 .PopUpClientsBirhday {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     position: absolute;
     z-index: 5;
 }
@@ -2970,5 +2986,10 @@ section {
     width: auto;
 }
 .big {
-    font-size: 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 5px;
+    margin-bottom: 10px;
 }

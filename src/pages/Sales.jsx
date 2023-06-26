@@ -10,15 +10,18 @@ import {
     getTypiesPolicies,
     oneForAll,
     oneForAllPost,
+    getActSales,
 } from "../Api";
 import { CustomContext } from "../components/Service/Context";
 import { Loader } from "../components/Elements/Loader";
 import { PopUpRedactorSales } from "../components/Sales/PopUpRedactorSales";
 import { PopUpNewDeal } from "../components/Dashboard/PopUpNewDeal";
 import { type } from "@testing-library/user-event/dist/type";
+import { PopUpActs } from "../components/Sales/PopUpActs";
 
 function Sales() {
     const [policies, setPolicies] = useState([]);
+    const [acts, setActs] = useState([]);
     const [typePolicies, setTypePolicies] = useState();
     const [channel, setChannel] = useState([]);
     const [insCompany, setInsCompany] = useState([]);
@@ -29,9 +32,11 @@ function Sales() {
     const [loader, setLoader] = useState(false);
     const [dateValid, setDateValid] = useState(true);
     const [currentSales, setCurrentSales] = useState();
+    const [showPopUp, setShowPopUp] = useState(false);
+    const [showActs, setShowActs] = useState(false);
 
     const values =
-        "accept_display,status_display,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,id,half_com_display";
+        "accept_display,status_display,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,sale_report__name,id,half_com_display";
 
     let policiesHeaderArray = [
         "Статус",
@@ -48,9 +53,11 @@ function Sales() {
         "Оформлен",
         "Начало действия",
         "Окончание действия",
+        "Акт",
         "ID",
         "50% КВ",
     ];
+    let prevScrollTop = 0;
 
     const scrollHandler = (
         e,
@@ -60,6 +67,9 @@ function Sales() {
         setLoading,
         setPolicies
     ) => {
+        if (e.target.scrollTop === prevScrollTop) {
+            return;
+        }
         if (
             e.target.scrollHeight -
                 (e.target.scrollTop + e.target.offsetHeight) <
@@ -69,6 +79,7 @@ function Sales() {
         ) {
             setLoading(true);
             let next = currentPagePolicy;
+
             oneForAll(undefined, undefined, next, undefined).then((data) => {
                 setPolicies((prevState) => [...prevState, ...data.results]);
                 if (data.next_page) {
@@ -96,40 +107,49 @@ function Sales() {
         let dataStartValue = document.getElementById("inputDateStartSels");
         let dataEndValue = document.getElementById("inputDateEndSels");
         let checkbox = document.getElementById("checkBoxSales");
-
+        let actValue = document.getElementById("actsId");
         let link = "";
 
-        if (typeValue && typeValue.value != "") {
-            link = link + `&type=${typeValue.value}`;
-        }
-        if (channelValue && channelValue.value != "") {
-            link = link + `&channel=${channelValue.value}`;
-        }
-        if (insCompanyValue && insCompanyValue.value != "") {
-            link = link + `&company=${insCompanyValue.value}`;
-        }
-        if (managerValue && managerValue.value != "") {
-            link = link + `&user=${managerValue.value}`;
-        }
-        if (statusValue && statusValue.value != "all") {
-            link = link + `&accept=${statusValue.value}`;
-        }
+        if (actValue && actValue.value != "") {
+            link = link + `sale_report=${actValue.value}`;
+        } else {
+            if (typeValue && typeValue.value != "") {
+                link = link + `&type=${typeValue.value}`;
+            }
+            if (channelValue && channelValue.value != "") {
+                link = link + `&channel=${channelValue.value}`;
+            }
+            if (insCompanyValue && insCompanyValue.value != "") {
+                link = link + `&company=${insCompanyValue.value}`;
+            }
+            if (managerValue && managerValue.value != "") {
+                link = link + `&user=${managerValue.value}`;
+            }
+            if (statusValue && statusValue.value != "all") {
+                link = link + `&accept=${statusValue.value}`;
+            }
 
-        if (dataStartValue && dataStartValue.value != "" && dateValid == true) {
-            link = link + `&date_start=${dataStartValue.value}`;
-        }
-        if (dataEndValue && dataEndValue.value != "" && dateValid == true) {
-            link = link + `&data_end=${dataEndValue.value}`;
-        }
-        if (checkbox) {
-            if (checkbox.checked) {
-                let value = checkbox.value;
-                link = link + `&f=${value}`;
+            if (
+                dataStartValue &&
+                dataStartValue.value != "" &&
+                dateValid == true
+            ) {
+                link = link + `&date_start=${dataStartValue.value}`;
+            }
+            if (dataEndValue && dataEndValue.value != "" && dateValid == true) {
+                link = link + `&data_end=${dataEndValue.value}`;
+            }
+            if (checkbox) {
+                if (checkbox.checked) {
+                    let value = checkbox.value;
+                    link = link + `&f=${value}`;
+                }
+            }
+            if (link != "") {
+                link = link.slice(1);
             }
         }
-        if (link != "") {
-            link = link.slice(1);
-        }
+
         oneForAll(values, "policy", undefined, link).then((data) => {
             setPolicies(data.results);
             if (data.next_page) {
@@ -190,6 +210,9 @@ function Sales() {
         getTypiesPolicies().then((data) => {
             setTypePolicies(data);
         });
+        getActSales().then((data) => {
+            setActs(data);
+        });
 
         getCompanies().then((data) => {
             setInsCompany(data);
@@ -247,7 +270,7 @@ function Sales() {
     ];
 
     function addPolicy() {
-        document.querySelector(".container__NewPopUp").classList.add("active");
+        setShowPopUp(true);
     }
     /*Выгрузка*/
     function unloadPolicy() {
@@ -259,33 +282,42 @@ function Sales() {
         let dataStartValue = document.getElementById("inputDateStartSels");
         let dataEndValue = document.getElementById("inputDateEndSels");
         let checkbox = document.getElementById("checkBoxSales");
-
+        let actValue = document.getElementById("actsId");
         let body = { upload: "policy" };
-        if (typeValue && typeValue.value != "") {
-            body["type"] = typeValue.value;
-        }
-        if (channelValue && channelValue.value != "") {
-            body["channel"] = channelValue.value;
-        }
-        if (insCompanyValue && insCompanyValue.value != "") {
-            body["company"] = insCompanyValue.value;
-        }
-        if (managerValue && managerValue.value != "") {
-            body["user"] = managerValue.value;
-        }
-        if (statusValue && statusValue.value != "all") {
-            body["accept"] = statusValue.value;
-        }
 
-        if (dataStartValue && dataStartValue.value != "" && dateValid == true) {
-            body["date_start"] = dataStartValue.value;
-        }
-        if (dataEndValue && dataEndValue.value != "" && dateValid == true) {
-            body["date_end"] = dataEndValue.value;
-        }
-        if (checkbox) {
-            if (checkbox.checked) {
-                body["f"] = checkbox.value;
+        if (actValue && actValue.value != "") {
+            body["sale_report"] = actValue.value;
+        } else {
+            if (typeValue && typeValue.value != "") {
+                body["type"] = typeValue.value;
+            }
+            if (channelValue && channelValue.value != "") {
+                body["channel"] = channelValue.value;
+            }
+            if (insCompanyValue && insCompanyValue.value != "") {
+                body["company"] = insCompanyValue.value;
+            }
+            if (managerValue && managerValue.value != "") {
+                body["user"] = managerValue.value;
+            }
+            if (statusValue && statusValue.value != "all") {
+                body["accept"] = statusValue.value;
+            }
+
+            if (
+                dataStartValue &&
+                dataStartValue.value != "" &&
+                dateValid == true
+            ) {
+                body["date_start"] = dataStartValue.value;
+            }
+            if (dataEndValue && dataEndValue.value != "" && dateValid == true) {
+                body["date_end"] = dataEndValue.value;
+            }
+            if (checkbox) {
+                if (checkbox.checked) {
+                    body["f"] = checkbox.value;
+                }
             }
         }
         oneForAllPost(body).then((data) => {
@@ -297,6 +329,9 @@ function Sales() {
             link.click();
             document.body.removeChild(link);
         });
+    }
+    function openPopUpActs() {
+        setShowActs(true);
     }
 
     return (
@@ -315,8 +350,27 @@ function Sales() {
                 <></>
             )}
             <div className="main" id="main">
-                <PopUpNewDeal />
-
+                {showPopUp === true ? (
+                    <PopUpNewDeal
+                        showPopUp={showPopUp}
+                        setShowPopUp={setShowPopUp}
+                    />
+                ) : (
+                    <></>
+                )}
+                {showActs === true ? (
+                    <PopUpActs
+                        month={month}
+                        now={now}
+                        channel={channel}
+                        insCompany={insCompany}
+                        typePolicies={typePolicies}
+                        policies={policies}
+                        setShowActs={setShowActs}
+                    />
+                ) : (
+                    <></>
+                )}
                 <div className="container__header_sales">
                     <Button onClick={addPolicy} name="Добавить полис" />
 
@@ -361,6 +415,17 @@ function Sales() {
                             options={statusSelectSels}
                             name="Статус"
                             style="inputBox__small"
+                        />
+                    ) : (
+                        <></>
+                    )}
+                    {admin ? (
+                        <Select
+                            setId="actsId"
+                            options={acts}
+                            name="Акты"
+                            style="inputBox__small"
+                            onChange={filtrSelects}
                         />
                     ) : (
                         <></>
@@ -416,7 +481,11 @@ function Sales() {
                             }
                         }}
                     />
-                    {admin ? <Button name="Создать АКТ" /> : <></>}
+                    {admin ? (
+                        <Button onClick={openPopUpActs} name="Создать АКТ" />
+                    ) : (
+                        <></>
+                    )}
                     {admin ? (
                         <Button onClick={unloadPolicy} name="Выгрузить" />
                     ) : (

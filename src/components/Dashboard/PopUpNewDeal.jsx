@@ -7,21 +7,18 @@ import { InputFile } from "../Elements/InputFile";
 import {
     addPolicy,
     getBanks,
-    getChannels,
+    getChannelsCompany,
     getCompaniesL,
     getTypiesPolicies,
 } from "../../Api";
 
-function PopUpNewDeal({ currentDeal }) {
+function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
     const [banks, setBanks] = useState([]);
     const [channel, setChannel] = useState([]);
     const [typePolicies, setTypePolicies] = useState();
     const [companiesL, setCompaniesL] = useState([]);
 
     useEffect(() => {
-        getChannels().then((data) => {
-            setChannel(data);
-        });
         getTypiesPolicies().then((data) => {
             setTypePolicies(data);
         });
@@ -47,11 +44,11 @@ function PopUpNewDeal({ currentDeal }) {
             };
         }
         if (document.querySelector(".toggleNewBtn")) {
-            document.querySelector(".toggleNewBtn").onclick = () => {
-                document
-                    .querySelector(".content__NewPopUp")
-                    .classList.remove("active");
-            };
+            if (showPopUp === true) {
+                document.querySelector(".toggleNewBtn").onclick = () => {
+                    setShowPopUp(false);
+                };
+            }
         }
         /*Удаление двойных пробелов*/
         document
@@ -202,8 +199,33 @@ function PopUpNewDeal({ currentDeal }) {
             }
         }
     }
+
+    /*Валидация email*/
+    function validateInputEmail() {
+        let form = document.getElementById("divMailCreateDeal");
+        let email = document.getElementById("emailId").value;
+        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (email.match(pattern)) {
+            // form.classList.add("green_border");
+            form.classList.remove("red_border");
+        } else {
+            form.classList.remove("green_border");
+            form.classList.add("red_border");
+        }
+        if (email == "") {
+            form.classList.remove("green_border");
+            form.classList.remove("red_border");
+        }
+    }
+
     /*Валидация даты*/
     function checkDate(e) {
+        let happyB = document.getElementById("birthdayId");
+        let form = document.getElementById("divBirthdayId");
+
+        if (happyB.value == "") {
+            form.classList.remove("red_border");
+        }
         e.target.value = e.target.value.replace(/[^0-9]/g, "");
         if (2 < e.target.value.length && e.target.value.length < 5) {
             e.target.value =
@@ -215,13 +237,26 @@ function PopUpNewDeal({ currentDeal }) {
                 e.target.value.slice(2, 4) +
                 "." +
                 e.target.value.slice(4, 8);
-
             if (e.target.value.length == 10) {
                 let newDate = new Date(
                     e.target.value.slice(6, 10),
                     Number(e.target.value.slice(3, 5) - 1),
                     e.target.value.slice(0, 2)
                 );
+                let inputDate = newDate.toLocaleDateString("ru-RU");
+                let dateNow = new Date();
+                let now = dateNow.toLocaleDateString("ru-RU");
+                let date1 = new Date(now.split(".").reverse().join("-"));
+                let date2 = new Date(inputDate.split(".").reverse().join("-"));
+                let delta_days = Math.abs(
+                    date2.getFullYear() - date1.getFullYear()
+                );
+
+                if (delta_days > 100 || delta_days < 14) {
+                    form.classList.add("red_border");
+                } else {
+                    form.classList.remove("red_border");
+                }
             }
         }
     }
@@ -231,13 +266,13 @@ function PopUpNewDeal({ currentDeal }) {
 
     /*Дата через год*/
     function addYear() {
-        const dateInput = document.getElementById("dateNow");
+        const dateInput = document.getElementById("dateNow").value;
         const dateWithYearInput = document.getElementById("datePlusYear");
-        const dateValue = dateInput.value;
-        const date = new Date(dateValue);
-        date.setFullYear(date.getFullYear() + 1);
+        let newDateInput = dateInput.split(".").reverse();
+        const date = new Date(newDateInput);
+        const newDate = new Date(date.getTime() + 364 * 24 * 60 * 60 * 1000);
         const options = { year: "numeric", month: "numeric", day: "numeric" };
-        const ruDate = date.toLocaleString("ru-RU", options);
+        const ruDate = newDate.toLocaleString("ru-RU", options);
         dateWithYearInput.value = ruDate;
     }
 
@@ -273,6 +308,11 @@ function PopUpNewDeal({ currentDeal }) {
 
     /*Снятие disabled с канала продаж*/
     function channelUndisable() {
+        let id = document.getElementById("companyId").value;
+        console.log(id);
+        getChannelsCompany(id).then((data) => {
+            setChannel(data);
+        });
         document.getElementById("channelId").disabled = false;
     }
     /*Сперва выберите компанию*/
@@ -454,11 +494,7 @@ function PopUpNewDeal({ currentDeal }) {
             document.getElementById("incomingCommissionId").value = "";
         }
     }
-    function hidePopUpNewDeal() {
-        document
-            .querySelector(".container__NewPopUp")
-            .classList.remove("active");
-    }
+
     /*Валидация номера телефона */
     function validateInputPhone() {
         let form = document.getElementById("divPhoneId");
@@ -487,204 +523,212 @@ function PopUpNewDeal({ currentDeal }) {
         }
     }
 
+    function closeNP(e) {
+        if (!e.target.closest(".container__NewPopUp")) {
+            setShowPopUp(false);
+        }
+    }
+
     return (
-        <div className="container__NewPopUp">
-            <div className="content__NewPopUp">
-                <div className="content__PopUp_input content__NewPopUp_container">
-                    <Select
-                        setId="payId"
-                        name="Оплата"
-                        style="inputBox__standart_popUp requared"
-                        options={selectOptionsPay}
-                        // selected={selectElement}
-                    />
-                    <Select
-                        name="Тип продажи"
-                        style="inputBox__standart_popUp requared"
-                        options={selectOptionsTypeSales}
-                        setId="typeSalesId"
-                    />
-                    <Select
-                        setId="typeId"
-                        name="Тип полиса"
-                        style="inputBox__standart_popUp requared"
-                        options={typePolicies}
-                        onChange={selectType}
-                    />
-                    <Select
-                        divId="divBankId"
-                        setId="bankId"
-                        name="Банк"
-                        options={banks}
-                        style="inputBox__standart_popUp none"
-                    />
-                    <Input
-                        divId="divIncomingCommissionId"
-                        setId="incomingCommissionId"
-                        name="Входящая комиссия"
-                        type="number"
-                        step="0.1"
-                        style="inputBox__standart_popUp none"
-                    />
-                    <Select
-                        divId="divCreditVehicleIdId"
-                        name="Кредитная ТС"
-                        style="inputBox__standart_popUp none"
-                        setId="creditVehicleId"
-                        options={selectOptionsCreditVehicle}
-                        onChange={selectKvBank}
-                    />
-                    <Input
-                        setId="kvBnakId"
-                        divId="divKvBankId"
-                        name="КВ Банк"
-                        type="number"
-                        step="0.1"
-                        style="inputBox__standart_popUp none"
-                    />
-
-                    <Input
-                        divId="divSeriesId"
-                        onInput={validateInputSeries}
-                        setId="seriesId"
-                        name="Серия"
-                        style="inputBox__standart_popUp"
-                    />
-
-                    <Input
-                        setId="numberId"
-                        name="Номер"
-                        style="inputBox__standart_popUp requared"
-                    />
-
-                    <Input
-                        setId="insurancePremiumId"
-                        name="Страховая премия"
-                        type="number"
-                        step="0.1"
-                        style="inputBox__standart_popUp requared"
-                    />
-                    <Select
-                        setId="companyId"
-                        name="Компания"
-                        style="inputBox__standart_popUp requared"
-                        onChange={channelUndisable}
-                        options={companiesL}
-                    />
-                    <Select
-                        setId="channelId"
-                        name="Канал продаж"
-                        style="inputBox__standart_popUp requared"
-                        disabled="true"
-                        onClick={channelInfo}
-                        options={channel}
-                        onChange={selectChannel}
-                    />
-                    <Input
-                        setId="discountCV"
-                        name="Скидка с КВ"
-                        type="number"
-                        step="0.1"
-                        style="inputBox__standart_popUp requared"
-                    />
-
-                    <Input
-                        setId="dataRegistrationId"
-                        name="Дата оформления"
-                        value={now}
-                        style="inputBox__standart_popUp requared"
-                        onInput={checkDate}
-                    />
-                    <Input
-                        name="Дата начала действия полиса"
-                        style="inputBox__standart_popUp requared"
-                        onInput={checkDate}
-                        onBlur={addYear}
-                        setId="dateNow"
-                    />
-                    <Input
-                        name="Дата окончания полиса"
-                        // value={ruDate}
-                        style="inputBox__standart_popUp requared"
-                        onInput={checkDate}
-                        setId="datePlusYear"
-                    />
-                </div>
-                <div className="content__NewPopUp_inputFile">
-                    {namesForFiles.map((item) => (
-                        <InputFile
-                            setId={Object.keys(item)[0]}
-                            name={Object.values(item)[0]}
-                            style="input-file__input none"
+        <div onClick={closeNP} className="main__container">
+            <div className="container__NewPopUp">
+                <div className="content__NewPopUp">
+                    <div className="content__PopUp_input content__NewPopUp_container">
+                        <Select
+                            setId="payId"
+                            name="Оплата"
+                            style="inputBox__standart_popUp requared"
+                            options={selectOptionsPay}
+                            // selected={selectElement}
                         />
-                    ))}
-                </div>
-                <div style={{ textAlign: "center" }} className="clientInfa">
-                    <h3>
-                        Страхователь<ion-icon name="person-outline"></ion-icon>
-                    </h3>
-                    <Input
-                        setId="full_nameId"
-                        style="inputBox__standart_popUp requared"
-                        value={
-                            currentDeal
-                                ? currentDeal.policy.policyholder.full_name
-                                : ""
-                        }
-                        name="ФИО"
-                    />
-                    <Input
-                        setId="birthdayId"
-                        value={
-                            currentDeal
-                                ? currentDeal.policy.policyholder.birthday
-                                : ""
-                        }
-                        style="inputBox__standart_popUp requared"
-                        name="Дата Рождения"
-                        onInput={checkDate}
-                    />
-                    <Input
-                        divId="divPhoneId"
-                        setId="phoneId"
-                        value={
-                            currentDeal
-                                ? currentDeal.policy.policyholder.phone
-                                : ""
-                        }
-                        style="inputBox__standart_popUp requared"
-                        name="Телефон"
-                        onInput={validateInputPhone}
-                    />
-                    <Input
-                        setId="emailId"
-                        value={
-                            currentDeal
-                                ? currentDeal.policy.policyholder.email
-                                : ""
-                        }
-                        style="inputBox__standart_popUp "
-                        name="Почта"
-                    />
-                    <Input
-                        setId="addressId"
-                        value={
-                            currentDeal
-                                ? currentDeal.policy.policyholder.address
-                                : ""
-                        }
-                        style="inputBox__standart_popUp "
-                        name="Адресс"
-                    />
-                </div>
-                <div className="content__PopUp_btn">
-                    <Button
-                        onClick={handleClick}
-                        style="button_green"
-                        name="Сохранить"
-                    />
-                    <div className="toggleNewBtn">
-                        <Button onClick={hidePopUpNewDeal} name="Отмена" />
+                        <Select
+                            name="Тип продажи"
+                            style="inputBox__standart_popUp requared"
+                            options={selectOptionsTypeSales}
+                            setId="typeSalesId"
+                        />
+                        <Select
+                            setId="typeId"
+                            name="Тип полиса"
+                            style="inputBox__standart_popUp requared"
+                            options={typePolicies}
+                            onChange={selectType}
+                        />
+                        <Select
+                            divId="divBankId"
+                            setId="bankId"
+                            name="Банк"
+                            options={banks}
+                            style="inputBox__standart_popUp none"
+                        />
+                        <Input
+                            divId="divIncomingCommissionId"
+                            setId="incomingCommissionId"
+                            name="Входящая комиссия"
+                            type="number"
+                            step="0.1"
+                            style="inputBox__standart_popUp none"
+                        />
+                        <Select
+                            divId="divCreditVehicleIdId"
+                            name="Кредитная ТС"
+                            style="inputBox__standart_popUp none"
+                            setId="creditVehicleId"
+                            options={selectOptionsCreditVehicle}
+                            onChange={selectKvBank}
+                        />
+                        <Input
+                            setId="kvBnakId"
+                            divId="divKvBankId"
+                            name="КВ Банк"
+                            type="number"
+                            step="0.1"
+                            style="inputBox__standart_popUp none"
+                        />
+
+                        <Input
+                            divId="divSeriesId"
+                            onInput={validateInputSeries}
+                            setId="seriesId"
+                            name="Серия"
+                            style="inputBox__standart_popUp"
+                        />
+
+                        <Input
+                            setId="numberId"
+                            name="Номер"
+                            style="inputBox__standart_popUp requared"
+                        />
+
+                        <Input
+                            setId="insurancePremiumId"
+                            name="Страховая премия"
+                            type="number"
+                            step="0.1"
+                            style="inputBox__standart_popUp requared"
+                        />
+                        <Select
+                            setId="companyId"
+                            name="Компания"
+                            style="inputBox__standart_popUp requared"
+                            onChange={channelUndisable}
+                            options={companiesL}
+                        />
+                        <Select
+                            setId="channelId"
+                            name="Канал продаж"
+                            style="inputBox__standart_popUp requared"
+                            disabled="true"
+                            onClick={channelInfo}
+                            options={channel}
+                            onChange={selectChannel}
+                        />
+                        <Input
+                            setId="discountCV"
+                            name="Скидка с КВ"
+                            type="number"
+                            step="0.1"
+                            style="inputBox__standart_popUp requared"
+                        />
+
+                        <Input
+                            setId="dataRegistrationId"
+                            name="Дата оформления"
+                            value={now}
+                            style="inputBox__standart_popUp requared"
+                            onInput={checkDate}
+                        />
+                        <Input
+                            name="Дата начала действия полиса"
+                            style="inputBox__standart_popUp requared"
+                            onInput={checkDate}
+                            onBlur={addYear}
+                            setId="dateNow"
+                        />
+                        <Input
+                            name="Дата окончания полиса"
+                            style="inputBox__standart_popUp requared"
+                            onInput={checkDate}
+                            setId="datePlusYear"
+                        />
+                    </div>
+                    <div className="content__NewPopUp_inputFile">
+                        {namesForFiles.map((item) => (
+                            <InputFile
+                                setId={Object.keys(item)[0]}
+                                name={Object.values(item)[0]}
+                                style="input-file__input none"
+                            />
+                        ))}
+                    </div>
+                    <div style={{ textAlign: "center" }} className="clientInfa">
+                        <h3>
+                            Страхователь
+                            <ion-icon name="person-outline"></ion-icon>
+                        </h3>
+                        <Input
+                            setId="full_nameId"
+                            style="inputBox__standart_popUp requared"
+                            value={
+                                currentDeal
+                                    ? currentDeal.policy.policyholder.full_name
+                                    : ""
+                            }
+                            name="ФИО"
+                        />
+                        <Input
+                            divId="divBirthdayId"
+                            setId="birthdayId"
+                            value={
+                                currentDeal
+                                    ? currentDeal.policy.policyholder.birthday
+                                    : ""
+                            }
+                            style="inputBox__standart_popUp requared"
+                            name="Дата Рождения"
+                            onInput={checkDate}
+                        />
+                        <Input
+                            divId="divPhoneId"
+                            setId="phoneId"
+                            value={
+                                currentDeal
+                                    ? currentDeal.policy.policyholder.phone
+                                    : ""
+                            }
+                            style="inputBox__standart_popUp requared"
+                            name="Телефон"
+                            onInput={validateInputPhone}
+                        />
+                        <Input
+                            divId="divMailCreateDeal"
+                            onInput={validateInputEmail}
+                            setId="emailId"
+                            value={
+                                currentDeal
+                                    ? currentDeal.policy.policyholder.email
+                                    : ""
+                            }
+                            style="inputBox__standart_popUp "
+                            name="Почта"
+                        />
+                        <Input
+                            setId="addressId"
+                            value={
+                                currentDeal
+                                    ? currentDeal.policy.policyholder.address
+                                    : ""
+                            }
+                            style="inputBox__standart_popUp "
+                            name="Адресс"
+                        />
+                    </div>
+                    <div className="content__PopUp_btn">
+                        <Button
+                            onClick={handleClick}
+                            style="button_green"
+                            name="Сохранить"
+                        />
                     </div>
                 </div>
             </div>

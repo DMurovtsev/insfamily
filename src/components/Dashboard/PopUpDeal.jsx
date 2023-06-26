@@ -1,7 +1,7 @@
 import { Input } from "../Elements/Input";
 import { Button } from "../Elements/Button";
 import { InputFile } from "../Elements/InputFile";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     addComments,
     addDiscription,
@@ -14,6 +14,7 @@ import { ReasonForFailure } from "./ReasonForFailure";
 import { Calculations } from "./Calculations";
 import { Select } from "../Elements/Select";
 import { Link } from "react-router-dom";
+import { PopUpNewDeal } from "./PopUpNewDeal";
 
 function PopUpDeal({
     currentDeal,
@@ -26,6 +27,8 @@ function PopUpDeal({
     insObjectRisk,
     sockets,
 }) {
+    const [showPopUp, setShowPopUp] = useState(false);
+
     function redactorDeal(e, i) {
         let id = currentDeal.id;
         let value = e.target.value;
@@ -45,7 +48,7 @@ function PopUpDeal({
         redactorIpoteca(mortagesId, key, value).then((response) => {});
     }
     function showPopUpNewDeal() {
-        document.querySelector(".container__NewPopUp").classList.add("active");
+        setShowPopUp(true);
     }
     function showPopUpCalculations() {
         if (document.querySelector(".container__Calculations")) {
@@ -232,7 +235,7 @@ function PopUpDeal({
     }
     function M(e) {
         {
-            if (!e.target.closest(".container__PopUp")) {
+            if (!e.target.closest(".container__PopUp") && !showPopUp) {
                 setCurrentDeal();
             }
         }
@@ -269,6 +272,14 @@ function PopUpDeal({
 
     return (
         <div onClick={M} className="popUp__body">
+            {showPopUp === true ? (
+                <PopUpNewDeal
+                    setShowPopUp={setShowPopUp}
+                    currentDeal={currentDeal}
+                />
+            ) : (
+                <></>
+            )}
             <div id="container__PopUp" className="container__PopUp">
                 <div className="content__PopUp">
                     <div className="content__PopUp_header">

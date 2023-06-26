@@ -444,7 +444,6 @@ function Dashboard() {
                 stages={stages}
                 setDeals={setDeals}
             />
-            <PopUpNewDeal currentDeal={currentDeal} />
 
             <div className="container__header">
                 <Select_2

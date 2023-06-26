@@ -521,6 +521,34 @@ async function addFiles(formData) {
     });
     return await response.json();
 }
+async function getChannelsCompany(id) {
+    let response = await fetch(`${myHost}/get_channels/?id=${id}`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getActSales() {
+    let response = await fetch(`${myHost}/srv/l/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function addActSales(fornData) {
+    let response = await fetch(`${myHost}/srv/pre_act/`, {
+        headers: headers,
+        body: fornData,
+        method: "POST",
+    });
+    return await response.json();
+}
+async function createActSales(fornData) {
+    let response = await fetch(`${myHost}/srv/`, {
+        headers: headers,
+        body: fornData,
+        method: "POST",
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -571,4 +599,8 @@ export {
     addPolicy,
     deletePolicy,
     addFiles,
+    getChannelsCompany,
+    getActSales,
+    addActSales,
+    createActSales,
 };
