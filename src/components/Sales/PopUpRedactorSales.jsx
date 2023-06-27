@@ -102,7 +102,7 @@ function PopUpRedactorSales({
     }
 
     return (
-        <div onClick={M} className="popUp__body">
+        <div onClick={M} className="main__container">
             <div id="container__PopUp" className="container__PopUp ">
                 {currentSales ? (
                     <SelsDocuments

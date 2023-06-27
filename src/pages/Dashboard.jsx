@@ -54,6 +54,7 @@ function Dashboard() {
     const [id, setId] = useState();
     const [sd, setSd] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [createDeal, setCreateDeal] = useState(false);
     const [currentStage, setCurrentStage] = useState({
         stage: {},
         target: "",
@@ -221,11 +222,7 @@ function Dashboard() {
 
     /*Отрисовка div созданиz сделки*/
     function showCreateDeal() {
-        if (document.querySelector(".container__PopUp_CreateDeal")) {
-            document
-                .querySelector(".container__PopUp_CreateDeal")
-                .classList.toggle("active");
-        }
+        setCreateDeal(true);
     }
 
     /*onClick на сделки для открытия подробной сделки*/
@@ -434,16 +431,20 @@ function Dashboard() {
             ) : (
                 <></>
             )}
-
-            <PopUpCreateDeal
-                insObjectRisk={insObjectRisk}
-                banks={banks}
-                setCurrentDeal={setCurrentDeal}
-                managers={managers}
-                typePolicies={typePolicies}
-                stages={stages}
-                setDeals={setDeals}
-            />
+            {createDeal ? (
+                <PopUpCreateDeal
+                    setCreateDeal={setCreateDeal}
+                    insObjectRisk={insObjectRisk}
+                    banks={banks}
+                    setCurrentDeal={setCurrentDeal}
+                    managers={managers}
+                    typePolicies={typePolicies}
+                    stages={stages}
+                    setDeals={setDeals}
+                />
+            ) : (
+                <></>
+            )}
 
             <div className="container__header">
                 <Select_2

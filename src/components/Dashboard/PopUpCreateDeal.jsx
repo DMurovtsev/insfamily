@@ -14,6 +14,7 @@ function PopUpCreateDeal({
     setCurrentDeal,
     banks,
     insObjectRisk,
+    setCreateDeal,
 }) {
     const [baseSource, setBaseSource] = useState([]);
     const admin = useContext(CustomContext);
@@ -28,12 +29,6 @@ function PopUpCreateDeal({
     stages.forEach((element) => {
         optionsStage.push(element.stage);
     });
-
-    function cancelCreateDeal() {
-        document
-            .querySelector(".container__PopUp_CreateDeal")
-            .classList.remove("active");
-    }
 
     /*Валидация даты*/
     function checkDate(e) {
@@ -139,7 +134,7 @@ function PopUpCreateDeal({
 
     /*Подсветка обязательных для заполнения полей*/
     function handleClick(e) {
-        const popUp = e.target.closest(".container__PopUp_CreateDeal");
+        const popUp = e.target.closest(".main__container");
         popUp
             .querySelectorAll(".requared select, .requared input")
             .forEach((item) => {
@@ -182,13 +177,6 @@ function PopUpCreateDeal({
             let bank = document.getElementById("bankInput").value;
             let risk = document.getElementById("riskSelect").value;
             let remainder = document.getElementById("remainderInput").value;
-
-            // if (document.getElementById("brandInput").value != "") {
-
-            // }
-
-            // createDeals(ipoteca, idBank, valueBank).then((response) => {});
-
             createDeals(
                 basesource_id,
                 type_policy,
@@ -210,20 +198,16 @@ function PopUpCreateDeal({
             ).then((response) => {
                 setCurrentDeal(response);
 
-                document
-                    .querySelector(".container__PopUp")
-                    .classList.toggle("active");
-                document
-                    .querySelector(".container__PopUp_CreateDeal")
-                    .classList.remove("active");
+                // document
+                //     .querySelector(".container__PopUp")
+                //     .classList.toggle("active");
+                // setCreateDeal(false)
                 getDeals(1).then((data) => {
                     setDeals(data);
                 });
             });
         }
-        document
-            .querySelector(".container__PopUp_CreateDeal")
-            .classList.remove("active");
+        setCreateDeal(false);
     }
 
     const insObject = [
@@ -272,10 +256,14 @@ function PopUpCreateDeal({
             document.getElementById("remainderDivInput").classList.add("none");
         }
     }
+    function M(e) {
+        setCreateDeal(false);
+    }
 
     return (
         <div
-            className="container__PopUp_CreateDeal"
+            onClick={M}
+            className="main__container "
             id="container__PopUp_CreateDeal"
         >
             <div className="content__PopUp_CreateDeal">
@@ -403,11 +391,6 @@ function PopUpCreateDeal({
                         style="button_green"
                         onClick={handleClick}
                         name="Создать"
-                    />
-                    <Button
-                        style="button_red"
-                        onClick={cancelCreateDeal}
-                        name="Отмена"
                     />
                 </div>
             </div>

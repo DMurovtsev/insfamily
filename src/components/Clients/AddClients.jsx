@@ -3,16 +3,10 @@ import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
 import { InputFile } from "../Elements/InputFile";
 import { InfoPopUp } from "../Service/InfoPopUp";
+import { addClient } from "../../Api";
 
-function AddClients() {
+function AddClients({ setAddClient }) {
     useEffect(() => {
-        if (document.getElementById("toggleBtn")) {
-            document.getElementById("toggleBtn").onclick = () => {
-                document
-                    .querySelector(".container__AddClients")
-                    .classList.toggle("active");
-            };
-        }
         const fileInput = document.getElementById("file-input");
         const fileList = document.getElementById("file-list");
         if (fileInput) {
@@ -167,35 +161,119 @@ function AddClients() {
             form.classList.remove("red_border");
         }
     }
+    function M(e) {
+        {
+            if (!e.target.closest(".container__AddClients")) {
+                setAddClient();
+            }
+        }
+    }
+    /*Удаление двойных пробелов*/
+    document.querySelectorAll(".inputBox__standart").forEach((item) => {
+        item.oninput = (e) => {
+            e.target.value = e.target.value.replace(/\s+/g, " ");
+        };
+    });
+
+    /*Удаление пробелов в начале и конце строки*/
+    document.querySelectorAll(".inputBox__standart").forEach((item) => {
+        item.onchange = (e) => {
+            e.target.value = e.target.value.trim();
+        };
+    });
+
+    function createClient() {
+        let r = false;
+        document.querySelectorAll(".requared input").forEach((item) => {
+            if (item.value == "") {
+                item.classList.add("red_border");
+                InfoPopUp(
+                    "Поля обязательные для заполнения",
+                    "popup__Info_red"
+                );
+                r = true;
+            }
+        });
+        if (r) {
+            return;
+        }
+        let formData = new FormData();
+        if (document.getElementById("fioAddClient").value) {
+            formData.append(
+                "full_name",
+                document.getElementById("fioAddClient").value
+            );
+        }
+        if (document.getElementById("addHappyBithday").value) {
+            formData.append(
+                "birthday",
+                document.getElementById("addHappyBithday").value
+            );
+        }
+        if (document.getElementById("addPhoneClient").value) {
+            formData.append(
+                "phone",
+                document.getElementById("addPhoneClient").value
+            );
+        }
+        if (document.getElementById("addEmailClient").value) {
+            formData.append(
+                "email",
+                document.getElementById("addEmailClient").value
+            );
+        }
+        if (document.getElementById("addAddressClient").value) {
+            formData.append(
+                "address",
+                document.getElementById("addAddressClient").value
+            );
+        }
+
+        addClient(formData).then((response) => {});
+    }
+    function validateFIO() {
+        let fio = document.getElementById("fioAddClient");
+        let regex = /[^a-zA-Zа-яА-Я\s]/g;
+        fio.value = fio.value.replace(regex, "");
+    }
 
     return (
-        <div className="main">
+        <div onClick={M} className="main__container">
             <div id="container__AddClients" className="container__AddClients">
                 <div className="content__PopUp_input ">
-                    <Input name="ФИО клиента" style="inputBox__standart" />
+                    <Input
+                        setId="fioAddClient"
+                        name="ФИО клиента"
+                        style="inputBox__standart requared"
+                        onInput={validateFIO}
+                    />
                     <Input
                         setId="addHappyBithday"
                         divId="divAddHappyBirthdayClient"
                         name="Дата рождения клиента"
-                        style="inputBox__standart"
+                        style="inputBox__standart requared"
                         onInput={checkDate}
                     />
                     <Input
-                        divId="divAddPhoneClient"
                         setId="addPhoneClient"
+                        divId="divAddPhoneClient"
                         name="Телефон клиента"
-                        style="inputBox__standart"
+                        style="inputBox__standart requared"
                         onInput={validateInputPhone}
                     />
                     <Input
-                        divId="divAddEmailClient"
                         setId="addEmailClient"
+                        divId="divAddEmailClient"
                         name="Email Клиента"
                         style="inputBox__standart"
                         onInput={validateInputEmail}
                     />
 
-                    <Input name="Регион клиента" style="inputBox__standart" />
+                    <Input
+                        setId="addAddressClient"
+                        name="Регион клиента"
+                        style="inputBox__standart"
+                    />
                     <Input name="Контактное лицо" style="inputBox__standart" />
                     <Input
                         divId="divAddPhoneClientFace"
@@ -220,11 +298,10 @@ function AddClients() {
                     </div>
                 </div>
                 <div className="twoBtnAddClients">
-                    <Button style="button_green" name="Сохранить" />
                     <Button
-                        setId="toggleBtn"
-                        style="button_red"
-                        name="Отмена"
+                        onClick={createClient}
+                        style="button_green"
+                        name="Сохранить"
                     />
                 </div>
             </div>

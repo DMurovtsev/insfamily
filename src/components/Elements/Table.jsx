@@ -11,8 +11,9 @@ function Table({
     setLoading,
     currentPage,
     setCurrentPage,
-    setCurrentSales,
-    setPolicies,
+    setCurrentItem,
+    setData,
+    loader,
 }) {
     let propsTd = "";
     if (props && props.length != 0) {
@@ -30,7 +31,7 @@ function Table({
                               setCurrentPage,
                               loading,
                               setLoading,
-                              setPolicies
+                              setData
                           );
                       }
                     : undefined
@@ -38,31 +39,43 @@ function Table({
             className={style ? `container__table ${style}` : "container__table"}
         >
             <h2 className="heading">{title}</h2>
-            <table className="table">
-                <thead className="table_thead">
-                    <tr>
-                        {check ? <th>{check}</th> : <></>}
-                        {header ? header.map((item) => <th>{item}</th>) : <></>}
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {props.map((item) => (
-                        <tr
-                            onClick={() => {
-                                setCurrentSales(item);
-                            }}
-                            id={item ? item.id : ""}
-                            className="trTableSales"
-                        >
-                            {check ? <td data-label="+">{check}</td> : <></>}
-                            {propsTd.map((i) => (
-                                <td data-label="Наименоваие"> {item[i]}</td>
-                            ))}
+            {loader ? (
+                <Loader />
+            ) : (
+                <table className="table">
+                    <thead className="table_thead">
+                        <tr>
+                            {check ? <th>{check}</th> : <></>}
+                            {header ? (
+                                header.map((item) => <th>{item}</th>)
+                            ) : (
+                                <></>
+                            )}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        {props.map((item) => (
+                            <tr
+                                onClick={() => {
+                                    setCurrentItem(item);
+                                }}
+                                id={item ? item.id : ""}
+                                className="trTableSales"
+                            >
+                                {check ? (
+                                    <td data-label="+">{check}</td>
+                                ) : (
+                                    <></>
+                                )}
+                                {propsTd.map((i) => (
+                                    <td data-label="Наименоваие"> {item[i]}</td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 }

@@ -282,41 +282,50 @@ function Sales() {
         let dataStartValue = document.getElementById("inputDateStartSels");
         let dataEndValue = document.getElementById("inputDateEndSels");
         let checkbox = document.getElementById("checkBoxSales");
+        let searchSale = document.getElementById("searchSale");
         let actValue = document.getElementById("actsId");
         let body = { upload: "policy" };
 
-        if (actValue && actValue.value != "") {
-            body["sale_report"] = actValue.value;
+        if (searchSale && searchSale.value != "") {
+            body["search"] = searchSale.value;
         } else {
-            if (typeValue && typeValue.value != "") {
-                body["type"] = typeValue.value;
-            }
-            if (channelValue && channelValue.value != "") {
-                body["channel"] = channelValue.value;
-            }
-            if (insCompanyValue && insCompanyValue.value != "") {
-                body["company"] = insCompanyValue.value;
-            }
-            if (managerValue && managerValue.value != "") {
-                body["user"] = managerValue.value;
-            }
-            if (statusValue && statusValue.value != "all") {
-                body["accept"] = statusValue.value;
-            }
+            if (actValue && actValue.value != "") {
+                body["sale_report"] = actValue.value;
+            } else {
+                if (typeValue && typeValue.value != "") {
+                    body["type"] = typeValue.value;
+                }
+                if (channelValue && channelValue.value != "") {
+                    body["channel"] = channelValue.value;
+                }
+                if (insCompanyValue && insCompanyValue.value != "") {
+                    body["company"] = insCompanyValue.value;
+                }
+                if (managerValue && managerValue.value != "") {
+                    body["user"] = managerValue.value;
+                }
+                if (statusValue && statusValue.value != "all") {
+                    body["accept"] = statusValue.value;
+                }
 
-            if (
-                dataStartValue &&
-                dataStartValue.value != "" &&
-                dateValid == true
-            ) {
-                body["date_start"] = dataStartValue.value;
-            }
-            if (dataEndValue && dataEndValue.value != "" && dateValid == true) {
-                body["date_end"] = dataEndValue.value;
-            }
-            if (checkbox) {
-                if (checkbox.checked) {
-                    body["f"] = checkbox.value;
+                if (
+                    dataStartValue &&
+                    dataStartValue.value != "" &&
+                    dateValid == true
+                ) {
+                    body["date_start"] = dataStartValue.value;
+                }
+                if (
+                    dataEndValue &&
+                    dataEndValue.value != "" &&
+                    dateValid == true
+                ) {
+                    body["date_end"] = dataEndValue.value;
+                }
+                if (checkbox) {
+                    if (checkbox.checked) {
+                        body["f"] = checkbox.value;
+                    }
                 }
             }
         }
@@ -472,6 +481,7 @@ function Sales() {
                     )}
 
                     <Input
+                        setId="searchSale"
                         logo={<ion-icon name="search-outline"></ion-icon>}
                         name="Поиск по полисам"
                         style="inputBox__standart"
@@ -493,23 +503,20 @@ function Sales() {
                     )}
                 </div>
                 <div className="container__body_sales">
-                    {loader ? (
-                        <Loader />
-                    ) : (
-                        <Table
-                            header={policiesHeaderArray}
-                            props={policies}
-                            title="Продажи"
-                            style="container__table_tops"
-                            scrollHandler={scrollHandler}
-                            currentPage={currentPagePolicy}
-                            setCurrentPage={setCurrentPagePolicy}
-                            loading={loading}
-                            setLoading={setLoading}
-                            setPolicies={setPolicies}
-                            setCurrentSales={setCurrentSales}
-                        />
-                    )}
+                    <Table
+                        loader={loader}
+                        header={policiesHeaderArray}
+                        props={policies}
+                        title="Продажи"
+                        style="container__table_tops"
+                        scrollHandler={scrollHandler}
+                        currentPage={currentPagePolicy}
+                        setCurrentPage={setCurrentPagePolicy}
+                        loading={loading}
+                        setLoading={setLoading}
+                        setData={setPolicies}
+                        setCurrentItem={setCurrentSales}
+                    />
                 </div>
             </div>
         </>

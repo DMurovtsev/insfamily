@@ -549,6 +549,14 @@ async function createActSales(fornData) {
     });
     return await response.json();
 }
+async function addClient(fornData) {
+    let response = await fetch(`${myHost}/clients/`, {
+        headers: headers,
+        body: fornData,
+        method: "POST",
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -603,4 +611,5 @@ export {
     getActSales,
     addActSales,
     createActSales,
+    addClient,
 };

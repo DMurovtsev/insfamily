@@ -1,106 +1,116 @@
+import { useEffect, useState } from "react";
 import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
 import { InputFile } from "../Elements/InputFile";
 import { Table } from "../Elements/Table";
+import { oneForAll } from "../../Api";
 
-function ClientCard() {
-    let agentArray = [
-        {
-            Информация: "Погода такая",
-            Название: "Майские",
-            Дата: "01.05.2023",
-        },
-        {
-            Информация: "Что хочется сидеть на берегу волги",
-            Название: "Близко",
-            Дата: "08.05.2023",
-        },
-        {
-            Информация: "Пить холодное пиво и жарить шашлык",
-            Название: "Близко",
-            Дата: "09.05.2023",
-        },
+function ClientCard({ currentClient, setCurrentClient }) {
+    const [clientSale, setClientSale] = useState();
+    const [clientDeal, setClientDeal] = useState();
+    const [clientPolicyInBase, setClientPolicyInBase] = useState();
+    const [loader, setLoader] = useState(false);
+
+    let clientSaleHeaderArray = [
+        "Дата Регистрации",
+        "Тип полиса",
+        "Компания",
+        "Канал Продаж",
+        "Серия и номер",
     ];
-    let agentArray1 = [
-        {
-            Информация: "Жопа в огне",
-            Название: "А выпить нечего",
-            Дата: "Сегодня",
-        },
-        {
-            Информация: "Жопа в огне",
-            Название: "А выпить нечего",
-            Дата: "Сегодня",
-        },
-        {
-            Информация: "Жопа в огне",
-            Название: "А выпить нечего",
-            Дата: "Сегодня",
-        },
-    ];
-    let agentArray2 = [
-        {
-            Информация: "Герои 3",
-            Название: "Надо катануть",
-            Дата: "Сегодня",
-        },
-        {
-            Информация: "Или варить борщ",
-            Название: "Взять пивка",
-            Дата: "Завтра",
-        },
-        {
-            Информация: "Жопа в огне",
-            Название: "А выпить нечего",
-            Дата: "Сегодня",
-        },
+    let clientDealHeaderArray = ["Дата создания", "Название", "Статус"];
+    let clientPolicyInBaseHeaderArray = [
+        "Источник",
+        "Тип полиса",
+        "Компания",
+        "Дата окончания",
     ];
 
-    function showDealTable() {
-        document.getElementById("dealsTable").classList.remove("none");
-        document.getElementById("sailsTable").classList.add("none");
-        document.getElementById("policiesTable").classList.add("none");
-    }
     function showSailsTable() {
-        document.getElementById("sailsTable").classList.remove("none");
-        document.getElementById("dealsTable").classList.add("none");
-        document.getElementById("policiesTable").classList.add("none");
+        setLoader(true);
+        setClientDeal();
+        setClientPolicyInBase();
+        const values =
+            "date_registration,type__name,company__name,channel__name,number";
+        let id = currentClient.id;
+        oneForAll(values, "policy", undefined, `client=${id}`).then((data) => {
+            setClientSale(data.results);
+        });
+        setLoader(false);
+    }
+    function showDealTable() {
+        setLoader(true);
+        setClientSale();
+        setClientPolicyInBase();
+        const values = "date_create,name,status";
+        let id = currentClient.id;
+        oneForAll(values, "deal", undefined, `client=${id}`).then((data) => {
+            setClientDeal(data.results);
+        });
+        setLoader(false);
     }
     function showPoliciesTable() {
-        document.getElementById("policiesTable").classList.remove("none");
-        document.getElementById("dealsTable").classList.add("none");
-        document.getElementById("sailsTable").classList.add("none");
-    }
-    function showPopUpNewClientCard() {
-        document
-            .querySelector(".container__ClientsCard")
-            .classList.toggle("active");
+        setLoader(true);
+        setClientSale();
+        setClientDeal();
+        const values = "base_source,type__name,company__name,date_end";
+        let id = currentClient.id;
+        oneForAll(values, "base_policy", undefined, `client=${id}`).then(
+            (data) => {
+                setClientPolicyInBase(data.results);
+            }
+        );
+        setLoader(false);
     }
 
-    let title = "Сделки";
-    let title1 = "Продажи";
-    let title2 = "Полисы в базе";
+    function M(e) {
+        {
+            if (!e.target.closest(".container__PopUp")) {
+                setCurrentClient();
+            }
+        }
+    }
+    useEffect(() => {
+        setLoader(true);
+        setClientDeal();
+        setClientPolicyInBase();
+        const values =
+            "date_registration,type__name,company__name,channel__name,number";
+        let id = currentClient.id;
+        oneForAll(values, "policy", undefined, `client=${id}`).then((data) => {
+            setClientSale(data.results);
+        });
+        setLoader(false);
+    }, []);
+
     return (
-        <div className="main main__flex">
-            <div id="container__ClientsCard" className="container__ClientsCard">
+        <div onClick={M} className="main__container">
+            <div id="container__ClientsCard" className="container__PopUp">
                 <div className="content__PopUp">
                     <div className="content__PopUpClientsCard_comments"></div>
 
                     <div className="content__PopUp_input right">
-                        <Input name="ФИО клиента" style="inputBox__standart" />
                         <Input
+                            value={currentClient.full_name}
+                            name="ФИО клиента"
+                            style="inputBox__standart"
+                        />
+                        <Input
+                            value={currentClient.birthday}
                             setId="addHappyBithday"
                             divId="divAddHappyBirthdayClient"
                             name="Дата рождения клиента"
                             style="inputBox__standart"
                         />
                         <Input
+                            value={currentClient.phone}
                             divId="divAddPhoneClient"
                             setId="addPhoneClient"
                             name="Телефон клиента"
                             style="inputBox__standart"
                         />
                         <Input
+                            value={currentClient.email}
                             divId="divAddEmailClient"
                             setId="addEmailClient"
                             name="Email Клиента"
@@ -108,6 +118,7 @@ function ClientCard() {
                         />
 
                         <Input
+                            value={currentClient.address}
                             name="Регион клиента"
                             style="inputBox__standart"
                         />
@@ -128,32 +139,50 @@ function ClientCard() {
                             style="inputBox__standart"
                         />
                     </div>
-                    <div className="content__PopUpClientCard">
-                        <div className="content__PopUpClientCard_btn">
-                            <Button onClick={showDealTable} name="Сделки" />
-                            <Button onClick={showSailsTable} name="Продажи" />
-                            <Button
-                                onClick={showPoliciesTable}
-                                name="Полисы в базе"
+
+                    <div className="content__PopUpClientCard_btn">
+                        <Button onClick={showSailsTable} name="Продажи" />
+                        <Button onClick={showDealTable} name="Сделки" />
+                        <Button
+                            onClick={showPoliciesTable}
+                            name="Полисы в базе"
+                        />
+                    </div>
+                    <div className="content__PopUpClientCardTable">
+                        {clientSale ? (
+                            <Table
+                                loader={loader}
+                                title="Продажи"
+                                props={clientSale}
+                                header={clientSaleHeaderArray}
+                                style="tableSaleClient"
                             />
-                        </div>
-                        <div
-                            className="button__close"
-                            onClick={showPopUpNewClientCard}
-                        >
-                            <ion-icon name="close-outline"></ion-icon>
-                        </div>
-                        <div className="content__PopUpClientCardTable">
-                            <div id="dealsTable" className="none">
-                                <Table props={agentArray} title={title} />
-                            </div>
-                            <div id="sailsTable" className="none">
-                                <Table props={agentArray1} title={title1} />
-                            </div>
-                            <div id="policiesTable" className="none">
-                                <Table props={agentArray2} title={title2} />
-                            </div>
-                        </div>
+                        ) : (
+                            <></>
+                        )}
+
+                        {clientDeal ? (
+                            <Table
+                                loader={loader}
+                                header={clientDealHeaderArray}
+                                title="Сделки"
+                                style="tableSaleClient"
+                                props={clientDeal}
+                            />
+                        ) : (
+                            <></>
+                        )}
+                        {clientPolicyInBase ? (
+                            <Table
+                                loader={loader}
+                                header={clientPolicyInBaseHeaderArray}
+                                title="Полисы в базе"
+                                style="tableSaleClient"
+                                props={clientPolicyInBase}
+                            />
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
             </div>
