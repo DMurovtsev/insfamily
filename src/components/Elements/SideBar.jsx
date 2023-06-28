@@ -38,7 +38,6 @@ function SideBar({ setSearchResponse }) {
                 item.classList.add("hovered");
             });
         }
-
         list.forEach((item) => {
             item.addEventListener("onclick", activeLink);
         });

@@ -97,6 +97,15 @@ body {
     left: 220px;
     gap: 10px;
 }
+.container__headerBaserClients {
+    transform: scale(0.85);
+    position: relative;
+    display: flex;
+    top: 20px;
+    left: 0px;
+    gap: 10px;
+}
+
 .container__header_sales {
     transform: scale(0.8);
     position: absolute;
@@ -789,6 +798,12 @@ button:hover i::after {
 .container__table_clients {
     top: 50px;
     height: 700px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.container__table_basepolicy {
+    margin-top: 40px;
+    height: 730px;
     overflow-y: scroll;
     overflow-x: hidden;
 }

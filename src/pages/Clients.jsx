@@ -91,7 +91,6 @@ function Clients() {
         setLoading,
         setClients
     ) => {
-        console.log(currentPageClients);
         if (e.target.scrollTop === prevScrollTop) {
             return;
         }
@@ -102,12 +101,10 @@ function Clients() {
             currentPageClients &&
             !loading
         ) {
-            console.log(2);
             setLoading(true);
             let next = currentPageClients;
 
             oneForAll(undefined, undefined, next, undefined).then((data) => {
-                console.log(3);
                 setClients((prevState) => [...prevState, ...data.results]);
                 if (data.next_page) {
                     setCurrentPageClients(data.next_page);
@@ -143,7 +140,7 @@ function Clients() {
             });
         }
     }, [admin]);
-    if (managers) {
+    if (managers.length > 0) {
         managers.forEach((user, i) => {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
@@ -213,9 +210,13 @@ function Clients() {
             {addClient ? <AddClients setAddClient={setAddClient} /> : <></>}
 
             <div className="container__header">
-                <Link to="/ClientsBases">
-                    <Button name="Базы" />
-                </Link>
+                {admin ? (
+                    <Link to="/ClientsBases">
+                        <Button name="Базы" />
+                    </Link>
+                ) : (
+                    <></>
+                )}
 
                 <Select
                     onChange={filtrClientsSelects}
@@ -255,6 +256,7 @@ function Clients() {
                     name="Поиск клиента"
                     setId="searchClients"
                     style="inputBox__standart"
+                    onBlur={Search}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             Search(e);
@@ -280,7 +282,7 @@ function Clients() {
                     header={clientsHeaderArray}
                     props={clients}
                     title="Клиенты"
-                    style="container__table_clients"
+                    style="container__table_basepolicy"
                     setData={setClients}
                     setCurrentItem={setCurrentClient}
                 />

@@ -1,7 +1,7 @@
 function CheckBox({ style }) {
     return (
         <label className={style ? `label ${style}` : "label"}>
-            <input type="checkbox" name="" />
+            <input id="checkbox" type="checkbox" name="" />
             <span className="btn"></span>
             <i className="fa">
                 <ion-icon name="checkmark-circle-sharp"></ion-icon>
@@ -9,5 +9,4 @@ function CheckBox({ style }) {
         </label>
     );
 }
-
 export { CheckBox };

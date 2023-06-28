@@ -159,6 +159,7 @@ async function changeStages(currentStage) {
     });
     return await response.json();
 }
+
 async function createDeals(
     basesource_id,
     type_policy,
@@ -557,6 +558,23 @@ async function addClient(fornData) {
     });
     return await response.json();
 }
+async function addBasePolicy(formData) {
+    let response = await fetch(`${myHost}/basepolicies/upload/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
+async function giveBasePolicy(body) {
+    headers["Content-Type"] = "application/json";
+    let response = await fetch(`${myHost}/basepolicies/broadcast/`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -612,4 +630,6 @@ export {
     addActSales,
     createActSales,
     addClient,
+    addBasePolicy,
+    giveBasePolicy,
 };

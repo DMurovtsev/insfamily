@@ -1,20 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getClientsBirthday, getManagers } from "../../Api";
 import { PopUpClientsBirhday } from "./PopUpClientsBirhday";
+import { CustomContext } from "../Service/Context";
 
 function HappyBirthdayClients({ setClientsBirhday, clientsBirhday }) {
     const [clientsBirhdayCount, setClientsBirhdayCount] = useState([]);
     const [managerss, setManagerss] = useState([]);
+    const { admin } = useContext(CustomContext);
     useEffect(() => {
         getClientsBirthday().then((data) => {
             setClientsBirhdayCount(data.clients);
         });
-        getManagers().then((data) => {
-            setManagerss(data);
-        });
+        {
+            admin ? (
+                getManagers().then((data) => {
+                    setManagerss(data);
+                })
+            ) : (
+                <></>
+            );
+        }
     }, []);
 
-    if (managerss) {
+    if (managerss.length > 0) {
         managerss.forEach((user, i) => {
             managerss[i]["name"] = `${user.first_name} ${user.last_name}`;
         });

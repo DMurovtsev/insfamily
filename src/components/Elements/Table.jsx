@@ -58,7 +58,13 @@ function Table({
                         {props.map((item) => (
                             <tr
                                 onClick={() => {
-                                    setCurrentItem(item);
+                                    {
+                                        setCurrentItem ? (
+                                            setCurrentItem(item)
+                                        ) : (
+                                            <></>
+                                        );
+                                    }
                                 }}
                                 id={item ? item.id : ""}
                                 className="trTableSales"

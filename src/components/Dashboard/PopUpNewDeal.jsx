@@ -113,7 +113,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             }
         });
         let formData = new FormData();
-
         formData.append("type_pay", document.getElementById("payId").value);
         formData.append("status", document.getElementById("typeSalesId").value);
         formData.append("type_policy", document.getElementById("typeId").value);
