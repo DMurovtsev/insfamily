@@ -4,7 +4,6 @@ import { Select } from "../components/Elements/Select";
 import { Input } from "../components/Elements/Input";
 import { Link } from "react-router-dom";
 import { Table } from "../components/Elements/Table";
-import { CheckBox } from "../components/Elements/CheckBox";
 import { AddClients } from "../components/Clients/AddClients";
 import { ClientCard } from "../components/Clients/ClientCard";
 import {
@@ -15,7 +14,6 @@ import {
     oneForAll,
     oneForAllPost,
 } from "../Api";
-import { Loader } from "../components/Elements/Loader";
 import { CustomContext } from "../components/Service/Context";
 
 function Clients() {

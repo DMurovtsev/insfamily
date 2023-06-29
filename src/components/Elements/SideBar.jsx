@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./Button";
@@ -8,13 +8,19 @@ import { HappyBirthdayClients } from "../Tools/HappyBirthdayClients";
 import { ProblemBook } from "../Tools/ProblemBook";
 import { LiveTape } from "../Tools/LiveTape";
 import { CustomContext } from "../Service/Context";
-import { globalSearch } from "../../Api";
+import { getBriefly, globalSearch } from "../../Api";
 import { Loader } from "./Loader";
 
 function SideBar({ setSearchResponse }) {
-    /*MenuToggle */
     const navigate = useNavigate();
+    const { admin } = useContext(CustomContext);
+    const [briefly, setBriefly] = useState([]);
+
     useEffect(() => {
+        getBriefly().then((data) => {
+            setBriefly(data);
+        });
+        console.log(briefly);
         if (document.querySelector(".toggle")) {
             document.querySelector(".toggle").onclick = function () {
                 if (document.getElementById("main")) {
@@ -45,7 +51,6 @@ function SideBar({ setSearchResponse }) {
             navigate(-1);
         };
     }, []);
-    const { admin } = useContext(CustomContext);
 
     function Search(e) {
         if (document.getElementById("inputGlobalSearch").value.trim()) {
@@ -68,6 +73,7 @@ function SideBar({ setSearchResponse }) {
                                 src="logoContur.png"
                                 alt=""
                             />
+
                             <span className="titleIF">
                                 InsFamily <br />
                                 <span style={{ fontSize: "13px" }}>
@@ -76,6 +82,11 @@ function SideBar({ setSearchResponse }) {
                             </span>
                             <div className="isAdmin">{admin}</div>
                         </Link>
+                        <div className="brieflySideBar">
+                            {" "}
+                            <p>{briefly.user}</p>
+                            <p>{briefly.sum_sp} &#8381;</p>
+                        </div>
                     </li>
                     <li>
                         <Link to="/Dashboard">

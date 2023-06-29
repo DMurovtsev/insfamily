@@ -831,6 +831,7 @@ button:hover i::after {
     text-align: center;
     text-transform: uppercase;
 }
+
 .table thead tr th {
     font-size: 14px;
     font-weight: medium;
@@ -840,6 +841,11 @@ button:hover i::after {
     padding: 12px;
     border: 1px solid var(--dark);
     white-space: nowrap;
+}
+table thead th:hover {
+    cursor: pointer;
+    color: var(--dark);
+    background: var(--grey);
 }
 .table tbody tr td {
     font-size: 14px;
@@ -3015,4 +3021,66 @@ section {
     position: absolute;
     left: 50px;
     width: 1200px;
+}
+.hdepatments {
+    color: var(--dark);
+    text-align: center;
+}
+.container__kasco {
+    position: absolute;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 50px;
+    left: -165px;
+}
+.tableAnalytics {
+    display: flex;
+    gap: 30px;
+    border-bottom: 5px double var(--dark);
+}
+.input__Department {
+    display: flex;
+    position: absolute;
+    left: -160px;
+    z-index: 20;
+    gap: 10px;
+}
+.brieflySideBar {
+    position: absolute;
+    color: var(--grey);
+    font-weight: lighter;
+    font-size: small;
+    text-align: center;
+    left: 75px;
+    bottom: 0;
+    padding-top: 8px;
+}
+.administration__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1200px;
+    height: 800px;
+    gap: 20px;
+}
+.administration__content {
+    width: 550px;
+    height: 550px;
+    box-shadow: 0 0 15px var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow: auto;
+    gap: 15px;
+    border-radius: 15px;
+}
+.administrationH {
+    display: block;
+    margin: 20px;
+    top: 0px;
+    color: var(--dark);
 }
