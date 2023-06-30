@@ -342,7 +342,7 @@ function PopUpDeal({
                         />
                         <Input
                             none="none"
-                            value={currentDeal.policy.contact_person}
+                            value={currentDeal.policy.policyholder.full_name}
                             name="ФИО клиента"
                             style="inputBox__standart"
                         />

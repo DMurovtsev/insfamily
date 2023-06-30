@@ -20,7 +20,6 @@ function SideBar({ setSearchResponse }) {
         getBriefly().then((data) => {
             setBriefly(data);
         });
-        console.log(briefly);
         if (document.querySelector(".toggle")) {
             document.querySelector(".toggle").onclick = function () {
                 if (document.getElementById("main")) {

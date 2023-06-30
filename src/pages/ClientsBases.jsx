@@ -14,7 +14,6 @@ import {
     oneForAllPost,
 } from "../Api";
 import { CustomContext } from "../components/Service/Context";
-import { CheckBox } from "../components/Elements/CheckBox";
 import { InputFile } from "../components/Elements/InputFile";
 import { PopUpBasePolicy } from "../components/BasePolicy/PopUpBasePolicy";
 function ClientsBases() {
@@ -34,6 +33,7 @@ function ClientsBases() {
     const [loading, setLoading] = useState(false);
     const [basePolicy, setBasePolicy] = useState([]);
     const [baseSource, setBaseSource] = useState([]);
+    const [dateValid, setDateValid] = useState(true);
     const [showBasePolicy, setShowBasePolicy] = useState(false);
     let clientsBaseHeaderArray = [
         "Источник",
@@ -107,6 +107,9 @@ function ClientsBases() {
     };
     /*Фильтрация базы полисов по селектам*/
     function filtrBasePolicysSelects() {
+        if (!dateValid) {
+            return;
+        }
         setLoader(true);
         let inworkBasePolicy = document.getElementById("inworkBasePolicy");
         let clientsBaseCompany = document.getElementById("clientsBaseCompany");
@@ -173,7 +176,10 @@ function ClientsBases() {
         });
     }
 
-    const status = [{ id: "yes", name: "Да" }];
+    const status = [
+        { id: "yes", name: "Да" },
+        { id: "all", name: "Все" },
+    ];
 
     function createFilterBody() {
         let body = {};
@@ -300,7 +306,7 @@ function ClientsBases() {
         addBasePolicy(formData).then((response) => {});
     }
     /*Валидация даты*/
-    function checkDate(e) {
+    function validateDate(e) {
         e.target.value = e.target.value.replace(/[^0-9]/g, "");
         if (2 < e.target.value.length && e.target.value.length < 5) {
             e.target.value =
@@ -312,11 +318,26 @@ function ClientsBases() {
                 e.target.value.slice(2, 4) +
                 "." +
                 e.target.value.slice(4, 8);
+            if (e.target.value.length != 10) {
+                e.target.classList.add("red_border");
+                setDateValid(false);
+            }
+
             if (e.target.value.length == 10) {
+                e.target.classList.remove("red_border");
+                setDateValid(true);
+
                 let newDate = new Date(
                     e.target.value.slice(6, 10),
                     Number(e.target.value.slice(3, 5) - 1),
                     e.target.value.slice(0, 2)
+                );
+                let inputDate = newDate.toLocaleDateString("ru-RU");
+                let dateNow = new Date();
+                let now = dateNow.toLocaleDateString("ru-RU");
+                const date1 = new Date(now.split(".").reverse().join("-"));
+                const date2 = new Date(
+                    inputDate.split(".").reverse().join("-")
                 );
             }
         }
@@ -394,10 +415,9 @@ function ClientsBases() {
                 />
                 <Input
                     setId="clientsBaseDateStart"
-                    onInput={checkDate}
+                    onInput={validateDate}
                     name="Дата окончания с"
                     style="inputBox__select_s"
-                    onBlur={filtrBasePolicysSelects}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrBasePolicysSelects();
@@ -405,11 +425,10 @@ function ClientsBases() {
                     }}
                 />
                 <Input
-                    onInput={checkDate}
+                    onInput={validateDate}
                     setId="clientsBaseDateEnd"
                     name="Дата окончания по"
                     style="inputBox__select_s"
-                    onBlur={filtrBasePolicysSelects}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrBasePolicysSelects();

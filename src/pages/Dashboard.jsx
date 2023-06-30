@@ -95,7 +95,6 @@ function Dashboard() {
             setIdFunnel(funnelArr[0]);
             setFunnels(data.results);
         });
-
         getChannels().then((data) => {
             setChannel(data);
         });

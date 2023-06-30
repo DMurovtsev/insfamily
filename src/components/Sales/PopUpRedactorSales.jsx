@@ -16,7 +16,6 @@ function PopUpRedactorSales({
 }) {
     const [documents, setDocuments] = useState([]);
     const { admin } = useContext(CustomContext);
-
     useEffect(() => {
         if (currentSales.half_com_display != "-") {
             let checkbox = document.getElementById("checkBoxSales");
@@ -158,6 +157,11 @@ function PopUpRedactorSales({
                         )}
                     </div>
                     <Select
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onChange={(e) => {
                             editPolicy(e, "status");
                         }}
@@ -168,6 +172,11 @@ function PopUpRedactorSales({
                         options={selectOptionsTypeSales}
                     />
                     <Select
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onChange={(e) => {
                             editPolicy(e, "type");
                         }}
@@ -178,6 +187,11 @@ function PopUpRedactorSales({
                         options={typePolicies}
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         style="inputBox__standart_popUp"
                         onBlur={(e) => {
                             editPolicy(e, "number");
@@ -186,6 +200,11 @@ function PopUpRedactorSales({
                         name="Серия и номер"
                     />
                     <Select
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onChange={(e) => {
                             editPolicy(e, "company");
                         }}
@@ -195,6 +214,11 @@ function PopUpRedactorSales({
                         options={insCompany}
                     />
                     <Select
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onChange={(e) => {
                             editPolicy(e, "channel");
                         }}
@@ -204,6 +228,11 @@ function PopUpRedactorSales({
                         options={channel}
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onBlur={(e) => {
                             editPolicy(e, "commission");
                         }}
@@ -212,6 +241,11 @@ function PopUpRedactorSales({
                         style="inputBox__standart_popUp"
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onBlur={(e) => {
                             editPolicy(e, "commission_discont");
                         }}
@@ -220,6 +254,11 @@ function PopUpRedactorSales({
                         style="inputBox__standart_popUp"
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onBlur={(e) => {
                             editPolicy(e, "commission_rur");
                         }}
@@ -228,6 +267,11 @@ function PopUpRedactorSales({
                         style="inputBox__standart_popUp"
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onBlur={(e) => {
                             editPolicy(e, "client__full_name");
                         }}
@@ -236,6 +280,11 @@ function PopUpRedactorSales({
                         style="inputBox__standart_popUp"
                     />
                     <Select
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onChange={(e) => {
                             editPolicy(e, "user");
                         }}
@@ -245,6 +294,11 @@ function PopUpRedactorSales({
                         options={managers}
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onBlur={(e) => {
                             editPolicy(e, "date_registration");
                         }}
@@ -254,6 +308,11 @@ function PopUpRedactorSales({
                         style="inputBox__standart_popUp"
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onBlur={(e) => {
                             editPolicy(e, "date_start");
                         }}
@@ -263,6 +322,11 @@ function PopUpRedactorSales({
                         style="inputBox__standart_popUp"
                     />
                     <Input
+                        none={
+                            currentSales.accept_display == "Проведён"
+                                ? "none"
+                                : ""
+                        }
                         onBlur={(e) => {
                             editPolicy(e, "date_end");
                         }}

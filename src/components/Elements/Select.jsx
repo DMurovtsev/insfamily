@@ -11,6 +11,7 @@ function Select({
     onChange,
     first,
     firstValue,
+    none,
 }) {
     useEffect(() => {
         let inputBox__select = document.querySelectorAll(".inputBox__select");
@@ -32,6 +33,7 @@ function Select({
             }
         >
             <select
+                style={{ pointerEvents: none }}
                 onChange={onChange}
                 disabled={disabled}
                 id={setId}

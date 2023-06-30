@@ -12,9 +12,10 @@ function Table({
     setLoading,
     currentPage,
     setCurrentPage,
-    setCurrentItem,
     setData,
     loader,
+    heading__new,
+    onClick,
 }) {
     let propsTd = "";
     if (props && props.length != 0) {
@@ -72,7 +73,7 @@ function Table({
             }
             className={style ? `container__table ${style}` : "container__table"}
         >
-            <h2 className="heading">{title}</h2>
+            <h2 className={heading__new ? heading__new : "heading"}>{title}</h2>
             {loader ? (
                 <Loader />
             ) : (
@@ -93,15 +94,9 @@ function Table({
                     <tbody>
                         {props.map((item) => (
                             <tr
-                                onClick={() => {
-                                    {
-                                        setCurrentItem ? (
-                                            setCurrentItem(item)
-                                        ) : (
-                                            <></>
-                                        );
-                                    }
-                                }}
+                                onClick={() =>
+                                    onClick ? onClick(item) : <></>
+                                }
                                 id={item ? item.id : ""}
                                 className="trTableSales"
                             >

@@ -793,7 +793,7 @@ button:hover i::after {
     left: -100px;
     height: 700px;
     overflow: auto;
-    width: 1600px;
+    width: auto;
 }
 .container__table_clients {
     top: 50px;
@@ -807,20 +807,7 @@ button:hover i::after {
     overflow-y: scroll;
     overflow-x: hidden;
 }
-.heading {
-    text-align: start;
-    color: var(--dark);
-    margin-bottom: 10px;
-    margin-top: 10px;
-    width: auto;
-    text-transform: uppercase;
-    border-bottom: thick double var(--dark);
-    position: sticky;
-    top: 0;
-    display: block;
-    background-color: var(--grey);
-    z-index: 5;
-}
+
 .table {
     min-width: 550px;
     overflow: auto;
@@ -2633,10 +2620,35 @@ section {
     top: 0;
     left: 0; */
 }
+.addManagers__container {
+    position: absolute;
+    top: 100px;
+    left: 600px;
+    width: auto;
+    height: auto;
+    box-shadow: 0 0 15px var(--dark);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
 .tableSaleClient {
-    overflow-x: hidden;
-    position: relative;
-    bottom: -450px;
+    max-height: 290px;
+    overflow-x: auto;
+    bottom: -440px;
+    margin: 0;
+    padding-left: 5px;
+}
+.container__table_stuff {
+    width: 1200px;
+    height: 800px;
+    display: flex;
+}
+.addManagers__container {
+    width: 400px;
+    height: 500px;
 }
 .button__close {
     top: -505px;
@@ -3083,4 +3095,32 @@ section {
     margin: 20px;
     top: 0px;
     color: var(--dark);
+}
+.heading {
+    text-align: start;
+    color: var(--dark);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: auto;
+    text-transform: uppercase;
+    border-bottom: thick double var(--dark);
+    position: sticky;
+    top: 0;
+    display: block;
+    background-color: var(--grey);
+    z-index: 5;
+}
+.heading__new {
+    text-align: start;
+    color: var(--dark);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: calc(100vw + 800px);
+    text-transform: uppercase;
+    border-bottom: thick double var(--dark);
+    position: sticky;
+    top: 0;
+    display: block;
+    background-color: var(--grey);
+    z-index: 5;
 }

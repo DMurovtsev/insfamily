@@ -21,6 +21,7 @@ function Clients() {
     const [typePolicies, setTypePolicies] = useState([]);
     const [insCompany, setInsCompany] = useState([]);
     const [channel, setChannel] = useState([]);
+    const [policies, setPolicies] = useState([]);
     const [managers, setManagers] = useState([]);
     const [loader, setLoader] = useState(false);
     const [addClient, setAddClient] = useState(false);
@@ -202,6 +203,9 @@ function Clients() {
             document.body.removeChild(link);
         });
     }
+    function showClient(item) {
+        setCurrentClient(item);
+    }
 
     return (
         <div>
@@ -254,7 +258,6 @@ function Clients() {
                     name="Поиск клиента"
                     setId="searchClients"
                     style="inputBox__standart"
-                    onBlur={Search}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             Search(e);
@@ -271,6 +274,7 @@ function Clients() {
             {/* {clients.length == 0 ? <Loader /> : ""} */}
             <div className="container__body_clients">
                 <Table
+                    onClick={showClient}
                     loader={loader}
                     loading={loading}
                     setLoading={setLoading}
@@ -282,7 +286,6 @@ function Clients() {
                     title="Клиенты"
                     style="container__table_basepolicy"
                     setData={setClients}
-                    setCurrentItem={setCurrentClient}
                 />
             </div>
             {currentClient ? (

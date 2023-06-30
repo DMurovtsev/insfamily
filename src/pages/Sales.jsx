@@ -342,6 +342,9 @@ function Sales() {
     function openPopUpActs() {
         setShowActs(true);
     }
+    function showSales(item) {
+        setCurrentSales(item);
+    }
 
     return (
         <>
@@ -515,7 +518,8 @@ function Sales() {
                         loading={loading}
                         setLoading={setLoading}
                         setData={setPolicies}
-                        setCurrentItem={setCurrentSales}
+                        onClick={showSales}
+                        heading__new="heading__new"
                     />
                 </div>
             </div>

@@ -3,20 +3,37 @@ import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
 import { InputFile } from "../Elements/InputFile";
 import { Table } from "../Elements/Table";
-import { oneForAll } from "../../Api";
+import { getDeal, oneForAll } from "../../Api";
+import { PopUpRedactorSales } from "../Sales/PopUpRedactorSales";
+import { PopUpDeal } from "../Dashboard/PopUpDeal";
 
 function ClientCard({ currentClient, setCurrentClient }) {
     const [clientSale, setClientSale] = useState();
+    const [currentSales, setCurrentSales] = useState();
     const [clientDeal, setClientDeal] = useState();
+    const [currentDeal, setCurrentDeal] = useState();
     const [clientPolicyInBase, setClientPolicyInBase] = useState();
     const [loader, setLoader] = useState(false);
+    const [deal, setDeal] = useState();
 
     let clientSaleHeaderArray = [
-        "Дата Регистрации",
+        "Статус",
+        "Тип продажи",
         "Тип полиса",
-        "Компания",
-        "Канал Продаж",
         "Серия и номер",
+        "Компания",
+        "Канал продаж",
+        "Премия",
+        "Вход. КВ %",
+        "Вход. КВ руб.",
+        "Клиент",
+        "Менеджер",
+        "Оформлен",
+        "Начало действия",
+        "Окончание действия",
+        "Акт",
+        "ID",
+        "50% КВ",
     ];
     let clientDealHeaderArray = ["Дата создания", "Название", "Статус"];
     let clientPolicyInBaseHeaderArray = [
@@ -42,13 +59,15 @@ function ClientCard({ currentClient, setCurrentClient }) {
         setLoader(true);
         setClientSale();
         setClientPolicyInBase();
-        const values = "date_create,name,status";
         let id = currentClient.id;
+        const values = "date_create,name,status,description,price,id";
         oneForAll(values, "deal", undefined, `client=${id}`).then((data) => {
             setClientDeal(data.results);
         });
+
         setLoader(false);
     }
+
     function showPoliciesTable() {
         setLoader(true);
         setClientSale();
@@ -74,14 +93,24 @@ function ClientCard({ currentClient, setCurrentClient }) {
         setLoader(true);
         setClientDeal();
         setClientPolicyInBase();
-        const values =
-            "date_registration,type__name,company__name,channel__name,number";
         let id = currentClient.id;
+        const values =
+            "accept_display,status_display,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,sale_report__name,id,half_com_display";
         oneForAll(values, "policy", undefined, `client=${id}`).then((data) => {
             setClientSale(data.results);
         });
+
         setLoader(false);
     }, []);
+
+    function showDeal(item) {
+        getDeal(item.id).then((data) => {
+            setDeal(data);
+        });
+    }
+    function showSales(item) {
+        setCurrentSales(item);
+    }
 
     return (
         <div onClick={M} className="main__container">
@@ -151,6 +180,7 @@ function ClientCard({ currentClient, setCurrentClient }) {
                     <div className="content__PopUpClientCardTable">
                         {clientSale ? (
                             <Table
+                                onClick={showSales}
                                 loader={loader}
                                 title="Продажи"
                                 props={clientSale}
@@ -163,6 +193,8 @@ function ClientCard({ currentClient, setCurrentClient }) {
 
                         {clientDeal ? (
                             <Table
+                                onClick={showDeal}
+                                setCurrentItem={setCurrentDeal}
                                 loader={loader}
                                 header={clientDealHeaderArray}
                                 title="Сделки"
@@ -186,6 +218,19 @@ function ClientCard({ currentClient, setCurrentClient }) {
                     </div>
                 </div>
             </div>
+            {currentSales ? (
+                <PopUpRedactorSales
+                    currentSales={currentSales}
+                    setCurrentSales={setCurrentSales}
+                />
+            ) : (
+                <></>
+            )}
+            {deal ? (
+                <PopUpDeal currentDeal={deal} setCurrentDeal={setDeal} />
+            ) : (
+                <></>
+            )}
         </div>
     );
 }

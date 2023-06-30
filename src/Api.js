@@ -710,6 +710,21 @@ async function redactorSd(name) {
     });
     return await response.json();
 }
+async function getDeal(id) {
+    let response = await fetch(`${myHost}/deals/${id}/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+
+async function regManagers(formData) {
+    let response = await fetch(`${myHost}/reg_user/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -782,4 +797,6 @@ export {
     redactorCompanies,
     redactorBanks,
     redactorSd,
+    getDeal,
+    regManagers,
 };

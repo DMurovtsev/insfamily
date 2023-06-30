@@ -52,9 +52,6 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
             localStorage.setItem("funnelId", e.target.attributes[1].value);
             document.querySelector(".Select_2").classList.toggle("active");
             setIdFunnel(i);
-            getDeals(idFunnel.id).then((data) => {
-                setDeals(data.results);
-            });
         }
     }
 
