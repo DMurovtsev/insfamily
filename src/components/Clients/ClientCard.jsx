@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
-import { InputFile } from "../Elements/InputFile";
 import { Table } from "../Elements/Table";
 import { getDeal, oneForAll } from "../../Api";
 import { PopUpRedactorSales } from "../Sales/PopUpRedactorSales";
@@ -42,7 +41,7 @@ function ClientCard({ currentClient, setCurrentClient }) {
         "Компания",
         "Дата окончания",
     ];
-
+    /*Показ таблицы продаж*/
     function showSailsTable() {
         setLoader(true);
         setClientDeal();
@@ -55,6 +54,7 @@ function ClientCard({ currentClient, setCurrentClient }) {
         });
         setLoader(false);
     }
+    /*Показ таблицы сделок*/
     function showDealTable() {
         setLoader(true);
         setClientSale();
@@ -64,10 +64,9 @@ function ClientCard({ currentClient, setCurrentClient }) {
         oneForAll(values, "deal", undefined, `client=${id}`).then((data) => {
             setClientDeal(data.results);
         });
-
         setLoader(false);
     }
-
+    /*Показ таблицы полисов*/
     function showPoliciesTable() {
         setLoader(true);
         setClientSale();
@@ -81,7 +80,7 @@ function ClientCard({ currentClient, setCurrentClient }) {
         );
         setLoader(false);
     }
-
+    /*Функция закрытия popUp*/
     function M(e) {
         {
             if (!e.target.closest(".container__PopUp")) {
@@ -102,7 +101,7 @@ function ClientCard({ currentClient, setCurrentClient }) {
 
         setLoader(false);
     }, []);
-
+    /*Функция  клика по строке таблиц и показ конкретной сделки и продажи*/
     function showDeal(item) {
         getDeal(item.id).then((data) => {
             setDeal(data);
@@ -111,7 +110,6 @@ function ClientCard({ currentClient, setCurrentClient }) {
     function showSales(item) {
         setCurrentSales(item);
     }
-
     return (
         <div onClick={M} className="main__container">
             <div id="container__ClientsCard" className="container__PopUp">

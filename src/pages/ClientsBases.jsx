@@ -17,12 +17,6 @@ import { CustomContext } from "../components/Service/Context";
 import { InputFile } from "../components/Elements/InputFile";
 import { PopUpBasePolicy } from "../components/BasePolicy/PopUpBasePolicy";
 function ClientsBases() {
-    const navigate = useNavigate();
-    const { admin } = useContext(CustomContext);
-    if (!admin) {
-        navigate(-1);
-    }
-
     const values =
         "base_source__name,type__name,company__name,date_end,car__brand,car__year,car__vin,car__number,ipoteka__bank__name,ipoteka__obj,id";
     const [managers, setManagers] = useState();
@@ -71,7 +65,16 @@ function ClientsBases() {
         { id: "SKODA", name: "SKODA" },
         { id: "VOLKSWAGEN", name: "VOLKSWAGEN" },
     ];
-
+    const status = [
+        { id: "yes", name: "Да" },
+        { id: "all", name: "Все" },
+    ];
+    const navigate = useNavigate();
+    const { admin } = useContext(CustomContext);
+    if (!admin) {
+        navigate(-1);
+    }
+    /*Функция скроллинга для таблицы базы*/
     let prevScrollTop = 0;
     const scrollHandler = (
         e,
@@ -128,7 +131,6 @@ function ClientsBases() {
             "clientsBaseBaseSource"
         );
         let link = "";
-
         if (clientsBaseBaseSource && clientsBaseBaseSource.value != "") {
             link = link + `&base_source=${clientsBaseBaseSource.value}`;
         }
@@ -150,7 +152,6 @@ function ClientsBases() {
         if (clientsBaseCarBrand && clientsBaseCarBrand.value != "") {
             link = link + `&car_brand=${clientsBaseCarBrand.value}`;
         }
-
         if (clientsBaseCarYear && clientsBaseCarYear.value != "") {
             link = link + `&car_year=${clientsBaseCarYear.value}`;
         }
@@ -160,11 +161,9 @@ function ClientsBases() {
         if (clientBaseSpMax && clientBaseSpMax.value != "") {
             link = link + `&sp_max=${clientBaseSpMax.value}`;
         }
-
         if (link != "") {
             link = link.slice(1);
         }
-
         oneForAll(values, "base_policy", undefined, link).then((data) => {
             setBasePolicy(data.results);
             if (data.next_page) {
@@ -175,12 +174,7 @@ function ClientsBases() {
             setLoader(false);
         });
     }
-
-    const status = [
-        { id: "yes", name: "Да" },
-        { id: "all", name: "Все" },
-    ];
-
+    /*Функция создания body для выгрузки базы*/
     function createFilterBody() {
         let body = {};
         let searcBasePolicy = document.getElementById("searcBasePolicy");
@@ -200,7 +194,6 @@ function ClientsBases() {
         let clientsBaseBaseSource = document.getElementById(
             "clientsBaseBaseSource"
         );
-
         if (searcBasePolicy && searcBasePolicy.value != "") {
             body["search"] = searcBasePolicy.value;
         } else {
@@ -237,7 +230,7 @@ function ClientsBases() {
         }
         return body;
     }
-
+    /*Функция выгрузки базы*/
     function unloadBasePolicy() {
         let body = createFilterBody();
         body["upload"] = "base_policy";
@@ -264,7 +257,6 @@ function ClientsBases() {
             filtrBasePolicysSelects();
             return;
         }
-
         e.target.value = search;
         oneForAll(values, "base_policy", undefined, `search=${search}`).then(
             (response) => {
@@ -286,7 +278,6 @@ function ClientsBases() {
             setBaseSource(data.results);
         });
     }, []);
-
     useEffect(() => {
         if (admin) {
             getManagers().then((data) => {
@@ -299,6 +290,7 @@ function ClientsBases() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
+    /*Загрузка базы*/
     function addBase() {
         let formData = new FormData();
         let input_files = document.getElementById("unloadBasePolicy");
@@ -322,11 +314,9 @@ function ClientsBases() {
                 e.target.classList.add("red_border");
                 setDateValid(false);
             }
-
             if (e.target.value.length == 10) {
                 e.target.classList.remove("red_border");
                 setDateValid(true);
-
                 let newDate = new Date(
                     e.target.value.slice(6, 10),
                     Number(e.target.value.slice(3, 5) - 1),
@@ -357,9 +347,7 @@ function ClientsBases() {
                 <Link to="/Clients">
                     <Button name="Клиенты" />
                 </Link>
-
                 <Button name="Залить Базу" onClick={showsBasePolicy} />
-
                 <Button name="Выгрузить" onClick={unloadBasePolicy} />
                 <InputFile
                     onChange={addBase}
@@ -367,7 +355,6 @@ function ClientsBases() {
                     setId="unloadBasePolicy"
                     name="Загрузить"
                 />
-
                 <Input
                     setId="searcBasePolicy"
                     logo={<ion-icon name="search-outline"></ion-icon>}
@@ -435,7 +422,6 @@ function ClientsBases() {
                         }
                     }}
                 />
-
                 <Select
                     options={carBrandSelectClientBase}
                     setId="clientsBaseCarBrand"
@@ -475,7 +461,6 @@ function ClientsBases() {
                     }}
                 />
             </div>
-
             <Table
                 props={basePolicy}
                 loader={loader}

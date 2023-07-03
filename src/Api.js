@@ -725,6 +725,14 @@ async function regManagers(formData) {
     });
     return await response.json();
 }
+async function editManagers(formData, id) {
+    let response = await fetch(`${myHost}/reg_user/${id}`, {
+        method: "PATCH",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
 
 export {
     Login,
@@ -799,4 +807,5 @@ export {
     redactorSd,
     getDeal,
     regManagers,
+    editManagers,
 };

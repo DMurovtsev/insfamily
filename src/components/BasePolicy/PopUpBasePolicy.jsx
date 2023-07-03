@@ -7,12 +7,13 @@ import { getFunnels, getStages, giveBasePolicy } from "../../Api";
 function PopUpBasePolicy({ setShowBasePolicy, managers, createFilterBody }) {
     const [funnels, setFunnels] = useState([]);
     const [stages, setStage] = useState([]);
-
+    /*Функция закрытие popUp*/
     function closeBasePolicy(e) {
         if (!e.target.closest(".container__Acts")) {
             setShowBasePolicy(false);
         }
     }
+    /*Функция заливки базы менеджеру*/
     function goBasePolicy() {
         let body = createFilterBody();
         let stagesBasePolicy = document.getElementById("stagesBasePolicy");
@@ -29,13 +30,12 @@ function PopUpBasePolicy({ setShowBasePolicy, managers, createFilterBody }) {
         }
         giveBasePolicy(body).then((response) => {});
     }
-
     useEffect(() => {
         getFunnels().then((data) => {
             setFunnels(data.results);
         });
     }, []);
-
+    /*Фунуция выбора воронки продаж*/
     function chooseFunnel() {
         let arrStages = [];
         let id = document.getElementById("funnelsBasePolicy").value;
@@ -63,28 +63,6 @@ function PopUpBasePolicy({ setShowBasePolicy, managers, createFilterBody }) {
                         name="Этапы"
                         style="requared inputBox__select_largest"
                     />
-
-                    {/* <Select
-                        setId="typePoliciesActs"
-                        style="requared inputBox__select_largest"
-                        name="Тип полиса"
-                        options
-                        onChange
-                    />
-                    <Select
-                        setId="channelActs"
-                        options
-                        style="requared inputBox__select_largest"
-                        name="Канал продаж"
-                        onChange
-                    />
-                    <Select
-                        setId="companiesActs"
-                        options
-                        style="requared inputBox__select_largest"
-                        name="Страховая компания"
-                        onChange
-                    /> */}
                     <Input
                         setId="countBasePolicy"
                         name="Кол-во полисов"

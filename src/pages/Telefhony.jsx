@@ -20,15 +20,15 @@ function Telefhony() {
         if (admin) {
             getManagersTelefony().then((data) => {
                 console.log(data);
-                // setManagers(data);
+                setManagers(data);
             });
         }
     }, [admin]);
-    // if (managers) {
-    //     managers.forEach((user, i) => {
-    //         managers[i]["name"] = `${user.first_name} ${user.last_name}`;
-    //     });
-    // }
+    if (managers) {
+        managers.forEach((user, i) => {
+            managers[i]["name"] = `${user.first_name} ${user.last_name}`;
+        });
+    }
     return (
         <div>
             <div className="main" id="main">

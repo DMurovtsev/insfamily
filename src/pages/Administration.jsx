@@ -24,6 +24,7 @@ function Administration() {
     const [companies, setCompanies] = useState([]);
     const [bank, setBank] = useState([]);
     const [sd, setSd] = useState([]);
+
     useEffect(() => {
         getTypiesPolicies().then((data) => {
             setType(data);
@@ -44,49 +45,59 @@ function Administration() {
         list.forEach((item) => {
             item.classList.remove("hovered");
         });
-        // list[10].classList.add("hovered");
+        list[10].classList.add("hovered");
     }, []);
+
+    /*Добавление нового типа полиса*/
     function addType() {
         let name = document.getElementById("addTypeAdministration").value;
         addtypePolicys(name).then((response) => {});
     }
+    /*Добавление нового канала продаж*/
     function addChannel() {
         let name = document.getElementById("addChannelsAdministration").value;
         addChannels(name).then((response) => {});
     }
+    /*Добавление новой компании*/
     function addCompanie() {
         let name = document.getElementById("addCompanieAdministration").value;
         addCompanies(name).then((response) => {});
     }
+    /*Добавление нового банка*/
     function addBank() {
         let name = document.getElementById("addBankAdministration").value;
         addBanks(name).then((response) => {});
     }
+    /*Добавление нового отдела продаж*/
     function addSD() {
         let name = document.getElementById("addSdAdministration").value;
         addSd(name).then((response) => {});
     }
+    /*Редактирование типа полиса*/
     function editType(e) {
         let name = e.target.value;
         redactortypePolicys(name).then((response) => {});
     }
+    /*Редактирование канала продаж*/
     function editChannel(e) {
         let name = e.target.value;
         redactorChannels(name).then((response) => {});
     }
+    /*Редактирование компании*/
     function editCompanie(e) {
         let name = e.target.value;
         redactorCompanies(name).then((response) => {});
     }
+    /*Редактирование банка*/
     function editBank(e) {
         let name = e.target.value;
         redactorBanks(name).then((response) => {});
     }
+    /*Редактирование отдела продаж*/
     function editSD(e) {
         let name = e.target.value;
         redactorSd(name).then((response) => {});
     }
-
     return (
         <div className="main">
             <>

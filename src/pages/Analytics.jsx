@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getAnalytics, getFilterAnalytics } from "../Api";
-import { Table } from "../components/Elements/Table";
 import { AnalyticsDepartament } from "../components/Analytics/AnalyticsDepartament";
 import { Input } from "../components/Elements/Input";
 
@@ -13,7 +12,6 @@ function Analytics() {
         getAnalytics().then((data) => {
             setAnalytics(data);
         });
-
         let list = document.querySelectorAll(".navigation li");
         list.forEach((item) => {
             item.classList.remove("hovered");
@@ -38,7 +36,6 @@ function Analytics() {
                 e.target.classList.add("red_border");
                 setDateValid(false);
             }
-
             if (e.target.value.length == 10) {
                 e.target.classList.remove("red_border");
                 setDateValid(true);
@@ -58,6 +55,7 @@ function Analytics() {
             }
         }
     }
+    /*1 число текущего месяца */
     let today = new Date();
     today.setDate(1);
     let now = today.toLocaleDateString("ru-RU");
@@ -68,16 +66,13 @@ function Analytics() {
             return;
         }
         setLoader(true);
-
         let input__DepartmentWith = document.getElementById(
             "input__DepartmentWith"
         );
         let input__DepartmentBefore = document.getElementById(
             "input__DepartmentBefore"
         );
-
         let link = "";
-
         if (input__DepartmentWith && input__DepartmentWith.value != "") {
             link = link + `&date_start=${input__DepartmentWith.value}`;
         }
@@ -87,13 +82,11 @@ function Analytics() {
         if (link != "") {
             link = link.slice(1);
         }
-
         getFilterAnalytics(link).then((data) => {
             setAnalytics(data);
             setLoader(false);
         });
     }
-
     return (
         <div className="main">
             <div className="input__Department">
@@ -129,7 +122,7 @@ function Analytics() {
                         <h2 className="hdepatments">
                             {data.sales_departments}
                         </h2>
-                        <h3 className="hdepatments">{data.sum}&#8381;</h3>
+                        <h3 className="hdepatments">{data.sum} &#8381;</h3>
                         <AnalyticsDepartament
                             loader={loader}
                             department={data}

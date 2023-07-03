@@ -13,10 +13,8 @@ import {
     getActSales,
 } from "../Api";
 import { CustomContext } from "../components/Service/Context";
-import { Loader } from "../components/Elements/Loader";
 import { PopUpRedactorSales } from "../components/Sales/PopUpRedactorSales";
 import { PopUpNewDeal } from "../components/Dashboard/PopUpNewDeal";
-import { type } from "@testing-library/user-event/dist/type";
 import { PopUpActs } from "../components/Sales/PopUpActs";
 
 function Sales() {
@@ -34,10 +32,8 @@ function Sales() {
     const [currentSales, setCurrentSales] = useState();
     const [showPopUp, setShowPopUp] = useState(false);
     const [showActs, setShowActs] = useState(false);
-
     const values =
         "accept_display,status_display,type__name,number,company__name,channel__name,commission,commission_discont,commission_rur,client__full_name,user__full_name,date_registration,date_start,date_end,sale_report__name,id,half_com_display";
-
     let policiesHeaderArray = [
         "Статус",
         "Тип продажи",
@@ -57,8 +53,12 @@ function Sales() {
         "ID",
         "50% КВ",
     ];
+    const statusSelectSels = [
+        { id: "all", name: "Все" },
+        { id: "true", name: "Проведён" },
+    ];
+    /*Функция скроллинга для таблицы продаж*/
     let prevScrollTop = 0;
-
     const scrollHandler = (
         e,
         currentPagePolicy,
@@ -79,7 +79,6 @@ function Sales() {
         ) {
             setLoading(true);
             let next = currentPagePolicy;
-
             oneForAll(undefined, undefined, next, undefined).then((data) => {
                 setPolicies((prevState) => [...prevState, ...data.results]);
                 if (data.next_page) {
@@ -91,14 +90,12 @@ function Sales() {
             });
         }
     };
-
     /*Фильтрация продаж по селектам*/
     function filtrSelects() {
         if (!dateValid) {
             return;
         }
         setLoader(true);
-
         let typeValue = document.getElementById("typeSelectSels");
         let channelValue = document.getElementById("channelSelectSels");
         let insCompanyValue = document.getElementById("insCompanySelectSels");
@@ -109,7 +106,6 @@ function Sales() {
         let checkbox = document.getElementById("checkBoxSales");
         let actValue = document.getElementById("actsId");
         let link = "";
-
         if (actValue && actValue.value != "") {
             link = link + `sale_report=${actValue.value}`;
         } else {
@@ -128,7 +124,6 @@ function Sales() {
             if (statusValue && statusValue.value != "all") {
                 link = link + `&accept=${statusValue.value}`;
             }
-
             if (
                 dataStartValue &&
                 dataStartValue.value != "" &&
@@ -149,7 +144,6 @@ function Sales() {
                 link = link.slice(1);
             }
         }
-
         oneForAll(values, "policy", undefined, link).then((data) => {
             setPolicies(data.results);
             if (data.next_page) {
@@ -160,7 +154,7 @@ function Sales() {
             setLoader(false);
         });
     }
-
+    /*Функция валидации даты*/
     function validateDate(e) {
         e.target.value = e.target.value.replace(/[^0-9]/g, "");
         if (2 < e.target.value.length && e.target.value.length < 5) {
@@ -177,11 +171,9 @@ function Sales() {
                 e.target.classList.add("red_border");
                 setDateValid(false);
             }
-
             if (e.target.value.length == 10) {
                 e.target.classList.remove("red_border");
                 setDateValid(true);
-
                 let newDate = new Date(
                     e.target.value.slice(6, 10),
                     Number(e.target.value.slice(3, 5) - 1),
@@ -199,7 +191,6 @@ function Sales() {
     }
     /*Сегодняшняя дата*/
     /*Дата через месяц*/
-
     let today = new Date();
     today.setDate(1);
     let now = today.toLocaleDateString("ru-RU");
@@ -213,7 +204,6 @@ function Sales() {
         getActSales().then((data) => {
             setActs(data);
         });
-
         getCompanies().then((data) => {
             setInsCompany(data);
         });
@@ -221,16 +211,12 @@ function Sales() {
             setChannel(data);
         });
         filtrSelects();
-
         let list = document.querySelectorAll(".navigation li");
-
         list.forEach((item) => {
             item.classList.remove("hovered");
         });
-
         list[3].classList.add("hovered");
     }, []);
-
     useEffect(() => {
         if (admin) {
             getManagers().then((data) => {
@@ -238,7 +224,6 @@ function Sales() {
             });
         }
     }, [admin]);
-
     if (managers) {
         managers.forEach((user, i) => {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
@@ -254,7 +239,6 @@ function Sales() {
             filtrSelects();
             return;
         }
-
         e.target.value = search;
         oneForAll(values, "policy", undefined, `search=${search}`).then(
             (response) => {
@@ -263,12 +247,7 @@ function Sales() {
             }
         );
     }
-
-    const statusSelectSels = [
-        { id: "all", name: "Все" },
-        { id: "true", name: "Проведён" },
-    ];
-
+    /*Отрисовка popUp добавления полиса*/
     function addPolicy() {
         setShowPopUp(true);
     }
@@ -285,7 +264,6 @@ function Sales() {
         let searchSale = document.getElementById("searchSale");
         let actValue = document.getElementById("actsId");
         let body = { upload: "policy" };
-
         if (searchSale && searchSale.value != "") {
             body["search"] = searchSale.value;
         } else {
@@ -307,7 +285,6 @@ function Sales() {
                 if (statusValue && statusValue.value != "all") {
                     body["accept"] = statusValue.value;
                 }
-
                 if (
                     dataStartValue &&
                     dataStartValue.value != "" &&
@@ -339,13 +316,14 @@ function Sales() {
             document.body.removeChild(link);
         });
     }
+    /*Отрисовка popUp актов*/
     function openPopUpActs() {
         setShowActs(true);
     }
+    /*Функция клика по строке таблицы и получения конкретной продажи*/
     function showSales(item) {
         setCurrentSales(item);
     }
-
     return (
         <>
             {currentSales ? (
@@ -385,7 +363,6 @@ function Sales() {
                 )}
                 <div className="container__header_sales">
                     <Button onClick={addPolicy} name="Добавить полис" />
-
                     <Select
                         onChange={filtrSelects}
                         setId="typeSelectSels"
@@ -442,7 +419,6 @@ function Sales() {
                     ) : (
                         <></>
                     )}
-
                     <Input
                         setId="inputDateStartSels"
                         onInput={validateDate}
@@ -482,7 +458,6 @@ function Sales() {
                     ) : (
                         <></>
                     )}
-
                     <Input
                         setId="searchSale"
                         logo={<ion-icon name="search-outline"></ion-icon>}

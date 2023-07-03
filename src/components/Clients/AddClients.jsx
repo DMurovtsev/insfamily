@@ -4,6 +4,8 @@ import { Input } from "../Elements/Input";
 import { InputFile } from "../Elements/InputFile";
 import { InfoPopUp } from "../Service/InfoPopUp";
 import { addClient } from "../../Api";
+import { ValidatePhone } from "../Service/ValidatePhone";
+import { ValidateEmail } from "../Service/ValidateEmail";
 
 function AddClients({ setAddClient }) {
     useEffect(() => {
@@ -27,140 +29,7 @@ function AddClients({ setAddClient }) {
         }
     }, []);
 
-    /*Валидация даты*/
-    function checkDate(e) {
-        let happyB = document.getElementById("addHappyBithday");
-        let form = document.getElementById("divAddHappyBirthdayClient");
-
-        if (happyB.value == "") {
-            form.classList.remove("red_border");
-        }
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (2 < e.target.value.length && e.target.value.length < 5) {
-            e.target.value =
-                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
-        } else if (e.target.value.length > 4) {
-            e.target.value =
-                e.target.value.slice(0, 2) +
-                "." +
-                e.target.value.slice(2, 4) +
-                "." +
-                e.target.value.slice(4, 8);
-            if (e.target.value.length == 10) {
-                let newDate = new Date(
-                    e.target.value.slice(6, 10),
-                    Number(e.target.value.slice(3, 5) - 1),
-                    e.target.value.slice(0, 2)
-                );
-                let inputDate = newDate.toLocaleDateString("ru-RU");
-                let dateNow = new Date();
-                let now = dateNow.toLocaleDateString("ru-RU");
-                const date1 = new Date(now.split(".").reverse().join("-"));
-                const date2 = new Date(
-                    inputDate.split(".").reverse().join("-")
-                );
-                const delta_days = Math.abs(
-                    date2.getFullYear() - date1.getFullYear()
-                );
-
-                if (delta_days > 100 || delta_days < 14) {
-                    form.classList.add("red_border");
-                    InfoPopUp("Некоректная дата", "popup__Info_red");
-                } else {
-                    form.classList.remove("red_border");
-                }
-            }
-        }
-    }
-
-    /*Валидация email*/
-    function validateInputEmail() {
-        let form = document.getElementById("divAddEmailClient");
-        let email = document.getElementById("addEmailClient");
-        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-        if (email.value.match(pattern)) {
-            // form.classList.add("green_border");
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (email.value == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
-    function validateInputEmailFace() {
-        let form = document.getElementById("divAddEmailClientFace");
-        let email = document.getElementById("addEmailClientFace");
-        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-        if (email.value.match(pattern)) {
-            // form.classList.add("green_border");
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (email.value == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
-    /*Валидация номер телефона */
-    function validateInputPhone() {
-        let form = document.getElementById("divAddPhoneClient");
-        let phone = document.getElementById("addPhoneClient");
-        let pattern = /^((\9)+([0-9]){9})$/;
-        let regex = /[^\d]/g;
-        let index = phone.value.indexOf("9");
-        if (index != -1) {
-            phone.value = phone.value.slice(index);
-        } else {
-            phone.value = "";
-        }
-        phone.value = phone.value.replace(regex, "");
-        if (phone.value.length > 10) {
-            phone.value = phone.value.slice(0, 10);
-        }
-        if (phone.value.match(pattern)) {
-            // form.classList.add("green_border");
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (phone.value == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
-    function validateInputPhoneFace() {
-        let form = document.getElementById("divAddPhoneClientFace");
-        let phone = document.getElementById("addPhoneClientFace");
-        let pattern = /^((\9)+([0-9]){9})$/;
-        let regex = /[^\d]/g;
-        let index = phone.value.indexOf("9");
-        if (index != -1) {
-            phone.value = phone.value.slice(index);
-        } else {
-            phone.value = "";
-        }
-        phone.value = phone.value.replace(regex, "");
-        if (phone.value.length > 10) {
-            phone.value = phone.value.slice(0, 10);
-        }
-        if (phone.value.match(pattern)) {
-            // form.classList.add("green_border");
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (phone.value == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
+    /*Закртие popUp добавления клиента*/
     function M(e) {
         {
             if (!e.target.closest(".container__AddClients")) {
@@ -174,14 +43,13 @@ function AddClients({ setAddClient }) {
             e.target.value = e.target.value.replace(/\s+/g, " ");
         };
     });
-
     /*Удаление пробелов в начале и конце строки*/
     document.querySelectorAll(".inputBox__standart").forEach((item) => {
         item.onchange = (e) => {
             e.target.value = e.target.value.trim();
         };
     });
-
+    /*Функция создания клиента*/
     function createClient() {
         let r = false;
         document.querySelectorAll(".requared input").forEach((item) => {
@@ -228,9 +96,9 @@ function AddClients({ setAddClient }) {
                 document.getElementById("addAddressClient").value
             );
         }
-
         addClient(formData).then((response) => {});
     }
+    /*Валидация ФИО*/
     function validateFIO() {
         let fio = document.getElementById("fioAddClient");
         let regex = /[^a-zA-Zа-яА-Я\s]/g;
@@ -252,23 +120,22 @@ function AddClients({ setAddClient }) {
                         divId="divAddHappyBirthdayClient"
                         name="Дата рождения клиента"
                         style="inputBox__standart requared"
-                        onInput={checkDate}
+                        Birthday="Birthday"
                     />
                     <Input
                         setId="addPhoneClient"
                         divId="divAddPhoneClient"
                         name="Телефон клиента"
                         style="inputBox__standart requared"
-                        onInput={validateInputPhone}
+                        Phone="Phone"
                     />
                     <Input
                         setId="addEmailClient"
                         divId="divAddEmailClient"
                         name="Email Клиента"
                         style="inputBox__standart"
-                        onInput={validateInputEmail}
+                        Email="Email"
                     />
-
                     <Input
                         setId="addAddressClient"
                         name="Регион клиента"
@@ -279,13 +146,17 @@ function AddClients({ setAddClient }) {
                         divId="divAddPhoneClientFace"
                         setId="addPhoneClientFace"
                         name="Телефон КЛ"
-                        onInput={validateInputPhoneFace}
+                        onInput={(e) => {
+                            ValidatePhone(e);
+                        }}
                         style="inputBox__standart"
                     />
                     <Input
                         divId="divAddEmailClientFace"
                         setId="addEmailClientFace"
-                        onInput={validateInputEmailFace}
+                        onInput={(e) => {
+                            ValidateEmail(e);
+                        }}
                         name="Email КЛ"
                         style="inputBox__standart"
                     />

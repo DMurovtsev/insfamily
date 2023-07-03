@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Loader } from "./Loader";
 
 function Table({
@@ -21,22 +20,6 @@ function Table({
     if (props && props.length != 0) {
         propsTd = Object.keys(props[0]);
     }
-    // const [sortOrder, setSortOrder] = useState("asc");
-    // const [data, setDatas] = useState(props);
-    // function sort() {
-    //     const newData = [...data];
-    //     newData.sort((a, b) => {
-    //         if (sortOrder === "asc") {
-    //             return a.number - b.number;
-    //         } else {
-    //             return b.number - a.number;
-    //         }
-    //     });
-    //     console.log(newData);
-    //     setDatas(newData);
-    //     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    // }
-
     const getSort = ({ target }) => {
         const order = (target.dataset.order = -(target.dataset.order || -1));
         const index = [...target.parentNode.cells].indexOf(target);

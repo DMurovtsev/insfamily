@@ -7,8 +7,6 @@ import { DealCard } from "../components/Dashboard/DealCard";
 import { Stage } from "../components/Dashboard/Stage";
 import { CustomContext } from "../components/Service/Context";
 import { PopUpDeal } from "../components/Dashboard/PopUpDeal";
-import { PopUpNewDeal } from "../components/Dashboard/PopUpNewDeal";
-
 import {
     getTypiesPolicies,
     getStages,
@@ -60,6 +58,29 @@ function Dashboard() {
         target: "",
         position: "",
     });
+    const socket = new WebSocket(
+        `wss://app.insfamily.ru:8001/ws/deals/?${localStorage.getItem(
+            "access"
+        )}`
+    );
+    const { admin } = useContext(CustomContext);
+    /*Наполнение статичных select*/
+    const status = [
+        { id: "archived", name: "В архиве" },
+        { id: "paid", name: "Оплачено" },
+        { id: "all", name: "Все" },
+    ];
+    const label = [
+        { id: "new", name: "Новые" },
+        { id: "no_call", name: "Сегодня не звонили" },
+    ];
+    const insObjectRisk = [
+        { id: "Жизнь", name: "Жизнь" },
+        { id: "Жизнь Имущество", name: "Жизнь Имущество" },
+        { id: "Жизнь Имущество Титул", name: "Жизнь Имущество Титул" },
+        { id: "Имущество", name: "Имущество" },
+        { id: "Имущество Титул", name: "Имущество Титул" },
+    ];
 
     // if (sockets) {
     //     sockets.onmessage = (e) => {
@@ -82,7 +103,6 @@ function Dashboard() {
         getBanks().then((data) => {
             setBanks(data);
         });
-
         getFunnels().then((data) => {
             let funnelArr = data.results.filter((funnel) => {
                 let localId = localStorage.getItem("funnelId");
@@ -111,11 +131,9 @@ function Dashboard() {
         getSD().then((data) => {
             setSd(data.results);
         });
-
         getReasonForFailure().then((data) => {
             setReasonForFailure(data.results);
         });
-
         let list = document.querySelectorAll(".navigation li");
         list.forEach((item) => {
             item.classList.remove("hovered");
@@ -137,12 +155,6 @@ function Dashboard() {
                 setStage(data);
             });
         }
-
-        const socket = new WebSocket(
-            `wss://app.insfamily.ru:8001/ws/deals/?${localStorage.getItem(
-                "access"
-            )}`
-        );
         socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             const { type } = data;
@@ -164,6 +176,7 @@ function Dashboard() {
         setSockets(socket);
     }, [idFunnel]);
 
+    /*Скроллинг для сделок*/
     const scrollHandler = (e) => {
         if (
             e.target.scrollHeight -
@@ -173,16 +186,11 @@ function Dashboard() {
             !loading
         ) {
             setLoading(true);
-
             getScrollDeals(`${currentPage}`).then((data) => {
                 let newDeals = deals.map((j, i) => {
                     return [...j, ...data.results[i]];
                 });
                 setDeals(newDeals);
-                // prevState.map((j, i) => {
-                //     return [...j, ...data.results[i]];
-                // });
-
                 if (data.next_page) {
                     setCurrentPage(data.next_page.split("/")[2]);
                 } else {
@@ -192,7 +200,6 @@ function Dashboard() {
             });
         }
     };
-
     if (document.querySelector(".container__dealCard_scroll")) {
         document.querySelector(".container__dealCard_scroll").onscroll = (
             e
@@ -218,12 +225,10 @@ function Dashboard() {
             setDeals(response.results);
         });
     }
-
     /*Отрисовка div созданиz сделки*/
     function showCreateDeal() {
         setCreateDeal(true);
     }
-
     /*onClick на сделки для открытия подробной сделки*/
     if (document.querySelector(".card")) {
         document.querySelectorAll(".card").forEach((card) => {
@@ -248,7 +253,6 @@ function Dashboard() {
             };
         });
     }
-    const { admin } = useContext(CustomContext);
     useEffect(() => {
         if (admin) {
             getManagers().then((data) => {
@@ -256,25 +260,6 @@ function Dashboard() {
             });
         }
     }, [admin]);
-
-    /*Наполнение статичных select*/
-    const status = [
-        { id: "archived", name: "В архиве" },
-        { id: "paid", name: "Оплачено" },
-        { id: "all", name: "Все" },
-    ];
-    const label = [
-        { id: "new", name: "Новые" },
-        { id: "no_call", name: "Сегодня не звонили" },
-    ];
-    const insObjectRisk = [
-        { id: "Жизнь", name: "Жизнь" },
-        { id: "Жизнь Имущество", name: "Жизнь Имущество" },
-        { id: "Жизнь Имущество Титул", name: "Жизнь Имущество Титул" },
-        { id: "Имущество", name: "Имущество" },
-        { id: "Имущество Титул", name: "Имущество Титул" },
-    ];
-
     /*Отрисовка и стилизация div для смены статуса*/
     function onDragEnterArhive(e) {
         e.target.classList.add("arhive");
@@ -292,7 +277,6 @@ function Dashboard() {
     function dragOverPaid(e) {
         e.preventDefault();
     }
-
     /*Смена статуса перетаскивая сделку*/
     function dropPaid() {
         let status_deal = "paid";
@@ -318,11 +302,9 @@ function Dashboard() {
         }
         chanageStatusDealCard(deal, status_deal).then((response) => {});
     }
-
     /*Функция фильтрации сделок по select*/
     function filtrSelect() {
         setLoader(true);
-
         let labelValue = null;
         if (document.getElementById("labelSelect").value != "all") {
             labelValue = document.getElementById("labelSelect").value;
@@ -342,7 +324,6 @@ function Dashboard() {
         ) {
             sdValue = document.getElementById("sdSelect").value;
         }
-
         let managerValue = null;
         if (
             document.getElementById("managerSelect") &&
@@ -366,7 +347,6 @@ function Dashboard() {
         if (managerValue) {
             link = link + `&user=${managerValue}`;
         }
-
         getFilterDeals(idFunnel.id, link).then((data) => {
             setDeals(data.results);
             setLoader(false);
@@ -383,9 +363,7 @@ function Dashboard() {
     }
     function drop(e) {
         e.currentTarget.classList.remove("paid");
-
         let dealColumn = e.target.closest(".dealColumn");
-
         let index = Array.from(
             document.querySelectorAll(".dealColumn")
         ).indexOf(dealColumn);
@@ -407,7 +385,6 @@ function Dashboard() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
-
     return (
         <div>
             {id ? (
@@ -444,8 +421,7 @@ function Dashboard() {
             ) : (
                 <></>
             )}
-
-            <div className="container__header">
+            <div className="container__header_dashboard">
                 <Select_2
                     name="Воронка Продаж"
                     options={funnels}
@@ -477,7 +453,6 @@ function Dashboard() {
                     name="Тип полиса"
                     options={typePolicies}
                 />
-
                 {admin === true ? (
                     <Select
                         setId="sdSelect"
@@ -488,7 +463,6 @@ function Dashboard() {
                 ) : (
                     ""
                 )}
-
                 {admin === true ? (
                     <Select
                         setId="managerSelect"
@@ -499,7 +473,6 @@ function Dashboard() {
                 ) : (
                     ""
                 )}
-
                 <Input
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск"
@@ -512,7 +485,6 @@ function Dashboard() {
                     }}
                 />
             </div>
-
             <div className="containerFlex">
                 <div className=" containerFlex_header">
                     {stages.map((stage) => {
@@ -528,7 +500,6 @@ function Dashboard() {
                             />
                         );
                     })}
-
                     {admin === true ? (
                         <Button
                             onClick={showAddStage}

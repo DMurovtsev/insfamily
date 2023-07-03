@@ -14,7 +14,7 @@ function AddStage({ setStage, setDeals, idFunnel }) {
             };
         }
     }, []);
-
+    /*Функция добавления нового этапа*/
     function addNewStage() {
         let addNewStage = document.getElementById("inputAddNewStage").value;
         if (idFunnel) {

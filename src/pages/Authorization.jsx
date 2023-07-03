@@ -1,6 +1,6 @@
 import { Button } from "../components/Elements/Button";
 import { Input } from "../components/Elements/Input";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { InfoPopUp } from "../components/Service/InfoPopUp";
 import { Login } from "../Api";
 function Authorization() {
@@ -11,7 +11,7 @@ function Authorization() {
         });
         list[11].classList.add("hovered");
     }, []);
-
+    /*Функция логирования*/
     function LogIn() {
         if (document.getElementById("inputLoginId").value == "") {
             document.getElementById("inputLoginId").classList.add("red_border");
@@ -30,7 +30,6 @@ function Authorization() {
             Login(LoginArray).then((data) => {});
         }
     }
-
     return (
         <div className="container__Authorization">
             <div className="form__Authorization">

@@ -29,9 +29,7 @@ function Clients() {
     const [currentPageClients, setCurrentPageClients] = useState();
     const [loading, setLoading] = useState(false);
     const [currentClient, setCurrentClient] = useState();
-
     const values = "full_name,phone,email,address,birthday,user__full_name,id";
-
     let clientsHeaderArray = [
         "ФИО",
         "Телефон",
@@ -42,17 +40,14 @@ function Clients() {
         "ID",
     ];
 
-    /*Фильтрация продаж по селектам*/
+    /*Фильтрация клиентов по селектам*/
     function filtrClientsSelects() {
         setLoader(true);
-
         let insCompanyClints = document.getElementById("insCompanyClints");
         let channelClints = document.getElementById("channelClints");
         let typePoliciesClints = document.getElementById("typePoliciesClints");
         let managersClints = document.getElementById("managersClints");
-
         let link = "";
-
         if (insCompanyClints && insCompanyClints.value != "") {
             link = link + `&company=${insCompanyClints.value}`;
         }
@@ -65,11 +60,9 @@ function Clients() {
         if (managersClints && managersClints.value != "") {
             link = link + `&user=${managersClints.value}`;
         }
-
         if (link != "") {
             link = link.slice(1);
         }
-
         oneForAll(values, "client", undefined, link).then((data) => {
             setClients(data.results);
             if (data.next_page) {
@@ -80,7 +73,7 @@ function Clients() {
             setLoader(false);
         });
     }
-
+    /*Функция скроллинга для таблицы клиентов*/
     let prevScrollTop = 0;
     const scrollHandler = (
         e,
@@ -102,7 +95,6 @@ function Clients() {
         ) {
             setLoading(true);
             let next = currentPageClients;
-
             oneForAll(undefined, undefined, next, undefined).then((data) => {
                 setClients((prevState) => [...prevState, ...data.results]);
                 if (data.next_page) {
@@ -144,11 +136,10 @@ function Clients() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
-
+    /*Показать popUp создания новой сделки*/
     function showPopUpNewDeal() {
         setAddClient(true);
     }
-
     /*Поиск по Clients
     Удаление пробелов в начале и конце строки*/
     function Search(e) {
@@ -158,7 +149,6 @@ function Clients() {
             filtrClientsSelects();
             return;
         }
-
         e.target.value = search;
         oneForAll(values, "client", undefined, `search=${search}`).then(
             (response) => {
@@ -167,7 +157,7 @@ function Clients() {
             }
         );
     }
-
+    /*Выгрузка клиентов*/
     function unloadClients() {
         let body = { upload: "client" };
         let insCompanyClints = document.getElementById("insCompanyClints");
@@ -175,7 +165,6 @@ function Clients() {
         let typePoliciesClints = document.getElementById("typePoliciesClints");
         let managersClints = document.getElementById("managersClints");
         let searchClients = document.getElementById("searchClients");
-
         if (searchClients && searchClients.value != "") {
             body["search"] = searchClients.value;
         } else {
@@ -192,7 +181,6 @@ function Clients() {
                 body["user"] = managersClints.value;
             }
         }
-
         oneForAllPost(body).then((data) => {
             const url = window.URL.createObjectURL(data);
             const link = document.createElement("a");
@@ -203,15 +191,14 @@ function Clients() {
             document.body.removeChild(link);
         });
     }
+    /*Функция клика по сточке и получения конкретного клиента и его данных*/
     function showClient(item) {
         setCurrentClient(item);
     }
-
     return (
         <div>
             {addClient ? <AddClients setAddClient={setAddClient} /> : <></>}
-
-            <div className="container__header">
+            <div className="container__header_clients">
                 {admin ? (
                     <Link to="/ClientsBases">
                         <Button name="Базы" />
@@ -219,7 +206,6 @@ function Clients() {
                 ) : (
                     <></>
                 )}
-
                 <Select
                     onChange={filtrClientsSelects}
                     setId="insCompanyClints"
@@ -252,7 +238,6 @@ function Clients() {
                 ) : (
                     <></>
                 )}
-
                 <Input
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск клиента"
@@ -271,7 +256,6 @@ function Clients() {
                     <></>
                 )}
             </div>
-            {/* {clients.length == 0 ? <Loader /> : ""} */}
             <div className="container__body_clients">
                 <Table
                     onClick={showClient}

@@ -33,7 +33,7 @@ function SearchResults() {
     if (!searchResponse) {
         return;
     }
-
+    /*Функция глобального поиска*/
     function updateSearch() {
         let search = document.getElementById("inputGlobalSearch").value.trim();
         if (search) {
@@ -53,7 +53,7 @@ function SearchResults() {
             });
         }
     }
-
+    /*Функция скролла для результатов поиска*/
     const scrollHandler = (
         e,
         currentPage,
@@ -102,7 +102,6 @@ function SearchResults() {
             });
         }
     };
-
     return (
         <div className="search__conteiner">
             {currentSales ? (
@@ -113,7 +112,6 @@ function SearchResults() {
             ) : (
                 <></>
             )}
-
             {searchResponse.base_policies.count == 0 ? (
                 <></>
             ) : (
@@ -142,7 +140,6 @@ function SearchResults() {
                     setSearchResponses={searchResponse}
                 />
             )}
-
             {searchResponse.deals.count == 0 ? (
                 <></>
             ) : (
@@ -157,7 +154,6 @@ function SearchResults() {
                     setSearchResponses={searchResponse}
                 />
             )}
-
             {searchResponse.deals.policies == 0 ? (
                 <></>
             ) : (
