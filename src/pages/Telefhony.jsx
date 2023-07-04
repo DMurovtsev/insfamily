@@ -15,7 +15,6 @@ function Telefhony() {
 
         list[4].classList.add("hovered");
     }, []);
-
     useEffect(() => {
         if (admin) {
             getManagersTelefony().then((data) => {
@@ -29,6 +28,7 @@ function Telefhony() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
+
     return (
         <div>
             <div className="main" id="main">

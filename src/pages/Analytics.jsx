@@ -7,7 +7,6 @@ function Analytics() {
     const [analytics, setAnalytics] = useState([]);
     const [loader, setLoader] = useState(false);
     const [dateValid, setDateValid] = useState(true);
-
     useEffect(() => {
         getAnalytics().then((data) => {
             setAnalytics(data);
@@ -18,48 +17,10 @@ function Analytics() {
         });
         list[5].classList.add("hovered");
     }, []);
-
-    /*Валидация даты*/
-    function validateDate(e) {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (2 < e.target.value.length && e.target.value.length < 5) {
-            e.target.value =
-                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
-        } else if (e.target.value.length > 4) {
-            e.target.value =
-                e.target.value.slice(0, 2) +
-                "." +
-                e.target.value.slice(2, 4) +
-                "." +
-                e.target.value.slice(4, 8);
-            if (e.target.value.length != 10) {
-                e.target.classList.add("red_border");
-                setDateValid(false);
-            }
-            if (e.target.value.length == 10) {
-                e.target.classList.remove("red_border");
-                setDateValid(true);
-
-                let newDate = new Date(
-                    e.target.value.slice(6, 10),
-                    Number(e.target.value.slice(3, 5) - 1),
-                    e.target.value.slice(0, 2)
-                );
-                let inputDate = newDate.toLocaleDateString("ru-RU");
-                let dateNow = new Date();
-                let now = dateNow.toLocaleDateString("ru-RU");
-                const date1 = new Date(now.split(".").reverse().join("-"));
-                const date2 = new Date(
-                    inputDate.split(".").reverse().join("-")
-                );
-            }
-        }
-    }
     /*1 число текущего месяца */
     let today = new Date();
     today.setDate(1);
     let now = today.toLocaleDateString("ru-RU");
-
     /*Фильтрация аналиттики по селектам*/
     function filtrClientsSelects() {
         if (!dateValid) {
@@ -92,7 +53,7 @@ function Analytics() {
             <div className="input__Department">
                 <Input
                     value={now}
-                    onInput={validateDate}
+                    Date="Date"
                     setId="input__DepartmentWith"
                     style="input__small"
                     name="Дата с"
@@ -104,7 +65,7 @@ function Analytics() {
                     }}
                 />
                 <Input
-                    onInput={validateDate}
+                    Date="Date"
                     setId="input__DepartmentBefore"
                     style="input__small"
                     name="Дата по"

@@ -8,13 +8,13 @@ function DealCard({ props, setDeal }) {
     let clients = {
         client: `${clientName.first_name} ${clientName.last_name}`,
     };
+    /*Drag and Drop для сделок*/
     function dragStartDeal(e) {
         document.querySelector(".main__bottom").classList.remove("none");
         e.target.classList.add("selected");
         let id = e.target.id;
         setDeal(id);
     }
-
     function dragEndDeal(e) {
         e.preventDefault();
         document.querySelector(".main__bottom").classList.add("none");
@@ -30,7 +30,6 @@ function DealCard({ props, setDeal }) {
     let next = next_contact_date.split(".");
     let newNext_contact_date = new Date(`${next[2]}-${next[1]}-${next[0]}`);
     let classOpacity = newNext_contact_date > today;
-
     return (
         <div
             data-stageId={props.stage_funnel.id}
@@ -73,7 +72,6 @@ function DealCard({ props, setDeal }) {
                 ) : (
                     ""
                 )}
-
                 <div className="content">
                     <div className="content__container">
                         <div className="content__container_top">
@@ -137,7 +135,6 @@ function DealCard({ props, setDeal }) {
                                 </h5>
                             </div>
                         )}
-
                         <div className="content__container content__container_span">
                             <div>
                                 <ion-icon name="person-sharp"></ion-icon>{" "}

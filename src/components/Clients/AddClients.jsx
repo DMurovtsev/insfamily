@@ -4,8 +4,6 @@ import { Input } from "../Elements/Input";
 import { InputFile } from "../Elements/InputFile";
 import { InfoPopUp } from "../Service/InfoPopUp";
 import { addClient } from "../../Api";
-import { ValidatePhone } from "../Service/ValidatePhone";
-import { ValidateEmail } from "../Service/ValidateEmail";
 
 function AddClients({ setAddClient }) {
     useEffect(() => {
@@ -28,27 +26,6 @@ function AddClients({ setAddClient }) {
             });
         }
     }, []);
-
-    /*Закртие popUp добавления клиента*/
-    function M(e) {
-        {
-            if (!e.target.closest(".container__AddClients")) {
-                setAddClient();
-            }
-        }
-    }
-    /*Удаление двойных пробелов*/
-    document.querySelectorAll(".inputBox__standart").forEach((item) => {
-        item.oninput = (e) => {
-            e.target.value = e.target.value.replace(/\s+/g, " ");
-        };
-    });
-    /*Удаление пробелов в начале и конце строки*/
-    document.querySelectorAll(".inputBox__standart").forEach((item) => {
-        item.onchange = (e) => {
-            e.target.value = e.target.value.trim();
-        };
-    });
     /*Функция создания клиента*/
     function createClient() {
         let r = false;
@@ -98,67 +75,58 @@ function AddClients({ setAddClient }) {
         }
         addClient(formData).then((response) => {});
     }
-    /*Валидация ФИО*/
-    function validateFIO() {
-        let fio = document.getElementById("fioAddClient");
-        let regex = /[^a-zA-Zа-яА-Я\s]/g;
-        fio.value = fio.value.replace(regex, "");
+    /*Закртие popUp добавления клиента*/
+    function closePopUp(e) {
+        {
+            if (!e.target.closest(".container__AddClients")) {
+                setAddClient();
+            }
+        }
     }
 
     return (
-        <div onClick={M} className="main__container">
+        <div onClick={closePopUp} className="main__container">
             <div id="container__AddClients" className="container__AddClients">
                 <div className="content__PopUp_input ">
                     <Input
                         setId="fioAddClient"
                         name="ФИО клиента"
-                        style="inputBox__standart requared"
-                        onInput={validateFIO}
+                        style="requared"
+                        Fio="Fio"
                     />
                     <Input
                         setId="addHappyBithday"
                         divId="divAddHappyBirthdayClient"
                         name="Дата рождения клиента"
-                        style="inputBox__standart requared"
+                        style="requared"
                         Birthday="Birthday"
                     />
                     <Input
                         setId="addPhoneClient"
                         divId="divAddPhoneClient"
                         name="Телефон клиента"
-                        style="inputBox__standart requared"
+                        style="requared"
                         Phone="Phone"
                     />
                     <Input
                         setId="addEmailClient"
                         divId="divAddEmailClient"
                         name="Email Клиента"
-                        style="inputBox__standart"
                         Email="Email"
                     />
-                    <Input
-                        setId="addAddressClient"
-                        name="Регион клиента"
-                        style="inputBox__standart"
-                    />
-                    <Input name="Контактное лицо" style="inputBox__standart" />
+                    <Input setId="addAddressClient" name="Регион клиента" />
+                    <Input name="Контактное лицо" Fio="Fio" />
                     <Input
                         divId="divAddPhoneClientFace"
                         setId="addPhoneClientFace"
                         name="Телефон КЛ"
-                        onInput={(e) => {
-                            ValidatePhone(e);
-                        }}
-                        style="inputBox__standart"
+                        Phone="Phone"
                     />
                     <Input
                         divId="divAddEmailClientFace"
                         setId="addEmailClientFace"
-                        onInput={(e) => {
-                            ValidateEmail(e);
-                        }}
+                        Email="Email"
                         name="Email КЛ"
-                        style="inputBox__standart"
                     />
                     <div
                         id="file-list"

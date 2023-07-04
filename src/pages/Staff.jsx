@@ -14,10 +14,17 @@ function Staff() {
     const [currentManagers, setCurrentManagers] = useState();
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(false);
-    const values = "full_name,department__name,active_display,id";
+    const values =
+        "last_name,first_name,middle_name,department__name,active_display,id";
     let prevScrollTop = 0;
-    let managersHeaderArray = ["ФИО", "Отдел продаж", "Статус", "ID"];
-
+    let managersHeaderArray = [
+        "Фамилия",
+        "Имя",
+        "Отчество",
+        "Отдел продаж",
+        "Статус",
+        "ID",
+    ];
     useEffect(() => {
         filtrManagersSelects();
         getSellsDepartment().then((data) => {
@@ -29,12 +36,10 @@ function Staff() {
         });
         list[9].classList.add("hovered");
     }, []);
-
     /*Функция отрисовки popUp редактирование менеджера*/
     function showRegManagers() {
         setUser(true);
     }
-
     /*Функция фильтра менеджеров*/
     function filtrManagersSelects() {
         setLoader(true);
@@ -53,7 +58,6 @@ function Staff() {
             setLoader(false);
         });
     }
-
     /*Фунуция скроллинга для таблицы менеджеров*/
     const scrollHandler = (
         e,
@@ -90,6 +94,7 @@ function Staff() {
     function showManager(item) {
         setCurrentManagers(item);
     }
+
     return (
         <div>
             {user === true ? (

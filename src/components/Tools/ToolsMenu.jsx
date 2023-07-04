@@ -5,15 +5,14 @@ import { HappyBirthdayClients } from "./HappyBirthdayClients";
 function ToolsMenu() {
     const [clientsBirhdayCount, setClientsBirhdayCount] = useState();
     const [clientsBirhday, setClientsBirhday] = useState();
-
+    let navigationToolsMenu = document.querySelector(".navigationToolsMenu");
+    let closeToolsMenu = document.querySelector(".closeToolsMenu");
     useEffect(() => {
         getClientsBirthdayCount().then((data) => {
             setClientsBirhdayCount(data.count);
         });
     }, []);
-
-    let navigationToolsMenu = document.querySelector(".navigationToolsMenu");
-    let closeToolsMenu = document.querySelector(".closeToolsMenu");
+    /*Открытие и закрытие инструментов*/
     if (navigationToolsMenu) {
         navigationToolsMenu.onclick = function () {
             navigationToolsMenu.classList.add("active");
@@ -51,7 +50,7 @@ function ToolsMenu() {
             document.getElementById("LiveTape").classList.toggle("active");
         };
     }
-
+    /*Функция закрытия всех инструментов*/
     function closeAllTools() {
         document
             .getElementById("HappyBirthdayClients")
@@ -68,7 +67,6 @@ function ToolsMenu() {
                     <ion-icon name="gift-outline"></ion-icon>
                 </span>
                 <div className="clientsBirhdays">{clientsBirhdayCount}</div>
-
                 <span id="createSpan" style={{ "--i": 1, "--x": 1, "--y": 0 }}>
                     <ion-icon name="create-outline"></ion-icon>
                 </span>

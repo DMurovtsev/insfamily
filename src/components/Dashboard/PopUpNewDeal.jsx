@@ -17,7 +17,82 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
     const [channel, setChannel] = useState([]);
     const [typePolicies, setTypePolicies] = useState();
     const [companiesL, setCompaniesL] = useState([]);
-
+    let input_labels = document.querySelectorAll(
+        ".content__NewPopUp_inputFile"
+    );
+    let namesForFile = {
+        review: "Отзыв",
+        policy: "Полис",
+        check: "Чек",
+        zaya: "Заявление",
+        passport: "Паспорт",
+        pts: "ПТС",
+        sts: "СТС",
+        prava: "Права",
+        ocenka: "Оценка",
+        egrn: "ЕГРН",
+        creditn: "Кредитный",
+    };
+    /*Наполнение статичных select*/
+    let selectOptionsPay = [
+        { id: "cash", name: "Наличные" },
+        { id: "no_cash", name: "Безналичный" },
+    ];
+    let selectOptionsCreditVehicle = [
+        { id: "Yes", name: "Да" },
+        { id: "No", name: "Нет" },
+    ];
+    let selectOptionsTypeSales = [
+        { id: "newbiz", name: "Новый бизнес" },
+        { id: "prolongation", name: "Пролонгация" },
+        { id: "transition", name: "Переход" },
+        { id: "addendum", name: "Аддендум" },
+        { id: "payment", name: "Очередной взнос" },
+    ];
+    let namesForFiles = [
+        { review: "Отзыв" },
+        { policy: "Полис" },
+        { check: "Чек" },
+        { zaya: "Заявление" },
+        { passport: "Паспорт" },
+        { pts: "ПТС" },
+        { sts: "СТС" },
+        { prava: "Права" },
+        { ocenka: "Оценка" },
+        { egrn: "ЕГРН" },
+        { creditn: "Кредитный" },
+    ];
+    let inputFileArray = {
+        ОСАГО: {
+            requared: ["policy", "review"],
+            options: ["pts", "sts", "check", "passport", "prava"],
+        },
+        КАСКО: {
+            requared: ["policy", "zaya", "review"],
+            options: ["pts", "sts", "passport", "prava"],
+        },
+        Ипотечный: {
+            requared: ["policy", "check", "review"],
+            options: ["passport", "ocenka", "egrn", "creditn"],
+        },
+        Else: {
+            requared: ["policy", "review"],
+            options: ["zaya", "check"],
+        },
+    };
+    // let namesForFiles = [
+    //     { review: "Отзыв" },
+    //     { policy: "Полис" },
+    //     { check: "Чек" },
+    //     { zaya: "Заявление" },
+    //     { passport: "Паспорт" },
+    //     { pts: "ПТС" },
+    //     { sts: "СТС" },
+    //     { prava: "Права" },
+    //     { ocenka: "Оценка" },
+    //     { egrn: "ЕГРН" },
+    //     { creditn: "Кредитный" },
+    // ];
     useEffect(() => {
         getTypiesPolicies().then((data) => {
             setTypePolicies(data);
@@ -28,10 +103,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
         getBanks().then((data) => {
             setBanks(data);
         });
-
-        let input_labels = document.querySelectorAll(
-            ".content__NewPopUp_inputFile"
-        );
         for (let i = 0; i < input_labels.length; i++) {
             input_labels[i].onchange = (e) => {
                 let text = `${"Выбранно"} ${e.target.files.length}шт.  <br>`;
@@ -58,7 +129,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                     e.target.value = e.target.value.replace(/\s+/g, " ");
                 };
             });
-
         /*Удаление пробелов в начале и конце строки*/
         document
             .querySelectorAll(".inputBox__standart_popUp")
@@ -67,7 +137,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                     e.target.value = e.target.value.trim();
                 };
             });
-
         /*Установка select по умолчанию*/
         document.getElementById("payId").selectedIndex = 2;
         document.getElementById("creditVehicleId").selectedIndex = 2;
@@ -76,21 +145,7 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
         document.getElementById("incomingCommissionId").value = 0;
         document.getElementById("discountCV").value = 0;
     }, []);
-
-    let namesForFile = {
-        review: "Отзыв",
-        policy: "Полис",
-        check: "Чек",
-        zaya: "Заявление",
-        passport: "Паспорт",
-        pts: "ПТС",
-        sts: "СТС",
-        prava: "Права",
-        ocenka: "Оценка",
-        egrn: "ЕГРН",
-        creditn: "Кредитный",
-    };
-    /*Подсветка незаполненных полей*/
+    /*Подсветка незаполненных полей и создание нового полиса*/
     function handleClick() {
         document.querySelectorAll(".requared select").forEach((item) => {
             if (item.value == "") {
@@ -198,71 +253,9 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             }
         }
     }
-
-    /*Валидация email*/
-    function validateInputEmail() {
-        let form = document.getElementById("divMailCreateDeal");
-        let email = document.getElementById("emailId").value;
-        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-        if (email.match(pattern)) {
-            // form.classList.add("green_border");
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (email == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
-
-    /*Валидация даты*/
-    function checkDate(e) {
-        let happyB = document.getElementById("birthdayId");
-        let form = document.getElementById("divBirthdayId");
-
-        if (happyB.value == "") {
-            form.classList.remove("red_border");
-        }
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (2 < e.target.value.length && e.target.value.length < 5) {
-            e.target.value =
-                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
-        } else if (e.target.value.length > 4) {
-            e.target.value =
-                e.target.value.slice(0, 2) +
-                "." +
-                e.target.value.slice(2, 4) +
-                "." +
-                e.target.value.slice(4, 8);
-            if (e.target.value.length == 10) {
-                let newDate = new Date(
-                    e.target.value.slice(6, 10),
-                    Number(e.target.value.slice(3, 5) - 1),
-                    e.target.value.slice(0, 2)
-                );
-                let inputDate = newDate.toLocaleDateString("ru-RU");
-                let dateNow = new Date();
-                let now = dateNow.toLocaleDateString("ru-RU");
-                let date1 = new Date(now.split(".").reverse().join("-"));
-                let date2 = new Date(inputDate.split(".").reverse().join("-"));
-                let delta_days = Math.abs(
-                    date2.getFullYear() - date1.getFullYear()
-                );
-
-                if (delta_days > 100 || delta_days < 14) {
-                    form.classList.add("red_border");
-                } else {
-                    form.classList.remove("red_border");
-                }
-            }
-        }
-    }
     /*Сегодняшняя дата*/
     let today = new Date();
     let now = today.toLocaleDateString("ru-RU");
-
     /*Дата через год*/
     function addYear() {
         const dateInput = document.getElementById("dateNow").value;
@@ -274,37 +267,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
         const ruDate = newDate.toLocaleString("ru-RU", options);
         dateWithYearInput.value = ruDate;
     }
-
-    /*Наполнение статичных select*/
-    let selectOptionsPay = [
-        { id: "cash", name: "Наличные" },
-        { id: "no_cash", name: "Безналичный" },
-    ];
-    let selectOptionsCreditVehicle = [
-        { id: "Yes", name: "Да" },
-        { id: "No", name: "Нет" },
-    ];
-    let selectOptionsTypeSales = [
-        { id: "newbiz", name: "Новый бизнес" },
-        { id: "prolongation", name: "Пролонгация" },
-        { id: "transition", name: "Переход" },
-        { id: "addendum", name: "Аддендум" },
-        { id: "payment", name: "Очередной взнос" },
-    ];
-    let namesForFiles = [
-        { review: "Отзыв" },
-        { policy: "Полис" },
-        { check: "Чек" },
-        { zaya: "Заявление" },
-        { passport: "Паспорт" },
-        { pts: "ПТС" },
-        { sts: "СТС" },
-        { prava: "Права" },
-        { ocenka: "Оценка" },
-        { egrn: "ЕГРН" },
-        { creditn: "Кредитный" },
-    ];
-
     /*Снятие disabled с канала продаж*/
     function channelUndisable() {
         let id = document.getElementById("companyId").value;
@@ -322,7 +284,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             InfoPopUp("Сперва выберите компанию", "popup__Info_red");
         }
     }
-
     /*Снятие display none с select кв банк*/
     function selectKvBank() {
         const creditVehicleId = document.getElementById("creditVehicleId");
@@ -335,7 +296,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             document.getElementById("kvBnakId").value = 0;
         }
     }
-
     /*Всё что связано с изменением типа полиса*/
     /*Добавление input file и классов для них*/
     function selectType() {
@@ -354,7 +314,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             document.getElementById("kvBnakId").value = 0;
             document.getElementById("creditVehicleId").value = "Нет";
         }
-
         if (selectType[selectType.selectedIndex].textContent == "Ипотечный") {
             document.getElementById("divBankId").classList.remove("none");
             document
@@ -367,7 +326,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                 .classList.add("none");
             document.getElementById("incomingCommissionId").value = "";
         }
-
         if (selectType[selectType.selectedIndex].textContent == "Личные вещи") {
             document.getElementById("seriesId").value = "SLV";
             document.getElementById("divSeriesId").classList.add("requared");
@@ -378,39 +336,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             document.getElementById("seriesId").value = "XXX";
             document.getElementById("divSeriesId").classList.add("requared");
         }
-
-        let inputFileArray = {
-            ОСАГО: {
-                requared: ["policy", "review"],
-                options: ["pts", "sts", "check", "passport", "prava"],
-            },
-            КАСКО: {
-                requared: ["policy", "zaya", "review"],
-                options: ["pts", "sts", "passport", "prava"],
-            },
-            Ипотечный: {
-                requared: ["policy", "check", "review"],
-                options: ["passport", "ocenka", "egrn", "creditn"],
-            },
-            Else: {
-                requared: ["policy", "review"],
-                options: ["zaya", "check"],
-            },
-        };
-        let namesForFiles = [
-            { review: "Отзыв" },
-            { policy: "Полис" },
-            { check: "Чек" },
-            { zaya: "Заявление" },
-            { passport: "Паспорт" },
-            { pts: "ПТС" },
-            { sts: "СТС" },
-            { prava: "Права" },
-            { ocenka: "Оценка" },
-            { egrn: "ЕГРН" },
-            { creditn: "Кредитный" },
-        ];
-
         namesForFiles.map((item) => {
             document
                 .getElementById(Object.keys(item)[0])
@@ -427,7 +352,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             <ion-icon name="cloud-upload-outline"></ion-icon>
         </i> ${Object.values(item)[0]}`;
         });
-
         if (
             selectType[selectType.selectedIndex].textContent in inputFileArray
         ) {
@@ -464,11 +388,10 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             });
         }
     }
-
+    /*Функция выбора канала продаж*/
     function selectChannel() {
         let selectChannel = document.getElementById("channelId");
         let selectType = document.getElementById("typeId");
-
         if (
             selectType[selectType.selectedIndex].textContent == "ОСАГО" &&
             selectChannel[selectChannel.selectedIndex].textContent == "Пампаду"
@@ -493,43 +416,14 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             document.getElementById("incomingCommissionId").value = "";
         }
     }
-
-    /*Валидация номера телефона */
-    function validateInputPhone() {
-        let form = document.getElementById("divPhoneId");
-        let phone = document.getElementById("phoneId");
-        let pattern = /^((\9)+([0-9]){9})$/;
-        let regex = /[^\d]/g;
-        let index = phone.value.indexOf("9");
-        if (index != -1) {
-            phone.value = phone.value.slice(index);
-        } else {
-            phone.value = "";
-        }
-        phone.value = phone.value.replace(regex, "");
-        if (phone.value.length > 10) {
-            phone.value = phone.value.slice(0, 10);
-        }
-        if (phone.value.match(pattern)) {
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (phone.value == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
-
-    function closeNP(e) {
+    function closePopUp(e) {
         if (!e.target.closest(".container__NewPopUp")) {
             setShowPopUp(false);
         }
     }
 
     return (
-        <div onClick={closeNP} className="main__container">
+        <div onClick={closePopUp} className="main__container">
             <div className="container__NewPopUp">
                 <div className="content__NewPopUp">
                     <div className="content__PopUp_input content__NewPopUp_container">
@@ -538,7 +432,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                             name="Оплата"
                             style="inputBox__standart_popUp requared"
                             options={selectOptionsPay}
-                            // selected={selectElement}
                         />
                         <Select
                             name="Тип продажи"
@@ -584,7 +477,6 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                             step="0.1"
                             style="inputBox__standart_popUp none"
                         />
-
                         <Input
                             divId="divSeriesId"
                             onInput={validateInputSeries}
@@ -592,13 +484,11 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                             name="Серия"
                             style="inputBox__standart_popUp"
                         />
-
                         <Input
                             setId="numberId"
                             name="Номер"
                             style="inputBox__standart_popUp requared"
                         />
-
                         <Input
                             setId="insurancePremiumId"
                             name="Страховая премия"
@@ -629,25 +519,24 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                             step="0.1"
                             style="inputBox__standart_popUp requared"
                         />
-
                         <Input
                             setId="dataRegistrationId"
                             name="Дата оформления"
                             value={now}
                             style="inputBox__standart_popUp requared"
-                            onInput={checkDate}
+                            Date="Date"
                         />
                         <Input
                             name="Дата начала действия полиса"
                             style="inputBox__standart_popUp requared"
-                            onInput={checkDate}
+                            Date="Date"
                             onBlur={addYear}
                             setId="dateNow"
                         />
                         <Input
                             name="Дата окончания полиса"
                             style="inputBox__standart_popUp requared"
-                            onInput={checkDate}
+                            Date="Date"
                             setId="datePlusYear"
                         />
                     </div>
@@ -674,6 +563,7 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                                     : ""
                             }
                             name="ФИО"
+                            Fio="Fio"
                         />
                         <Input
                             divId="divBirthdayId"
@@ -685,7 +575,7 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                             }
                             style="inputBox__standart_popUp requared"
                             name="Дата Рождения"
-                            onInput={checkDate}
+                            Birthday="Birthday"
                         />
                         <Input
                             divId="divPhoneId"
@@ -697,18 +587,18 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
                             }
                             style="inputBox__standart_popUp requared"
                             name="Телефон"
-                            onInput={validateInputPhone}
+                            Phone="Phone"
                         />
                         <Input
                             divId="divMailCreateDeal"
-                            onInput={validateInputEmail}
+                            Email="Email"
                             setId="emailId"
                             value={
                                 currentDeal
                                     ? currentDeal.policy.policyholder.email
                                     : ""
                             }
-                            style="inputBox__standart_popUp "
+                            style="inputBox__standart_popUp"
                             name="Почта"
                         />
                         <Input

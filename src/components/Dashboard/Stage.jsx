@@ -14,13 +14,14 @@ function Stage({
 }) {
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState(props.stage.name);
-
+    const admin = useContext(CustomContext);
+    const [sort, setSort] = useState();
+    const [stageId, setStageId] = useState();
     useEffect(() => {
         if (document.getElementById("inputUpdateStage")) {
             document.getElementById("inputUpdateStage").focus();
         }
     }, [editing]);
-
     /*Редактирование этапа и фокус на input*/
     const handleEditClick = (e) => {
         e.target.parentNode.parentNode.parentNode.firstChild.classList.toggle(
@@ -34,7 +35,8 @@ function Stage({
             document.getElementById("inputUpdateStage").focus();
         }
     };
-    const hadleDeleteStage = function (e, setId) {
+    /*Удаление этапа продаж*/
+    function hadleDeleteStage(e, setId) {
         let idDelete = props.stage.id;
         setId(idDelete);
         if (document.querySelector(".contenerDeleteStage")) {
@@ -45,8 +47,8 @@ function Stage({
         e.target.parentNode.parentNode.parentNode.firstChild.classList.toggle(
             "active"
         );
-    };
-
+    }
+    /*Функция изменения названия этапа*/
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
@@ -58,7 +60,7 @@ function Stage({
             handleNameSave();
         }
     };
-
+    /*Функция открытия редактора этапа*/
     function showEditStage(e) {
         e.target.parentNode.parentNode.parentNode.firstChild.classList.toggle(
             "active"
@@ -67,24 +69,22 @@ function Stage({
             setEditing(false);
         }
     }
+    /*Функция закрытия редактора этапа*/
     function closeRedactorStage(e) {
         e.target.parentNode.parentNode.parentNode.firstChild.classList.toggle(
             "active"
         );
     }
     /*Сохранение измененного этапа */
-    const handleNameSave = () => {
+    function handleNameSave() {
         let newId = props.stage.id;
         let newName = document.querySelector(".inputReadactorStage").value;
         updateStageName(newId, newName).then((response) => {
             setStage(response);
         });
         setEditing(false);
-    };
-    const admin = useContext(CustomContext);
-    const [sort, setSort] = useState();
-    const [stageId, setStageId] = useState();
-
+    }
+    /*Drag and Drop для этапов*/
     function dragStart(e) {
         setCurrentStage({ ...currentStage, stage: props.stage });
         e.target.classList.add("selected");
@@ -110,7 +110,7 @@ function Stage({
             }
         });
     }
-    /*Для того чтобы элементы раздвигались*/
+    /*Функция для того чтобы элементы раздвигались при Drag and Drop*/
     function dragOver(e, currentStage) {
         if (
             e.currentTarget.classList.contains("containerFlex__header_single")
@@ -182,10 +182,10 @@ function Stage({
                         }}
                         name="Редактировать"
                     />
-
                     <Button
                         setId="buttonDeleteStage"
                         name="Удалить"
+                        style="button_red"
                         onClick={(e) => {
                             hadleDeleteStage(e, setId);
                         }}
@@ -212,7 +212,6 @@ function Stage({
                     ) : (
                         ""
                     )}
-
                     {editing ? (
                         <input
                             id="inputUpdateStage"
@@ -226,7 +225,6 @@ function Stage({
                     ) : (
                         <h3>{props.stage.name}</h3>
                     )}
-
                     <div
                         className={editing ? "none" : "containerStage_quantity"}
                     >

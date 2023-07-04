@@ -21,12 +21,12 @@ function HappyBirthdayClients({ setClientsBirhday, clientsBirhday }) {
             );
         }
     }, []);
-
     if (managerss.length > 0) {
         managerss.forEach((user, i) => {
             managerss[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
+
     return (
         <>
             <div id="HappyBirthdayClients" className="HappyBirthdayClients">

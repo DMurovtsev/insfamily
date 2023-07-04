@@ -7,9 +7,9 @@ function Education() {
         list.forEach((item) => {
             item.classList.remove("hovered");
         });
-
         list[8].classList.add("hovered");
     }, []);
+
     return;
 }
 export { Education };

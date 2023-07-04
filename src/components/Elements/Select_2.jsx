@@ -4,7 +4,6 @@ import { CustomContext } from "../Service/Context";
 
 function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
     const { admin } = useContext(CustomContext);
-
     useEffect(() => {
         if (document.getElementById("Select_2__text")) {
             document.getElementById("Select_2__text").onclick = () => {
@@ -19,7 +18,6 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
                 });
             };
         }
-
         if (localStorage.getItem("funnelId")) {
             document
                 .querySelectorAll(".Select_2__Option_all")
@@ -45,7 +43,6 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
             }
         }
     }
-
     function show(i, e) {
         if (document.querySelector(".Select_2__text")) {
             document.querySelector(".Select_2__text").textContent = i.name;
@@ -54,7 +51,6 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
             setIdFunnel(i);
         }
     }
-
     function addSalesFunnel() {
         let funnelName = document.getElementById("addFunnelInput").value;
         addFunnels(funnelName).then((response) => {
@@ -91,7 +87,6 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
                             type="text"
                             placeholder="Добавить воронку"
                         />
-
                         <span onClick={addSalesFunnel} className="addVoronka">
                             <ion-icon name="add-outline"></ion-icon>
                         </span>
@@ -103,5 +98,4 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
         </div>
     );
 }
-
 export { Select_2 };

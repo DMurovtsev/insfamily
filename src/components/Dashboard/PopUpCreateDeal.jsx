@@ -18,121 +18,21 @@ function PopUpCreateDeal({
 }) {
     const [baseSource, setBaseSource] = useState([]);
     const admin = useContext(CustomContext);
-
+    const insObject = [
+        { id: "car", name: "МАШИНА" },
+        { id: "ipoteca", name: "ИПОТЕКА" },
+    ];
+    let optionsStage = [];
     useEffect(() => {
         getBaseSource().then((list) => {
             setBaseSource(list.results);
         });
     }, []);
-
-    let optionsStage = [];
+    /*Функция наполнения массива этапов*/
     stages.forEach((element) => {
         optionsStage.push(element.stage);
     });
-
-    /*Валидация даты*/
-    function checkDate(e) {
-        let happyB = document.getElementById("dateCreateDeals");
-        let form = document.getElementById("divDateCreateDeals");
-
-        if (happyB.value == "") {
-            form.classList.remove("red_border");
-        }
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (2 < e.target.value.length && e.target.value.length < 5) {
-            e.target.value =
-                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
-        } else if (e.target.value.length > 4) {
-            e.target.value =
-                e.target.value.slice(0, 2) +
-                "." +
-                e.target.value.slice(2, 4) +
-                "." +
-                e.target.value.slice(4, 8);
-            if (e.target.value.length == 10) {
-                let newDate = new Date(
-                    e.target.value.slice(6, 10),
-                    Number(e.target.value.slice(3, 5) - 1),
-                    e.target.value.slice(0, 2)
-                );
-                let inputDate = newDate.toLocaleDateString("ru-RU");
-                let dateNow = new Date();
-                let now = dateNow.toLocaleDateString("ru-RU");
-                let date1 = new Date(now.split(".").reverse().join("-"));
-                let date2 = new Date(inputDate.split(".").reverse().join("-"));
-                let delta_days = Math.abs(
-                    date2.getFullYear() - date1.getFullYear()
-                );
-
-                if (delta_days > 100 || delta_days < 14) {
-                    form.classList.add("red_border");
-                } else {
-                    form.classList.remove("red_border");
-                }
-            }
-        }
-    }
-
-    /*Валидация email*/
-    function validateInputEmail() {
-        let form = document.getElementById("divMailCreateDeals");
-        let email = document.getElementById("mailCreateDeals").value;
-        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-        if (email.match(pattern)) {
-            // form.classList.add("green_border");
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (email == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
-    /*Валидация номера телефона */
-    function validateInputPhone() {
-        let form = document.getElementById("divPhoneCreateDeals");
-        let phone = document.getElementById("phoneCreateDeals");
-        let pattern = /^((\9)+([0-9]){9})$/;
-        let regex = /[^\d]/g;
-        let index = phone.value.indexOf("9");
-        if (index != -1) {
-            phone.value = phone.value.slice(index);
-        } else {
-            phone.value = "";
-        }
-        phone.value = phone.value.replace(regex, "");
-        if (phone.value.length > 10) {
-            phone.value = phone.value.slice(0, 10);
-        }
-        if (phone.value.match(pattern)) {
-            form.classList.remove("red_border");
-        } else {
-            form.classList.remove("green_border");
-            form.classList.add("red_border");
-        }
-        if (phone.value == "") {
-            form.classList.remove("green_border");
-            form.classList.remove("red_border");
-        }
-    }
-    /*Удаление двойных пробелов*/
-
-    document.querySelectorAll(".input__medium").forEach((item) => {
-        item.oninput = (e) => {
-            e.target.value = e.target.value.replace(/\s+/g, " ");
-        };
-    });
-
-    /*Удаление пробелов в начале и конце строки*/
-    document.querySelectorAll(".input__medium").forEach((item) => {
-        item.onchange = (e) => {
-            e.target.value = e.target.value.trim();
-        };
-    });
-
-    /*Подсветка обязательных для заполнения полей*/
+    /*Подсветка обязательных для заполнения полей и создание сделки*/
     function handleClick(e) {
         const popUp = e.target.closest(".main__container");
         popUp
@@ -144,18 +44,6 @@ function PopUpCreateDeal({
                     item.classList.remove("red_border");
                 }
             });
-        // document.querySelectorAll(".requared input").forEach((item) => {
-        //     if (item.value == "") {
-        //         item.classList.add("red_border");
-        //         InfoPopUp(
-        //             "Поля обязательные для заполнения",
-        //             "popup__Info_red"
-        //         );
-        //     } else {
-        //         item.classList.remove("red_border");
-        //     }
-        // });
-
         if (popUp.querySelectorAll(".red_border").length > 0) {
             InfoPopUp("Поля обязательные для заполнения", "popup__Info_red");
             return;
@@ -197,11 +85,6 @@ function PopUpCreateDeal({
                 remainder
             ).then((response) => {
                 setCurrentDeal(response);
-
-                // document
-                //     .querySelector(".container__PopUp")
-                //     .classList.toggle("active");
-                // setCreateDeal(false)
                 getDeals(1).then((data) => {
                     setDeals(data);
                 });
@@ -209,25 +92,17 @@ function PopUpCreateDeal({
         }
         setCreateDeal(false);
     }
-
-    const insObject = [
-        { id: "car", name: "МАШИНА" },
-        { id: "ipoteca", name: "ИПОТЕКА" },
-    ];
-
+    /*Функция отрисовки селектов в зависимости от выбранного*/
     function showCarObject() {
         if (document.getElementById("selectInsObject")) {
             if (document.getElementById("selectInsObject").value == "car") {
                 document
                     .getElementById("brandDivInput")
                     .classList.remove("none");
-
                 document
                     .getElementById("gosNomerDivInput")
                     .classList.remove("none");
-
                 document.getElementById("vinDivInput").classList.remove("none");
-
                 document
                     .getElementById("yearDivInput")
                     .classList.remove("none");
@@ -236,9 +111,7 @@ function PopUpCreateDeal({
                 document
                     .getElementById("gosNomerDivInput")
                     .classList.add("none");
-
                 document.getElementById("vinDivInput").classList.add("none");
-
                 document.getElementById("yearDivInput").classList.add("none");
             }
         }
@@ -256,14 +129,18 @@ function PopUpCreateDeal({
             document.getElementById("remainderDivInput").classList.add("none");
         }
     }
-    function M(e) {
-        setCreateDeal(false);
+    /*Функция закрытия popUp создания сделки*/
+    function closePopUp(e) {
+        {
+            if (!e.target.closest(".content__PopUp_CreateDeal")) {
+                setCreateDeal(false);
+            }
+        }
     }
-
     return (
         <div
-            onClick={M}
-            className="main__container "
+            onClick={closePopUp}
+            className="main__container"
             id="container__PopUp_CreateDeal"
         >
             <div className="content__PopUp_CreateDeal">
@@ -299,6 +176,7 @@ function PopUpCreateDeal({
                     setId="full_name"
                     style="input__medium  requared"
                     name="ФИО клиента"
+                    Fio="Fio"
                 />
                 <Input
                     setId="address"
@@ -310,21 +188,21 @@ function PopUpCreateDeal({
                     divId="divPhoneCreateDeals"
                     style="input__medium requared"
                     name="Телефон"
-                    onInput={validateInputPhone}
+                    Phone="Phone"
                 />
                 <Input
                     setId="mailCreateDeals"
                     divId="divMailCreateDeals"
                     style="input__medium"
                     name="Почта"
-                    onInput={validateInputEmail}
+                    Email="Email"
                 />
                 <Input
                     setId="dateCreateDeals"
                     divId="divDateCreateDeals"
                     style="input__medium"
                     name="Дата Рождения"
-                    onInput={checkDate}
+                    Birthday="Birthday"
                 />
                 <Select
                     setId="selectInsObject"
@@ -385,7 +263,6 @@ function PopUpCreateDeal({
                     type="number"
                     step={0.1}
                 />
-
                 <div className="content__PopUp_btn">
                     <Button
                         style="button_green"

@@ -24,7 +24,6 @@ function Administration() {
     const [companies, setCompanies] = useState([]);
     const [bank, setBank] = useState([]);
     const [sd, setSd] = useState([]);
-
     useEffect(() => {
         getTypiesPolicies().then((data) => {
             setType(data);
@@ -47,7 +46,6 @@ function Administration() {
         });
         list[10].classList.add("hovered");
     }, []);
-
     /*Добавление нового типа полиса*/
     function addType() {
         let name = document.getElementById("addTypeAdministration").value;
@@ -98,13 +96,13 @@ function Administration() {
         let name = e.target.value;
         redactorSd(name).then((response) => {});
     }
+
     return (
         <div className="main">
             <>
                 <div className="administration__container">
                     <div className="administration__content">
                         <h3 className="administrationH">Тип полиса</h3>
-
                         {type ? (
                             type.map((t) => (
                                 <Input
@@ -164,7 +162,6 @@ function Administration() {
                             }}
                         />
                     </div>
-
                     <div className="administration__content">
                         {" "}
                         <h3 className="administrationH">Компания</h3>
@@ -196,7 +193,6 @@ function Administration() {
                             }}
                         />
                     </div>
-
                     <div className="administration__content">
                         <h3 className="administrationH">Банк</h3>
 

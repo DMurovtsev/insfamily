@@ -81,7 +81,6 @@ function Dashboard() {
         { id: "Имущество", name: "Имущество" },
         { id: "Имущество Титул", name: "Имущество Титул" },
     ];
-
     // if (sockets) {
     //     sockets.onmessage = (e) => {
     //         const data = JSON.parse(e.data);
@@ -98,7 +97,6 @@ function Dashboard() {
     //         }
     //     };
     // }
-
     useEffect(() => {
         getBanks().then((data) => {
             setBanks(data);
@@ -140,7 +138,6 @@ function Dashboard() {
         });
         list[1].classList.add("hovered");
     }, []);
-
     useEffect(() => {
         if (idFunnel) {
             getDeals(idFunnel.id).then((data) => {
@@ -155,10 +152,10 @@ function Dashboard() {
                 setStage(data);
             });
         }
+        /*WebSocket*/
         socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             const { type } = data;
-
             if (type == "deals_upgrade") {
                 setDeals((prevDeals) => {
                     return prevDeals.map((j) => {
@@ -175,7 +172,6 @@ function Dashboard() {
         };
         setSockets(socket);
     }, [idFunnel]);
-
     /*Скроллинг для сделок*/
     const scrollHandler = (e) => {
         if (
@@ -277,7 +273,7 @@ function Dashboard() {
     function dragOverPaid(e) {
         e.preventDefault();
     }
-    /*Смена статуса перетаскивая сделку*/
+    /*Смена статуса оплачено перетаскивая сделку*/
     function dropPaid() {
         let status_deal = "paid";
         chanageStatusDealCard(deal, status_deal).then((response) => {
@@ -289,6 +285,7 @@ function Dashboard() {
                 .classList.add("active");
         });
     }
+    /*Смена статуса архив перетаскивая сделку*/
     function dragOverArhive(e) {
         e.preventDefault();
     }
@@ -352,7 +349,6 @@ function Dashboard() {
             setLoader(false);
         });
     }
-
     /*Drag and Drop сделок*/
     function onEnter(e) {}
     function onleave(e) {
@@ -385,6 +381,7 @@ function Dashboard() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
+
     return (
         <div>
             {id ? (
@@ -505,6 +502,7 @@ function Dashboard() {
                             onClick={showAddStage}
                             setId="addStage"
                             name="Создать этап"
+                            style="button_green"
                         />
                     ) : (
                         ""
@@ -513,6 +511,7 @@ function Dashboard() {
                         setId="createStage"
                         name="Создать сделку"
                         onClick={showCreateDeal}
+                        style="button_green"
                     />
                     <AddStage
                         setDeals={setDeals}

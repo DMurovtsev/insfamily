@@ -11,11 +11,11 @@ import { CustomContext } from "../Service/Context";
 import { getBriefly, globalSearch } from "../../Api";
 import { Loader } from "./Loader";
 
-function SideBar({ setSearchResponse }) {
+function SideBar() {
     const navigate = useNavigate();
     const { admin } = useContext(CustomContext);
     const [briefly, setBriefly] = useState([]);
-
+    let list = document.querySelectorAll(".navigation li");
     useEffect(() => {
         getBriefly().then((data) => {
             setBriefly(data);
@@ -35,8 +35,7 @@ function SideBar({ setSearchResponse }) {
         ) {
             document.getElementById("main").classList.add("active");
         }
-
-        let list = document.querySelectorAll(".navigation li");
+        /*Функция навигации по приложению*/
         function activeLink() {
             list.forEach((item) => {
                 item.classList.remove("hovered");
@@ -50,7 +49,7 @@ function SideBar({ setSearchResponse }) {
             navigate(-1);
         };
     }, []);
-
+    /*Функция поиска*/
     function Search(e) {
         if (document.getElementById("inputGlobalSearch").value.trim()) {
             navigate("/SearchResults");
@@ -58,8 +57,6 @@ function SideBar({ setSearchResponse }) {
             document.getElementById("inputGlobalSearch").value = "";
         }
     }
-
-    /*Добавление класса прпи новедении на list item*/
 
     return (
         <div className="container">
@@ -72,7 +69,6 @@ function SideBar({ setSearchResponse }) {
                                 src="logoContur.png"
                                 alt=""
                             />
-
                             <span className="titleIF">
                                 InsFamily <br />
                                 <span style={{ fontSize: "13px" }}>
@@ -199,7 +195,6 @@ function SideBar({ setSearchResponse }) {
                         }
                     }}
                 />
-
                 <Button setId="btnBack" name="Назад" />
             </div>
             <ToolsMenu />

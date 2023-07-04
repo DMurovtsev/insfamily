@@ -16,6 +16,7 @@ import {
 import { CustomContext } from "../components/Service/Context";
 import { InputFile } from "../components/Elements/InputFile";
 import { PopUpBasePolicy } from "../components/BasePolicy/PopUpBasePolicy";
+
 function ClientsBases() {
     const values =
         "base_source__name,type__name,company__name,date_end,car__brand,car__year,car__vin,car__number,ipoteka__bank__name,ipoteka__obj,id";
@@ -29,6 +30,7 @@ function ClientsBases() {
     const [baseSource, setBaseSource] = useState([]);
     const [dateValid, setDateValid] = useState(true);
     const [showBasePolicy, setShowBasePolicy] = useState(false);
+    let prevScrollTop = 0;
     let clientsBaseHeaderArray = [
         "Источник",
         "Тип",
@@ -75,7 +77,6 @@ function ClientsBases() {
         navigate(-1);
     }
     /*Функция скроллинга для таблицы базы*/
-    let prevScrollTop = 0;
     const scrollHandler = (
         e,
         currentPageClientsBase,
@@ -96,7 +97,6 @@ function ClientsBases() {
         ) {
             setLoading(true);
             let next = currentPageClientsBase;
-
             oneForAll(undefined, undefined, next, undefined).then((data) => {
                 setBasePolicy((prevState) => [...prevState, ...data.results]);
                 if (data.next_page) {
@@ -244,10 +244,10 @@ function ClientsBases() {
             document.body.removeChild(link);
         });
     }
+    /*Функция отрисовки залития базы полисов*/
     function showsBasePolicy() {
         setShowBasePolicy(true);
     }
-
     /*Поиск по BasePolicy
     Удаление пробелов в начале и конце строки*/
     function Search(e) {
@@ -265,7 +265,6 @@ function ClientsBases() {
             }
         );
     }
-
     useEffect(() => {
         filtrBasePolicysSelects();
         getTypiesPolicies().then((data) => {
@@ -297,41 +296,7 @@ function ClientsBases() {
         formData.append("file", input_files.files[0]);
         addBasePolicy(formData).then((response) => {});
     }
-    /*Валидация даты*/
-    function validateDate(e) {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (2 < e.target.value.length && e.target.value.length < 5) {
-            e.target.value =
-                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
-        } else if (e.target.value.length > 4) {
-            e.target.value =
-                e.target.value.slice(0, 2) +
-                "." +
-                e.target.value.slice(2, 4) +
-                "." +
-                e.target.value.slice(4, 8);
-            if (e.target.value.length != 10) {
-                e.target.classList.add("red_border");
-                setDateValid(false);
-            }
-            if (e.target.value.length == 10) {
-                e.target.classList.remove("red_border");
-                setDateValid(true);
-                let newDate = new Date(
-                    e.target.value.slice(6, 10),
-                    Number(e.target.value.slice(3, 5) - 1),
-                    e.target.value.slice(0, 2)
-                );
-                let inputDate = newDate.toLocaleDateString("ru-RU");
-                let dateNow = new Date();
-                let now = dateNow.toLocaleDateString("ru-RU");
-                const date1 = new Date(now.split(".").reverse().join("-"));
-                const date2 = new Date(
-                    inputDate.split(".").reverse().join("-")
-                );
-            }
-        }
-    }
+
     return (
         <div className="containerBaserClients">
             {showBasePolicy ? (
@@ -402,7 +367,7 @@ function ClientsBases() {
                 />
                 <Input
                     setId="clientsBaseDateStart"
-                    onInput={validateDate}
+                    Date="Date"
                     name="Дата окончания с"
                     style="inputBox__select_s"
                     onKeyDown={(e) => {
@@ -412,7 +377,7 @@ function ClientsBases() {
                     }}
                 />
                 <Input
-                    onInput={validateDate}
+                    Date="Date"
                     setId="clientsBaseDateEnd"
                     name="Дата окончания по"
                     style="inputBox__select_s"
@@ -477,5 +442,4 @@ function ClientsBases() {
         </div>
     );
 }
-
 export { ClientsBases };

@@ -725,15 +725,22 @@ async function regManagers(formData) {
     });
     return await response.json();
 }
-async function editManagers(formData, id) {
-    let response = await fetch(`${myHost}/reg_user/${id}`, {
-        method: "PATCH",
+async function editManagers(formData) {
+    let response = await fetch(`${myHost}/users/up/`, {
+        method: "POST",
         body: formData,
         headers: headers,
     });
     return await response.json();
 }
-
+async function resetPassword(formData) {
+    let response = await fetch(`${myHost}/users/reset_password/`, {
+        method: "POST",
+        body: formData,
+        headers: headers,
+    });
+    return await response.json();
+}
 export {
     Login,
     loging,
@@ -808,4 +815,5 @@ export {
     getDeal,
     regManagers,
     editManagers,
+    resetPassword,
 };

@@ -13,7 +13,6 @@ function LiveTape() {
             };
         }
     }, []);
-
     let agentArray = [
         {
             Информация: "Погода такая",
@@ -31,7 +30,6 @@ function LiveTape() {
             Дата: "09.05.2023",
         },
     ];
-
     let title = "Живая лента";
     return (
         <div id="LiveTape" className="LiveTape">
@@ -39,7 +37,6 @@ function LiveTape() {
                 <div id="closeLiveTape" className="closeLiveTape">
                     <ion-icon name="close-outline"></ion-icon>
                 </div>
-
                 <div className="container__header_relative">
                     <Select name="Событие" />
                     <Select name="Пользователь" />

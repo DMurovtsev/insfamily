@@ -1,8 +1,4 @@
-import { useEffect } from "react";
-
 function List() {
-    useEffect(() => {}, []);
-
     return (
         <div>
             <section id="container__list" className="container__list">
@@ -57,5 +53,4 @@ function List() {
         </div>
     );
 }
-
 export { List };

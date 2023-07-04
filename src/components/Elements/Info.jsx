@@ -1,8 +1,4 @@
-import { useEffect } from "react";
-
 function Info() {
-    useEffect(() => {}, []);
-
     return (
         <div className="container__flex">
             <div className="popup__Info">

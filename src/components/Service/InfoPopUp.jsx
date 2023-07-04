@@ -1,3 +1,4 @@
+/*Функция всплывающего окна с уведомлением в любой части приложения*/
 function InfoPopUp(text, style) {
     const infoPopUp = document.querySelector(".popup__Info");
     const popup__Info_P = document.querySelector(".popup__Info p");

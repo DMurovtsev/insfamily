@@ -13,6 +13,7 @@ function TableDeals({
         archived: "В архиве",
         paid: "Оплачено",
     };
+
     return (
         <div
             onScroll={(e) => {

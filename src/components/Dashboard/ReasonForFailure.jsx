@@ -2,13 +2,13 @@ import { chooseReasonForFailure } from "../../Api";
 import { Button } from "../Elements/Button";
 import { Select } from "../Elements/Select";
 
-function ReasonForFailure({ reasonForFailure, deal, setCurrentDeal }) {
-    function closeReasonForFailure() {
-        document
-            .querySelector(".container__ReasonForFailure")
-            .classList.remove("active");
-    }
-
+function ReasonForFailure({
+    reasonForFailure,
+    deal,
+    setCurrentDeal,
+    setShowReasonForFailure,
+}) {
+    /*Функция добавления причины отказа*/
     function addReasonForFailure() {
         if (document.getElementById("selectReasonForFailure")) {
             let reason_for_failure = document.getElementById(
@@ -24,28 +24,39 @@ function ReasonForFailure({ reasonForFailure, deal, setCurrentDeal }) {
             );
         }
     }
+    /*Функция закрытия причин отказа*/
+    function closePopUp(e) {
+        {
+            if (!e.target.closest(".content__PopUp_CreateDeal")) {
+                setShowReasonForFailure(false);
+            }
+        }
+    }
 
     return (
-        <div className="container__ReasonForFailure">
-            <div className="content__ReasonForFailure">
-                <h3>
-                    {" "}
-                    <ion-icon name="alert-circle-outline"></ion-icon>
-                    Обязательно выбрать
-                    <ion-icon name="alert-circle-outline"></ion-icon>
-                </h3>
-                <Select
-                    setId="selectReasonForFailure"
-                    first="ПРИЧИНА ОТКАЗА"
-                    options={reasonForFailure}
-                />
-                <div className="flexBtn">
-                    <Button
-                        onClick={addReasonForFailure}
-                        name="В архив"
-                        style="button_red"
+        <div onClick={closePopUp} className="main__container">
+            <div className="content__PopUp_CreateDeal">
+                <div className="content__reazon">
+                    <h3 style={{ color: "red" }}>
+                        {" "}
+                        <ion-icon name="alert-circle-outline"></ion-icon>
+                        Обязательно выбрать{" "}
+                        <ion-icon name="alert-circle-outline"></ion-icon> <br />{" "}
+                        причину отказа
+                    </h3>
+                    <Select
+                        style="input__medium"
+                        setId="selectReasonForFailure"
+                        first="ПРИЧИНА ОТКАЗА"
+                        options={reasonForFailure}
                     />
-                    <Button onClick={closeReasonForFailure} name="Отмена" />
+                    <div className="flexBtn">
+                        <Button
+                            onClick={addReasonForFailure}
+                            name="В архив"
+                            style="button_red"
+                        />
+                    </div>
                 </div>
             </div>
         </div>

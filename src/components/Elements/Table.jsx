@@ -20,6 +20,7 @@ function Table({
     if (props && props.length != 0) {
         propsTd = Object.keys(props[0]);
     }
+    /*Функция сортировки таблиц*/
     const getSort = ({ target }) => {
         const order = (target.dataset.order = -(target.dataset.order || -1));
         const index = [...target.parentNode.cells].indexOf(target);
@@ -30,10 +31,8 @@ function Table({
                 a.children[index].innerHTML,
                 b.children[index].innerHTML
             );
-
         for (const tBody of target.closest("table").tBodies)
             tBody.append(...[...tBody.rows].sort(comparator(index, order)));
-
         for (const cell of target.parentNode.cells)
             cell.classList.toggle("sorted", cell === target);
     };
@@ -73,7 +72,6 @@ function Table({
                             )}
                         </tr>
                     </thead>
-
                     <tbody>
                         {props.map((item) => (
                             <tr

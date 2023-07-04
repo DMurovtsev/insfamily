@@ -39,7 +39,6 @@ function Clients() {
         "Менеджер",
         "ID",
     ];
-
     /*Фильтрация клиентов по селектам*/
     function filtrClientsSelects() {
         setLoader(true);
@@ -106,7 +105,6 @@ function Clients() {
             });
         }
     };
-
     useEffect(() => {
         filtrClientsSelects();
         getTypiesPolicies().then((data) => {

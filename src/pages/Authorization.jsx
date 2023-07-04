@@ -3,6 +3,7 @@ import { Input } from "../components/Elements/Input";
 import { useEffect } from "react";
 import { InfoPopUp } from "../components/Service/InfoPopUp";
 import { Login } from "../Api";
+
 function Authorization() {
     useEffect(() => {
         let list = document.querySelectorAll(".navigation li");
@@ -30,6 +31,7 @@ function Authorization() {
             Login(LoginArray).then((data) => {});
         }
     }
+
     return (
         <div className="container__Authorization">
             <div className="form__Authorization">
@@ -45,5 +47,4 @@ function Authorization() {
         </div>
     );
 }
-
 export { Authorization };

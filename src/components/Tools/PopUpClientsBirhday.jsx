@@ -17,6 +17,7 @@ function PopUpClientsBirhday({ clientsBirhday, managerss, setClientsBirhday }) {
                 "_blank"`
         );
     }
+
     return (
         <div onClick={closeHB} className="popUp__body">
             <div className="container__table">

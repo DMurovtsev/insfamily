@@ -12,6 +12,7 @@ function PopUpActs({
     insCompany,
     channel,
 }) {
+    const [count, setCount] = useState([]);
     useEffect(() => {
         getCountPolisiesAndValue();
     }, []);
@@ -20,9 +21,7 @@ function PopUpActs({
             setShowActs(false);
         }
     }
-
-    const [count, setCount] = useState([]);
-
+    /*Функция создания body для создания акта*/
     function creareFormData() {
         let formData = new FormData();
         let typePoliciesActs = document.getElementById("typePoliciesActs");
@@ -47,13 +46,14 @@ function PopUpActs({
         }
         return formData;
     }
-
+    /*Функция получения колличества актов*/
     function getCountPolisiesAndValue() {
         let formData = creareFormData();
         addActSales(formData).then((response) => {
             setCount(response);
         });
     }
+    /*Функция создания акта*/
     function createAct() {
         let nameAct = document.getElementById("nameAct");
         if (nameAct && nameAct.value != "") {
@@ -67,7 +67,7 @@ function PopUpActs({
     return (
         <div onClick={closeActs} className="main__container">
             <div className="container__Acts">
-                <div className="content__Acts container__Acts">
+                <div className="content__PopUp_CreateDeal container__Acts">
                     <div className="content__PopUp_btn">
                         <div className="big">
                             <ion-icon name="reader-outline"></ion-icon>
@@ -78,7 +78,6 @@ function PopUpActs({
                             {count.sum}
                         </div>
                     </div>
-
                     <Select
                         setId="typePoliciesActs"
                         style="requared inputBox__select_largest"

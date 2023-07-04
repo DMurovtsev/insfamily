@@ -20,7 +20,6 @@ function SearchResults() {
     const [policies, setPolicies] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [currentSales, setCurrentSales] = useState();
-
     useEffect(() => {
         document.getElementById("inputGlobalSearch").onblur = () => {
             updateSearch();

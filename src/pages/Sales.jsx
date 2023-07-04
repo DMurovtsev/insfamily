@@ -57,6 +57,13 @@ function Sales() {
         { id: "all", name: "Все" },
         { id: "true", name: "Проведён" },
     ];
+    /*Сегодняшняя дата*/
+    /*Дата через месяц*/
+    let today = new Date();
+    today.setDate(1);
+    let now = today.toLocaleDateString("ru-RU");
+    let nextMonth = new Date(today.setMonth(today.getMonth() + 1));
+    let month = nextMonth.toLocaleDateString("ru-RU");
     /*Функция скроллинга для таблицы продаж*/
     let prevScrollTop = 0;
     const scrollHandler = (
@@ -154,49 +161,6 @@ function Sales() {
             setLoader(false);
         });
     }
-    /*Функция валидации даты*/
-    function validateDate(e) {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (2 < e.target.value.length && e.target.value.length < 5) {
-            e.target.value =
-                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
-        } else if (e.target.value.length > 4) {
-            e.target.value =
-                e.target.value.slice(0, 2) +
-                "." +
-                e.target.value.slice(2, 4) +
-                "." +
-                e.target.value.slice(4, 8);
-            if (e.target.value.length != 10) {
-                e.target.classList.add("red_border");
-                setDateValid(false);
-            }
-            if (e.target.value.length == 10) {
-                e.target.classList.remove("red_border");
-                setDateValid(true);
-                let newDate = new Date(
-                    e.target.value.slice(6, 10),
-                    Number(e.target.value.slice(3, 5) - 1),
-                    e.target.value.slice(0, 2)
-                );
-                let inputDate = newDate.toLocaleDateString("ru-RU");
-                let dateNow = new Date();
-                let now = dateNow.toLocaleDateString("ru-RU");
-                const date1 = new Date(now.split(".").reverse().join("-"));
-                const date2 = new Date(
-                    inputDate.split(".").reverse().join("-")
-                );
-            }
-        }
-    }
-    /*Сегодняшняя дата*/
-    /*Дата через месяц*/
-    let today = new Date();
-    today.setDate(1);
-    let now = today.toLocaleDateString("ru-RU");
-    let nextMonth = new Date(today.setMonth(today.getMonth() + 1));
-    let month = nextMonth.toLocaleDateString("ru-RU");
-
     useEffect(() => {
         getTypiesPolicies().then((data) => {
             setTypePolicies(data);
@@ -229,7 +193,6 @@ function Sales() {
             managers[i]["name"] = `${user.first_name} ${user.last_name}`;
         });
     }
-
     /*Поиск по Sels
     Удаление пробелов в начале и конце строки*/
     function Search(e) {
@@ -251,7 +214,7 @@ function Sales() {
     function addPolicy() {
         setShowPopUp(true);
     }
-    /*Выгрузка*/
+    /*Функция для выгрузки*/
     function unloadPolicy() {
         let typeValue = document.getElementById("typeSelectSels");
         let channelValue = document.getElementById("channelSelectSels");
@@ -421,7 +384,7 @@ function Sales() {
                     )}
                     <Input
                         setId="inputDateStartSels"
-                        onInput={validateDate}
+                        Date="Date"
                         style="inputBox__select_s"
                         name="Дата оформления с"
                         value={now}
@@ -434,7 +397,7 @@ function Sales() {
                     />
                     <Input
                         setId="inputDateEndSels"
-                        onInput={validateDate}
+                        Date="Date"
                         style="inputBox__select_s"
                         name="Дата оформления по"
                         value={month}

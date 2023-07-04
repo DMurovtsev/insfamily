@@ -78,19 +78,14 @@ function SelsDocuments({ documents, currentSales }) {
                         name="Загрузить документы"
                     />
                     {inputFile ? (
-                        <Input setId="addFileId" name="Название документа" />
+                        <Input setId="addFileId" name="Название" />
                     ) : (
                         <></>
                     )}
                     {inputFile ? (
-                        <Button
-                            onClick={addFile}
-                            name={
-                                <div className="big">
-                                    <ion-icon name="cloud-upload-outline"></ion-icon>
-                                </div>
-                            }
-                        />
+                        <div className="bigBtn" onClick={addFile}>
+                            <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        </div>
                     ) : (
                         <></>
                     )}

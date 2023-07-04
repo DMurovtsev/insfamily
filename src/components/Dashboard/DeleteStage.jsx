@@ -12,25 +12,23 @@ function DeleteStage({ id, setId, setStage }) {
             data.forEach((item) => {
                 arrayStage.push(item.stage);
             });
-
             let newArrayStage = arrayStage.filter(function (item) {
                 return item.id != id;
             });
-
             setStageOptions(newArrayStage);
         });
     }, []);
-
-    function close(setId) {
-        setId();
-    }
-
+    /*Функция удаления этапа*/
     function deleteArrayStage() {
         let selectId = document.getElementById("selectDeleteStage").value;
         deleteStage(id, selectId).then((response) => {
             setStage(response);
             setId();
         });
+    }
+    /*Функция закрытия удаления этапа*/
+    function close(setId) {
+        setId();
     }
 
     return (

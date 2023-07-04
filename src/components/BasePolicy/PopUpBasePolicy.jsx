@@ -7,12 +7,6 @@ import { getFunnels, getStages, giveBasePolicy } from "../../Api";
 function PopUpBasePolicy({ setShowBasePolicy, managers, createFilterBody }) {
     const [funnels, setFunnels] = useState([]);
     const [stages, setStage] = useState([]);
-    /*Функция закрытие popUp*/
-    function closeBasePolicy(e) {
-        if (!e.target.closest(".container__Acts")) {
-            setShowBasePolicy(false);
-        }
-    }
     /*Функция заливки базы менеджеру*/
     function goBasePolicy() {
         let body = createFilterBody();
@@ -46,8 +40,15 @@ function PopUpBasePolicy({ setShowBasePolicy, managers, createFilterBody }) {
             setStage(arrStages);
         });
     }
+    /*Функция закрытие popUp*/
+    function closePopUp(e) {
+        if (!e.target.closest(".container__Acts")) {
+            setShowBasePolicy(false);
+        }
+    }
+
     return (
-        <div onClick={closeBasePolicy} className="main__container">
+        <div onClick={closePopUp} className="main__container">
             <div className="container__Acts">
                 <div className="content__Acts container__Acts">
                     <Select

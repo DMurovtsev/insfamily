@@ -41,9 +41,11 @@ function AddStage({ setStage, setDeals, idFunnel }) {
                 <Button
                     onClick={addNewStage}
                     setId="addNewStage"
+                    style="button_green"
                     name={<ion-icon name="checkmark-outline"></ion-icon>}
                 />
                 <Button
+                    style="button_red"
                     setId="cancelAddStage"
                     name={<ion-icon name="trash-outline"></ion-icon>}
                 />

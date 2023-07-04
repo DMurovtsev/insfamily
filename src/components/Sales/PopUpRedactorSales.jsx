@@ -16,6 +16,13 @@ function PopUpRedactorSales({
 }) {
     const [documents, setDocuments] = useState([]);
     const { admin } = useContext(CustomContext);
+    let selectOptionsTypeSales = [
+        { id: "newbiz", name: "Новый бизнес" },
+        { id: "prolongation", name: "Пролонгация" },
+        { id: "transition", name: "Переход" },
+        { id: "addendum", name: "Аддендум" },
+        { id: "payment", name: "Очередной взнос" },
+    ];
     useEffect(() => {
         if (currentSales.half_com_display != "-") {
             let checkbox = document.getElementById("checkBoxSales");
@@ -26,34 +33,14 @@ function PopUpRedactorSales({
             setDocuments(file.results);
         });
     }, []);
-
-    let selectOptionsTypeSales = [
-        { id: "newbiz", name: "Новый бизнес" },
-        { id: "prolongation", name: "Пролонгация" },
-        { id: "transition", name: "Переход" },
-        { id: "addendum", name: "Аддендум" },
-        { id: "payment", name: "Очередной взнос" },
-    ];
-    function M(e) {
-        {
-            if (!e.target.closest(".container__PopUp")) {
-                setCurrentSales();
-            }
-        }
-    }
+    /*Функция удаления полиса*/
     function closeRedactorSales() {
         let id = currentSales.id;
         deletePolicy(id).then((response) => {
             setCurrentSales();
         });
     }
-    function showDocuments() {
-        if (document.querySelector(".content__SelsDocuments")) {
-            document
-                .querySelector(".content__SelsDocuments")
-                .classList.add("active");
-        }
-    }
+    /*Функция редактирования полиса*/
     function editPolicy(e, key, value = null) {
         if (e.target.value == "") {
             return;
@@ -67,30 +54,7 @@ function PopUpRedactorSales({
         };
         oneForAllPost(body).then((response) => {});
     }
-    /*Валидация дат */
-    function checkDate(e) {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (2 < e.target.value.length && e.target.value.length < 5) {
-            e.target.value =
-                e.target.value.slice(0, 2) + "." + e.target.value.slice(2, 4);
-        } else if (e.target.value.length > 4) {
-            e.target.value =
-                e.target.value.slice(0, 2) +
-                "." +
-                e.target.value.slice(2, 4) +
-                "." +
-                e.target.value.slice(4, 8);
-
-            if (e.target.value.length == 10) {
-                let newDate = new Date(
-                    e.target.value.slice(6, 10),
-                    Number(e.target.value.slice(3, 5) - 1),
-                    e.target.value.slice(0, 2)
-                );
-            }
-        }
-    }
-
+    /*Функция чекбокса на 50% скидки*/
     function check() {
         let checkbox = document.getElementById("checkBoxSales");
         if (checkbox.checked) {
@@ -99,9 +63,17 @@ function PopUpRedactorSales({
             return false;
         }
     }
+    /*Функция закрытия PopUp*/
+    function closePopUp(e) {
+        {
+            if (!e.target.closest(".container__PopUp")) {
+                setCurrentSales();
+            }
+        }
+    }
 
     return (
-        <div onClick={M} className="main__container">
+        <div onClick={closePopUp} className="main__container">
             <div id="container__PopUp" className="container__PopUp ">
                 {currentSales ? (
                     <SelsDocuments
@@ -165,8 +137,7 @@ function PopUpRedactorSales({
                         onChange={(e) => {
                             editPolicy(e, "status");
                         }}
-                        firstValue={currentSales.status_display}
-                        first={currentSales.status_display}
+                        valueName={currentSales.status_display}
                         style="inputBox__standart_popUp"
                         name="Тип продажи"
                         options={selectOptionsTypeSales}
@@ -180,8 +151,7 @@ function PopUpRedactorSales({
                         onChange={(e) => {
                             editPolicy(e, "type");
                         }}
-                        firstValue={currentSales.type}
-                        first={currentSales.type__name}
+                        valueName={currentSales.type__name}
                         style="inputBox__standart_popUp"
                         name="Тип полиса"
                         options={typePolicies}
@@ -208,7 +178,7 @@ function PopUpRedactorSales({
                         onChange={(e) => {
                             editPolicy(e, "company");
                         }}
-                        first={currentSales.company__name}
+                        valueName={currentSales.company__name}
                         style="inputBox__standart_popUp"
                         name="Страховая компания"
                         options={insCompany}
@@ -222,7 +192,7 @@ function PopUpRedactorSales({
                         onChange={(e) => {
                             editPolicy(e, "channel");
                         }}
-                        first={currentSales.channel__name}
+                        valueName={currentSales.channel__name}
                         style="inputBox__standart_popUp"
                         name="Канал продаж"
                         options={channel}
@@ -304,8 +274,8 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.date_registration}
                         name="Оформлен"
-                        onInput={checkDate}
                         style="inputBox__standart_popUp"
+                        Date="Date"
                     />
                     <Input
                         none={
@@ -318,8 +288,8 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.date_start}
                         name="Начало действия"
-                        onInput={checkDate}
                         style="inputBox__standart_popUp"
+                        Date="Date"
                     />
                     <Input
                         none={
@@ -332,10 +302,9 @@ function PopUpRedactorSales({
                         }}
                         value={currentSales.date_end}
                         name="Окончание действия"
-                        onInput={checkDate}
                         style="inputBox__standart_popUp"
+                        Date="Date"
                     />
-
                     <Button
                         style="button_red"
                         onClick={closeRedactorSales}

@@ -1,16 +1,10 @@
-import { useEffect } from "react";
 import { Input } from "../Elements/Input";
 import { Select } from "../Elements/Select";
 import { Button } from "../Elements/Button";
 import { addCalc, deleteCalc, getCalc } from "../../Api";
-function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
-    useEffect(() => {}, []);
 
-    function closeCalculation() {
-        document
-            .querySelector(".container__Calculations")
-            .classList.remove("active");
-    }
+function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
+    /*Функция создания рассчётов*/
     function createCalc() {
         if (document.getElementById("selectCompaniesL")) {
             let companies_option =
@@ -23,12 +17,19 @@ function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
             });
         }
     }
+    /*Функция удаления рассчётов*/
     function deleteCalcs(e, id) {
         deleteCalc(id).then((response) => {
             getCalc(`?deal=${deal}`).then((data) => {
                 setCurrentDeal({ ...currentDeal, calcs: data.results });
             });
         });
+    }
+    /*Функция закрытия рассчётов */
+    function closeCalculation() {
+        document
+            .querySelector(".container__Calculations")
+            .classList.remove("active");
     }
 
     return (
@@ -58,7 +59,6 @@ function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
                           ))
                         : ""}
                 </div>
-
                 <div className="container__flex_calc">
                     <Select
                         setId="selectCompaniesL"

@@ -14,7 +14,6 @@ function ClientCard({ currentClient, setCurrentClient }) {
     const [clientPolicyInBase, setClientPolicyInBase] = useState();
     const [loader, setLoader] = useState(false);
     const [deal, setDeal] = useState();
-
     let clientSaleHeaderArray = [
         "Статус",
         "Тип продажи",
@@ -80,14 +79,6 @@ function ClientCard({ currentClient, setCurrentClient }) {
         );
         setLoader(false);
     }
-    /*Функция закрытия popUp*/
-    function M(e) {
-        {
-            if (!e.target.closest(".container__PopUp")) {
-                setCurrentClient();
-            }
-        }
-    }
     useEffect(() => {
         setLoader(true);
         setClientDeal();
@@ -110,63 +101,65 @@ function ClientCard({ currentClient, setCurrentClient }) {
     function showSales(item) {
         setCurrentSales(item);
     }
+    /*Функция закрытия popUp*/
+    function closePopUp(e) {
+        {
+            if (!e.target.closest(".container__PopUp")) {
+                setCurrentClient();
+            }
+        }
+    }
     return (
-        <div onClick={M} className="main__container">
+        <div onClick={closePopUp} className="main__container">
             <div id="container__ClientsCard" className="container__PopUp">
                 <div className="content__PopUp">
                     <div className="content__PopUpClientsCard_comments"></div>
-
                     <div className="content__PopUp_input right">
                         <Input
                             value={currentClient.full_name}
                             name="ФИО клиента"
-                            style="inputBox__standart"
+                            Fio="Fio"
                         />
                         <Input
                             value={currentClient.birthday}
                             setId="addHappyBithday"
                             divId="divAddHappyBirthdayClient"
                             name="Дата рождения клиента"
-                            style="inputBox__standart"
+                            Birthday="Birthday"
                         />
                         <Input
                             value={currentClient.phone}
                             divId="divAddPhoneClient"
                             setId="addPhoneClient"
                             name="Телефон клиента"
-                            style="inputBox__standart"
+                            Phone="Phone"
                         />
                         <Input
                             value={currentClient.email}
                             divId="divAddEmailClient"
                             setId="addEmailClient"
                             name="Email Клиента"
-                            style="inputBox__standart"
+                            Email="Email"
                         />
 
                         <Input
                             value={currentClient.address}
                             name="Регион клиента"
-                            style="inputBox__standart"
                         />
-                        <Input
-                            name="Контактное лицо"
-                            style="inputBox__standart"
-                        />
+                        <Input name="Контактное лицо" Fio="Fio" />
                         <Input
                             divId="divAddPhoneClientFace"
                             setId="addPhoneClientFace"
                             name="Телефон КЛ"
-                            style="inputBox__standart"
+                            Phone="Phone"
                         />
                         <Input
                             divId="divAddEmailClientFace"
                             setId="addEmailClientFace"
                             name="Email КЛ"
-                            style="inputBox__standart"
+                            Email="Email"
                         />
                     </div>
-
                     <div className="content__PopUpClientCard_btn">
                         <Button onClick={showSailsTable} name="Продажи" />
                         <Button onClick={showDealTable} name="Сделки" />
@@ -188,7 +181,6 @@ function ClientCard({ currentClient, setCurrentClient }) {
                         ) : (
                             <></>
                         )}
-
                         {clientDeal ? (
                             <Table
                                 onClick={showDeal}

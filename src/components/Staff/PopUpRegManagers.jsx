@@ -5,6 +5,7 @@ import { Select } from "../Elements/Select";
 import { InfoPopUp } from "../Service/InfoPopUp";
 
 function PopUpRegManagers({ setUser, sd }) {
+    /*Функция добавления менеджера*/
     function addManagers() {
         let formData = new FormData();
         let lastNameAddManagerId = document.getElementById(
@@ -40,56 +41,58 @@ function PopUpRegManagers({ setUser, sd }) {
             }
         });
     }
-    function M(e) {
+    function closePopUp(e) {
         {
-            if (!e.target.closest(".addManagers__container")) {
+            if (!e.target.closest(".content__PopUp_CreateDeal")) {
                 setUser(false);
             }
         }
     }
 
     return (
-        <div onClick={M} className="main__container">
-            <div className="addManagers__container">
+        <div onClick={closePopUp} className="main__container">
+            <div className="content__PopUp_CreateDeal">
                 <h3 style={{ borderBottom: "thick double var(--dark)" }}>
                     Добавление Менеджера
                 </h3>
-                <Input
-                    style="input__medium"
-                    setId="lastNameAddManagerId"
-                    name="Фамилия"
-                />
-                <Input
-                    style="input__medium"
-                    setId="firstNameAddManagerId"
-                    name="Имя"
-                />
-                <Input
-                    style="input__medium"
-                    setId="middleNameAddManagerId"
-                    name="Отчество"
-                />
-                <Input
-                    style="input__medium"
-                    setId="loginAddManagerId"
-                    name="Логин"
-                />
-                <Input
-                    style="input__medium"
-                    setId="passworAddManagerdId"
-                    name="Пароль"
-                />
-                <Select
-                    style="inputBox__select_largest"
-                    setId="sdAddManagersId"
-                    options={sd}
-                    name="Отдел продаж"
-                />
-                <Button
-                    style="button_green"
-                    onClick={addManagers}
-                    name="Добавить"
-                />
+                <div className="content__reazon">
+                    <Input
+                        style="input__medium"
+                        setId="lastNameAddManagerId"
+                        name="Фамилия"
+                    />
+                    <Input
+                        style="input__medium"
+                        setId="firstNameAddManagerId"
+                        name="Имя"
+                    />
+                    <Input
+                        style="input__medium"
+                        setId="middleNameAddManagerId"
+                        name="Отчество"
+                    />
+                    <Input
+                        style="input__medium"
+                        setId="loginAddManagerId"
+                        name="Логин"
+                    />
+                    <Input
+                        style="input__medium"
+                        setId="passworAddManagerdId"
+                        name="Пароль"
+                    />
+                    <Select
+                        style="inputBox__select_largest"
+                        setId="sdAddManagersId"
+                        options={sd}
+                        name="Отдел продаж"
+                    />
+                    <Button
+                        style="button_green"
+                        onClick={addManagers}
+                        name="Добавить"
+                    />
+                </div>
             </div>
         </div>
     );

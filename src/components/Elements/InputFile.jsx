@@ -1,5 +1,3 @@
-import { Button } from "./Button";
-
 function InputFile(props) {
     const { name, setId, style, onChange } = props;
 

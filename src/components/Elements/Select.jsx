@@ -12,6 +12,8 @@ function Select({
     first,
     firstValue,
     none,
+    valueName,
+    valueId,
 }) {
     useEffect(() => {
         let inputBox__select = document.querySelectorAll(".inputBox__select");
@@ -39,18 +41,28 @@ function Select({
                 id={setId}
                 required="required"
             >
-                {first ? (
+                {" "}
+                {valueName ? (
+                    <></>
+                ) : valueId ? (
+                    <></>
+                ) : first ? (
                     <option value={firstValue ? firstValue : null}>
                         {first}
                     </option>
                 ) : (
                     <option></option>
                 )}
-
                 {options
                     ? options.map((i) => (
                           <option
-                              selected={firstValue == i.id ? true : false}
+                              selected={
+                                  valueId && valueId == i.id
+                                      ? true
+                                      : valueName && valueName == i.name
+                                      ? true
+                                      : false
+                              }
                               value={i.id}
                           >
                               {i.name}
@@ -62,5 +74,4 @@ function Select({
         </div>
     );
 }
-
 export { Select };
