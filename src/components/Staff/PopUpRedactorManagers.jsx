@@ -64,10 +64,7 @@ function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
 
     return (
         <div onClick={closePopUp} className="main__container">
-            <div
-                id="content__PopUp_CreateDeal"
-                className="content__PopUp_CreateDeal"
-            >
+            <div className="content__PopUp_CreateDeal">
                 <div className="content__reazon ">
                     <Input
                         onKeyDown={(e) => {

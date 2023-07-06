@@ -4,6 +4,7 @@ import { Input } from "../components/Elements/Input";
 import { getManagersTelefony } from "../Api";
 import { CustomContext } from "../components/Service/Context";
 import { Loader } from "../components/Elements/Loader";
+import { PopUpTelefony } from "../components/Telefony/PopUpTelefony";
 
 function Telefhony() {
     const { admin } = useContext(CustomContext);
@@ -13,6 +14,7 @@ function Telefhony() {
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState();
     const [link, setLink] = useState("");
+    const [url, setUrl] = useState();
     useEffect(() => {
         let list = document.querySelectorAll(".navigation li");
         list.forEach((item) => {
@@ -108,7 +110,7 @@ function Telefhony() {
             });
         }
     };
-
+    /*Функция перевода длительности звонка в минуты и секунды*/
     function duration(minetsAndSeconds) {
         const time = Math.floor(minetsAndSeconds / 1000);
         const minutes = Math.floor(time / 60);
@@ -116,6 +118,7 @@ function Telefhony() {
         let duratin = minutes + " минут " + seconds + " секунд";
         return duratin;
     }
+    /*Функция перевода даты в формат дд.мм.гггг-чч:мм:сс*/
     function newDate(data) {
         const date = new Date(data);
         const day = String(date.getDate()).padStart(2, "0");
@@ -126,6 +129,19 @@ function Telefhony() {
         const seconds = String(date.getSeconds()).padStart(2, "0");
         const formattedDate = `${day}.${month}.${year}-${hours}:${minutes}:${seconds}`;
         return formattedDate;
+    }
+
+    function listenCall(item) {
+        getManagersTelefony(
+            `get_record&date=${item.startDate}&user_id=${item.abonent_id}`
+        ).then((response) => {
+            setUrl(response.url);
+        });
+    }
+    function downLoadCall(item) {
+        getManagersTelefony(
+            `get_record&date=${item.startDate}&user_id=${item.abonent_id}`
+        ).then((response) => {});
     }
 
     return (
@@ -190,6 +206,7 @@ function Telefhony() {
                                 <th>Телефон</th>
                                 <th>Длительность</th>
                                 <th>Статус</th>
+                                <th>Запись</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -218,6 +235,35 @@ function Telefhony() {
                                                 <></>
                                             )}
                                         </td>
+                                        <td>
+                                            <div
+                                                style={{
+                                                    fontSize: "18px",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent:
+                                                        "space-around",
+                                                }}
+                                            >
+                                                <div
+                                                    onClick={() => {
+                                                        listenCall(call);
+                                                    }}
+                                                    className="listenDiv"
+                                                >
+                                                    <ion-icon name="megaphone-outline"></ion-icon>
+                                                </div>
+
+                                                <div
+                                                    onClick={() => {
+                                                        downLoadCall(call);
+                                                    }}
+                                                    className="downloadDiv"
+                                                >
+                                                    <ion-icon name="download-outline"></ion-icon>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
@@ -227,6 +273,7 @@ function Telefhony() {
                     </table>
                 )}
             </div>
+            {url ? <PopUpTelefony url={url} setUrl={setUrl} /> : <></>}
         </div>
     );
 }
