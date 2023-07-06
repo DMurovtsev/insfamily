@@ -16,13 +16,13 @@ function Authorization() {
     function LogIn() {
         if (document.getElementById("inputLoginId").value == "") {
             document.getElementById("inputLoginId").classList.add("red_border");
-            InfoPopUp("Поля обязательные для заполнения", "popup__Info_red");
+            InfoPopUp("ПОЛЯ ОБЯЗАТЕЛЬНЫЕ ДЛЯ ЗАПОЛНЕНИЯ", "popup__Info_red");
         }
         if (document.getElementById("inputPasswordId").value == "") {
             document
                 .getElementById("inputPasswordId")
                 .classList.add("red_border");
-            InfoPopUp("Поля обязательные для заполнения", "popup__Info_red");
+            InfoPopUp("ПОЛЯ ОБЯЗАТЕЛЬНЫЕ ДЛЯ ЗАПОЛНЕНИЯ", "popup__Info_red");
         } else {
             const LoginArray = {
                 login: document.getElementById("inputLoginId").value,

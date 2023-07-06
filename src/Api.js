@@ -575,19 +575,14 @@ async function giveBasePolicy(body) {
     });
     return await response.json();
 }
-async function getManagersTelefony() {
-    let response = await fetch(
-        "https://cloudpbx.beeline.ru/apis/portal/abonents",
-        {
-            headers: {
-                "X-MPBX-API-AUTH-TOKEN": "d77f542d-7ccb-4bd1-bd69-5f8150416740",
-            },
-        }
-    );
-    return await response.json();
-}
 async function getAnalytics() {
     let response = await fetch(`${myHost}/pn/statistic/`, {
+        headers: headers,
+    });
+    return await response.json();
+}
+async function getManagersTelefony(method) {
+    let response = await fetch(`${myHost}/beeline/?method=${method}`, {
         headers: headers,
     });
     return await response.json();

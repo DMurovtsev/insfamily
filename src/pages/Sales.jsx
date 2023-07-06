@@ -152,6 +152,7 @@ function Sales() {
             }
         }
         oneForAll(values, "policy", undefined, link).then((data) => {
+            console.log(data);
             setPolicies(data.results);
             if (data.next_page) {
                 setCurrentPagePolicy(data.next_page);

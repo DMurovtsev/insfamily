@@ -45,7 +45,7 @@ function PopUpCreateDeal({
                 }
             });
         if (popUp.querySelectorAll(".red_border").length > 0) {
-            InfoPopUp("Поля обязательные для заполнения", "popup__Info_red");
+            InfoPopUp("ПОЛЯ ОБЯЗАТЕЛЬНЫЕ ДЛЯ ЗАПОЛНЕНИЯ", "popup__Info_red");
             return;
         } else {
             let basesource_id = document.getElementById("basesource_id").value;

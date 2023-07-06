@@ -4,9 +4,12 @@ import { Button } from "../Elements/Button";
 import { Input } from "../Elements/Input";
 import { Select } from "../Elements/Select";
 import { ResetPassword } from "./ResetPassword";
+import { InfoPopUp } from "../Service/InfoPopUp";
 
 function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
     const [deletePopUp, setDeletePopUp] = useState(false);
+    const [password, setPassword] = useState();
+
     const statusSelectManagers = [
         { id: "true", name: "Активный" },
         { id: "false", name: "Заблокирован" },
@@ -45,6 +48,18 @@ function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
                 setCurrentManagers();
             }
         }
+    }
+    /*Фуекция копирования пароля в буфер обмена*/
+    function copyNewPassword(event) {
+        const value = event.target.textContent;
+        const tempElement = document.createElement("textarea");
+        tempElement.value = value;
+        document.body.appendChild(tempElement);
+        tempElement.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempElement);
+        setCurrentManagers();
+        InfoPopUp(`ПАРОЛЬ УСПЕШНО СКОПИРОВАН`, "popup__Info_green");
     }
 
     return (
@@ -100,21 +115,27 @@ function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
                         options={statusSelectManagers}
                         valueName={currentManagers.active_display}
                     />
-                    <Button
-                        onClick={resetPassword}
-                        style="button_red"
-                        name="Сбросить пароль"
-                    />
-                    {/* {password ? (
-                        <Input name="Новый Пароль" value={password} />
+
+                    {password ? (
+                        <div onClick={copyNewPassword} className="passwordDiv">
+                            {password}
+
+                            {<ion-icon name="copy-outline"></ion-icon>}
+                        </div>
                     ) : (
-                        <></>
-                    )} */}
+                        <Button
+                            onClick={resetPassword}
+                            style="button_red"
+                            name="Сбросить пароль"
+                        />
+                    )}
                 </div>
                 {deletePopUp ? (
                     <ResetPassword
+                        setDeletePopUp={setDeletePopUp}
                         currentManagers={currentManagers}
                         setCurrentManagers={setCurrentManagers}
+                        setPassword={setPassword}
                     />
                 ) : (
                     <></>

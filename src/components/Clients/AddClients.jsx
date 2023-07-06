@@ -33,7 +33,7 @@ function AddClients({ setAddClient }) {
             if (item.value == "") {
                 item.classList.add("red_border");
                 InfoPopUp(
-                    "Поля обязательные для заполнения",
+                    "ПОЛЯ ОБЯЗАТЕЛЬНЫЕ ДЛЯ ЗАПОЛНЕНИЯ",
                     "popup__Info_red"
                 );
                 r = true;

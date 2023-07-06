@@ -4,11 +4,6 @@ import { CustomContext } from "../Service/Context";
 
 function PopUpClientsBirhday({ clientsBirhday, managerss, setClientsBirhday }) {
     const { admin } = useContext(CustomContext);
-    function closeHB(e) {
-        if (!e.target.closest(".container__table")) {
-            setClientsBirhday();
-        }
-    }
     function whatsUpHB(full_name, phone, managers) {
         let name = full_name.split(" ").slice(1).join(" ");
         let manager = managers.split(" ")[2];
@@ -17,55 +12,58 @@ function PopUpClientsBirhday({ clientsBirhday, managerss, setClientsBirhday }) {
                 "_blank"`
         );
     }
-
+    /*Функция закрытия popUp*/
+    function closePopUp(e) {
+        if (!e.target.closest(".content__PopUp_CreateDeal")) {
+            setClientsBirhday();
+        }
+    }
     return (
-        <div onClick={closeHB} className="popUp__body">
-            <div className="container__table">
-                <div>
-                    <table className="table">
-                        <thead className="table__thead">
-                            <tr>
-                                <th>ФИО клиента</th>
-                                <th>Дата рождения</th>
-                                <th>Телефон</th>
-                                <th>Менеджер</th>
-                                {admin ? <th>Ответственный</th> : <></>}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {clientsBirhday ? (
-                                clientsBirhday.map((client) => (
-                                    <tr className="trTableSales">
-                                        <td>{client.full_name}</td>
-                                        <td>{client.birthday}</td>
-                                        <td
-                                            className="green__hover"
-                                            onClick={() => {
-                                                whatsUpHB(
-                                                    client.full_name,
-                                                    client.phone,
-                                                    client.manager
-                                                );
-                                            }}
-                                        >
-                                            {client.phone}
+        <div onClick={closePopUp} className="main__container">
+            <div className="content__PopUp_CreateDeal content__PopUp_CreateNewDeal">
+                <table className="table">
+                    <thead className="table__thead">
+                        <tr>
+                            <th>ФИО клиента</th>
+                            <th>Дата рождения</th>
+                            <th>Телефон</th>
+                            <th>Менеджер</th>
+                            {admin ? <th>Ответственный</th> : <></>}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {clientsBirhday ? (
+                            clientsBirhday.map((client) => (
+                                <tr className="trTableSales">
+                                    <td>{client.full_name}</td>
+                                    <td>{client.birthday}</td>
+                                    <td
+                                        className="green__hover"
+                                        onClick={() => {
+                                            whatsUpHB(
+                                                client.full_name,
+                                                client.phone,
+                                                client.manager
+                                            );
+                                        }}
+                                    >
+                                        {client.phone}
+                                    </td>
+                                    <td>{client.manager}</td>
+                                    {admin ? (
+                                        <td>
+                                            <Select options={managerss} />
                                         </td>
-                                        <td>{client.manager}</td>
-                                        {admin ? (
-                                            <td>
-                                                <Select options={managerss} />
-                                            </td>
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </tr>
-                                ))
-                            ) : (
-                                <></>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </tr>
+                            ))
+                        ) : (
+                            <></>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

@@ -151,7 +151,7 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             if (item.value == "") {
                 item.classList.add("red_border");
                 InfoPopUp(
-                    "Поля обязательные для заполнения",
+                    "ПОЛЯ ОБЯЗАТЕЛЬНЫЕ ДЛЯ ЗАПОЛНЕНИЯ",
                     "popup__Info_red"
                 );
                 return;
@@ -161,7 +161,7 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             if (item.value == "") {
                 item.classList.add("red_border");
                 InfoPopUp(
-                    "Поля обязательные для заполнения",
+                    "ПОЛЯ ОБЯЗАТЕЛЬНЫЕ ДЛЯ ЗАПОЛНЕНИЯ",
                     "popup__Info_red"
                 );
                 return;
@@ -244,7 +244,7 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
             if (isValidInput) {
                 inputField.value = inputField.value.replace(regex, "");
                 InfoPopUp(
-                    "Введите три заглавные русские буквы",
+                    "ВВЕДИТЕ ТРИ ЗАГЛАВНЫЕ РУССКИЕ БУКВЫ",
                     "popup__Info_red"
                 );
             }
@@ -281,7 +281,7 @@ function PopUpNewDeal({ currentDeal, showPopUp, setShowPopUp }) {
         if (document.getElementById("companyId").value != "") {
             return;
         } else {
-            InfoPopUp("Сперва выберите компанию", "popup__Info_red");
+            InfoPopUp("СПЕРВА ВЫБЕРИТЕ КОМПАНИЮ", "popup__Info_red");
         }
     }
     /*Снятие display none с select кв банк*/

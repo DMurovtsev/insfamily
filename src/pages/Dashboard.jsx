@@ -97,6 +97,7 @@ function Dashboard() {
     //         }
     //     };
     // }
+
     useEffect(() => {
         getBanks().then((data) => {
             setBanks(data);
@@ -152,26 +153,42 @@ function Dashboard() {
                 setStage(data);
             });
         }
-        /*WebSocket*/
-        socket.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-            const { type } = data;
-            if (type == "deals_upgrade") {
-                setDeals((prevDeals) => {
-                    return prevDeals.map((j) => {
-                        return j.map((deal) => {
-                            if (deal.id == data.deal.id) {
-                                return data.deal;
-                            } else {
-                                return deal;
-                            }
-                        });
-                    });
-                });
-            }
-        };
-        setSockets(socket);
     }, [idFunnel]);
+
+    // useEffect(() => {
+    //     if (idFunnel) {
+    //         getDeals(idFunnel.id).then((data) => {
+    //             setDeals(data.results);
+    //             if (data.next_page) {
+    //                 setCurrentPage(data.next_page.split("/")[2]);
+    //             } else {
+    //                 setCurrentPage(null);
+    //             }
+    //         });
+    //         getStages(idFunnel.id).then((data) => {
+    //             setStage(data);
+    //         });
+    //     }
+    //     /*WebSocket*/
+    //     socket.onmessage = (e) => {
+    //         const data = JSON.parse(e.data);
+    //         const { type } = data;
+    //         if (type == "deals_upgrade") {
+    //             setDeals((prevDeals) => {
+    //                 return prevDeals.map((j) => {
+    //                     return j.map((deal) => {
+    //                         if (deal.id == data.deal.id) {
+    //                             return data.deal;
+    //                         } else {
+    //                             return deal;
+    //                         }
+    //                     });
+    //                 });
+    //             });
+    //         }
+    //     };
+    //     setSockets(socket);
+    // }, [idFunnel]);
     /*Скроллинг для сделок*/
     const scrollHandler = (e) => {
         if (
@@ -203,7 +220,6 @@ function Dashboard() {
             scrollHandler(e);
         };
     }
-
     /*Отрисовка div создания этапа*/
     function showAddStage() {
         if (document.getElementById("addStage")) {
@@ -225,30 +241,6 @@ function Dashboard() {
     function showCreateDeal() {
         setCreateDeal(true);
     }
-    /*onClick на сделки для открытия подробной сделки*/
-    if (document.querySelector(".card")) {
-        document.querySelectorAll(".card").forEach((card) => {
-            card.onclick = () => {
-                deals.forEach((item) => {
-                    let currentCard = item.filter((deal) => deal.id == card.id);
-                    if (currentCard.length > 0) {
-                        setCurrentDeal(currentCard[0]);
-                        if (currentCard[0].label == "new") {
-                            let label_deal = "no_call";
-                            let label_id = currentCard[0].id;
-                            chanageLabelDealCard(label_id, label_deal).then(
-                                (response) => {
-                                    getDeals(idFunnel.id).then((data) => {
-                                        setDeals(data.results);
-                                    });
-                                }
-                            );
-                        }
-                    }
-                });
-            };
-        });
-    }
     useEffect(() => {
         if (admin) {
             getManagers().then((data) => {
@@ -263,7 +255,6 @@ function Dashboard() {
     function dragleaveArhive(e) {
         e.target.classList.remove("arhive");
     }
-
     function onDragEnterPaid(e) {
         e.target.classList.add("sales");
     }
@@ -539,6 +530,7 @@ function Dashboard() {
                                     {item.map((dial) => {
                                         return (
                                             <DealCard
+                                                setCurrentDeal={setCurrentDeal}
                                                 stageId={stageId}
                                                 deal={deal}
                                                 setDeal={setDeal}

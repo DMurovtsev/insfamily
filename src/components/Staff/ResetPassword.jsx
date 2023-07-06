@@ -1,12 +1,10 @@
-import { useState } from "react";
 import { resetPassword } from "../../Api";
 import { Button } from "../Elements/Button";
 
-function ResetPassword({ currentManagers, setCurrentManagers }) {
-    const [password, setPassword] = useState();
+function ResetPassword({ currentManagers, setDeletePopUp, setPassword }) {
     /*Функция закрытия popUp*/
     function closePopUp() {
-        setCurrentManagers();
+        setDeletePopUp();
     }
     /*Функция сброса пороля менеджера*/
     function deletePassword() {
@@ -14,6 +12,7 @@ function ResetPassword({ currentManagers, setCurrentManagers }) {
         let id = currentManagers.id;
         formData.append("user", id);
         resetPassword(formData).then((response) => {
+            setDeletePopUp();
             setPassword(response);
         });
     }

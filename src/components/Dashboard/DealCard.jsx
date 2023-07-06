@@ -1,4 +1,4 @@
-function DealCard({ props, setDeal }) {
+function DealCard({ props, setDeal, setCurrentDeal }) {
     let discription = props.description;
     let user = props.user;
     let manager = {
@@ -36,6 +36,9 @@ function DealCard({ props, setDeal }) {
             className="container__dealCarde"
         >
             <div
+                onClick={() => {
+                    setCurrentDeal(props);
+                }}
                 draggable
                 id={props.id}
                 className={

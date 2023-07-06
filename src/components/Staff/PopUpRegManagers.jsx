@@ -35,7 +35,7 @@ function PopUpRegManagers({ setUser, sd }) {
                 InfoPopUp(response.error_name, "popup__Info_red");
             } else {
                 InfoPopUp(
-                    `${loginAddManagerId} успешно добавлен`,
+                    `${loginAddManagerId} УСПЕШНО ДОБАВЛЕН`,
                     "popup__Info_green"
                 );
             }

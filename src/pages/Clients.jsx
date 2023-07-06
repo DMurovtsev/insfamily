@@ -193,6 +193,7 @@ function Clients() {
     function showClient(item) {
         setCurrentClient(item);
     }
+
     return (
         <div>
             {addClient ? <AddClients setAddClient={setAddClient} /> : <></>}
