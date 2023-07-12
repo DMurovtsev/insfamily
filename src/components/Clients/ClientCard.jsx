@@ -104,17 +104,18 @@ function ClientCard({ currentClient, setCurrentClient }) {
     /*Функция закрытия popUp*/
     function closePopUp(e) {
         {
-            if (!e.target.closest(".container__PopUp")) {
+            if (!currentSales && !e.target.closest(".content__PopUp_Deal")) {
                 setCurrentClient();
             }
         }
     }
+
     return (
         <div onClick={closePopUp} className="main__container">
-            <div id="container__ClientsCard" className="container__PopUp">
-                <div className="content__PopUp">
+            <div className="main__flex">
+                <div className="content__PopUp_Deal">
                     <div className="content__PopUpClientsCard_comments"></div>
-                    <div className="content__PopUp_input right">
+                    <div className="content__PopUp_ClientCard right">
                         <Input
                             value={currentClient.full_name}
                             name="ФИО клиента"
@@ -141,7 +142,6 @@ function ClientCard({ currentClient, setCurrentClient }) {
                             name="Email Клиента"
                             Email="Email"
                         />
-
                         <Input
                             value={currentClient.address}
                             name="Регион клиента"
@@ -168,7 +168,7 @@ function ClientCard({ currentClient, setCurrentClient }) {
                             name="Полисы в базе"
                         />
                     </div>
-                    <div className="content__PopUpClientCardTable">
+                    <div>
                         {clientSale ? (
                             <Table
                                 onClick={showSales}

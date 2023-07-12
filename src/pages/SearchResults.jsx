@@ -102,7 +102,7 @@ function SearchResults() {
         }
     };
     return (
-        <div className="search__conteiner">
+        <div>
             {currentSales ? (
                 <PopUpRedactorSales
                     currentSales={currentSales}

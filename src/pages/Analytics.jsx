@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAnalytics, getFilterAnalytics } from "../Api";
 import { AnalyticsDepartament } from "../components/Analytics/AnalyticsDepartament";
 import { Input } from "../components/Elements/Input";
+import { Loader } from "../components/Elements/Loader";
 
 function Analytics() {
     const [analytics, setAnalytics] = useState([]);
@@ -23,10 +24,10 @@ function Analytics() {
     let now = today.toLocaleDateString("ru-RU");
     /*Фильтрация аналиттики по селектам*/
     function filtrClientsSelects() {
+        setLoader(true);
         if (!dateValid) {
             return;
         }
-        setLoader(true);
         let input__DepartmentWith = document.getElementById(
             "input__DepartmentWith"
         );
@@ -48,16 +49,16 @@ function Analytics() {
             setLoader(false);
         });
     }
+
     return (
         <div className="main">
-            <div className="input__Department">
+            <div className="container__header">
                 <Input
                     value={now}
                     Date="Date"
                     setId="input__DepartmentWith"
-                    style="input__small"
+                    style="input__S"
                     name="Дата с"
-                    onBlur={filtrClientsSelects}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrClientsSelects();
@@ -67,9 +68,8 @@ function Analytics() {
                 <Input
                     Date="Date"
                     setId="input__DepartmentBefore"
-                    style="input__small"
+                    style="input__S"
                     name="Дата по"
-                    onBlur={filtrClientsSelects}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrClientsSelects();
@@ -77,20 +77,25 @@ function Analytics() {
                     }}
                 />
             </div>
-            <div className="container__kasco">
-                {analytics.map((data) => (
-                    <div className="table__department">
-                        <h2 className="hdepatments">
-                            {data.sales_departments}
-                        </h2>
-                        <h3 className="hdepatments">{data.sum} &#8381;</h3>
-                        <AnalyticsDepartament
-                            loader={loader}
-                            department={data}
-                        />
-                    </div>
-                ))}
-            </div>
+            {analytics.length > 0 ? (
+                <div className="container__analytics">
+                    {analytics.map((data) => (
+                        <div>
+                            <h2 className="depatmentsH2">
+                                {data.sales_departments}
+                            </h2>
+                            <h3 className="depatmentsH2">{data.sum} &#8381;</h3>
+                            <AnalyticsDepartament
+                                setLoader={setLoader}
+                                department={data}
+                            />
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <Loader />
+            )}
+            {loader == true ? <Loader /> : <></>}
         </div>
     );
 }

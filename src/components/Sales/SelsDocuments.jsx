@@ -33,7 +33,6 @@ function SelsDocuments({ documents, currentSales }) {
         if (document.getElementById("addFileId").value.trim() == "") {
             return;
         }
-
         let formData = new FormData();
         formData.append("policy", currentSales.id);
         formData.append("name", document.getElementById("addFileId").value);

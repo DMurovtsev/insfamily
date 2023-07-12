@@ -27,26 +27,28 @@ function DeleteStage({ id, setId, setStage }) {
         });
     }
     /*Функция закрытия удаления этапа*/
-    function close(setId) {
-        setId();
+    function closePopUp(e) {
+        if (!e.target.closest(".contentDeleteStage")) {
+            setId();
+        }
     }
 
     return (
-        <div className="contenerDeleteStage">
+        <div onClick={closePopUp} className="main__container">
             <div className="contentDeleteStage">
-                <h3>Чтобы удалить этап, нужно перенести сделки на другой</h3>
+                <h3 style={{ color: "red" }}>
+                    Чтобы удалить этап, нужно перенести сделки на другой
+                </h3>
                 <Select
                     first={1}
                     name="Этапы"
                     options={stageOptions}
                     setId="selectDeleteStage"
                 />
-                <Button onClick={deleteArrayStage} name="Удалить" />
                 <Button
-                    onClick={(e) => {
-                        close(setId);
-                    }}
-                    name="Отмена"
+                    style="button_red"
+                    onClick={deleteArrayStage}
+                    name="Удалить"
                 />
             </div>
         </div>

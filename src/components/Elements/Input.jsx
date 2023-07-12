@@ -13,6 +13,7 @@ function Input({
     none,
     ion_icon,
     whatsUp,
+    call,
     Birthday,
     Email,
     Phone,
@@ -188,11 +189,10 @@ function Input({
                 {logo}
                 {name}
             </span>
-
             <div onClick={whatsUp ? whatsUp : ""} className="watsUp">
                 {ion_icon ? <ion-icon name="logo-whatsapp"></ion-icon> : ""}
             </div>
-            <div className="watsUpI">
+            <div onClick={call ? call : ""} className="watsUpI">
                 {ion_icon ? <ion-icon name="call-outline"></ion-icon> : ""}
             </div>
         </div>

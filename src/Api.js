@@ -1,7 +1,4 @@
 const myHost = "https://app.insfamily.ru";
-const headers = {
-    AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
-};
 
 /*Логирование*/
 async function Login(LoginArray) {
@@ -55,7 +52,9 @@ async function getAccessToken() {
 /*Получить типы полисов*/
 async function getTypiesPolicies() {
     let response = await fetch(`${myHost}/typies/l/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -66,14 +65,18 @@ async function getClients(values = null) {
         ? `${myHost}/clients/?values=${values}`
         : `${myHost}/clients/`;
     let response = await fetch(link, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 /*Получение воронок*/
 async function getFunnels() {
     let response = await fetch(`${myHost}/funnels/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -81,14 +84,18 @@ async function getFunnels() {
 /*Получение базового источника*/
 async function getBaseSource() {
     let response = await fetch(`${myHost}/basesource/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 /*Получение менеджеров*/
 async function getManagers() {
     let response = await fetch(`${myHost}/uft/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -96,7 +103,9 @@ async function getManagers() {
 /*Получить все этапы одной воронки*/
 async function getStages(id) {
     let response = await fetch(`${myHost}/stagefunnels/?funnel=${id}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -124,7 +133,9 @@ async function createStages(id, name) {
     let response = await fetch(`${myHost}/stagefunnels/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -134,7 +145,9 @@ async function deleteStage(id, selectId) {
     formData.append("stage", selectId);
     let response = await fetch(`${myHost}/stagefunnels/${id}/`, {
         method: "DELETE",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -143,7 +156,9 @@ async function deleteStage(id, selectId) {
 async function getClientsBirthdayCount() {
     let response = await fetch(`${myHost}/clients/birthday_count/`, {
         method: "POST",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -154,7 +169,9 @@ async function changeStages(currentStage) {
     formData.append("position", currentStage.position);
     let response = await fetch(`${myHost}/stagefunnels/sort_refresh/`, {
         method: "POST",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -186,53 +203,57 @@ async function createDeals(
     formData.append("user", user);
     formData.append("full_name", full_name);
     formData.append("phone", phone);
-    if (email != "") {
+    if (email !== "") {
         formData.append("email", email);
     }
-    if (birthday != "") {
+    if (birthday !== "") {
         formData.append("birthday", birthday);
     }
-    if (address != "") {
+    if (address !== "") {
         formData.append("address", address);
     }
-    if (brand != "") {
+    if (brand !== "") {
         formData.append("brand", brand);
     }
-    if (number != "") {
+    if (number !== "") {
         formData.append("number", number);
     }
-    if (vin != "") {
+    if (vin !== "") {
         formData.append("vin", vin);
     }
-    if (year != "") {
+    if (year !== "") {
         formData.append("year", year);
     }
-    if (ipoteca != "") {
+    if (ipoteca !== "") {
         formData.append("ipoteca", ipoteca);
     }
-    if (bank != "") {
+    if (bank !== "") {
         formData.append("bank", bank);
     }
-    if (risk != "") {
+    if (risk !== "") {
         formData.append("obj", risk);
     }
-    if (remainder != "") {
+    if (remainder !== "") {
         formData.append("remainder", remainder);
     }
     let response = await fetch(`${myHost}/deals/`, {
         method: "POST",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
 }
 async function getDeals(funnel_id, search = "") {
     let url = `${myHost}/deals/?funnel_id=${funnel_id}&status=in_work`;
-    if (search != "") {
+    if (search !== "") {
         url = url + `&search=${search}`;
     }
     let response = await fetch(url, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -241,7 +262,9 @@ async function addDiscription(description, id) {
     formData.append("description", description);
     let response = await fetch(`${myHost}/deals/${id}/`, {
         method: "PATCH",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -251,7 +274,9 @@ async function chanageDealCard(deal, stage_id) {
     formData.append("stage_funnel_id", stage_id);
     let response = await fetch(`${myHost}/deals/${deal}/`, {
         method: "PATCH",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -261,7 +286,9 @@ async function chanageStatusDealCard(deal, status_deal) {
     formData.append("status", status_deal);
     let response = await fetch(`${myHost}/deals/${deal}/`, {
         method: "PATCH",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -271,7 +298,9 @@ async function redactorPopUpDeal(key, value, id) {
     formData.append(key, value);
     let response = await fetch(`${myHost}/deals/${id}/`, {
         method: "PATCH",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -283,7 +312,9 @@ async function addFunnels(funnelName) {
     let response = await fetch(`${myHost}/funnels/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -292,7 +323,9 @@ async function chanageLabelDealCard(deal, label_deal) {
     formData.append("label", label_deal);
     let response = await fetch(`${myHost}/deals/${deal}/`, {
         method: "PATCH",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -304,19 +337,25 @@ async function addComments(deal_id, comment_content) {
     let response = await fetch(`${myHost}/comments/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getCompaniesL() {
     let response = await fetch(`${myHost}/companies/l/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getReasonForFailure() {
     let response = await fetch(`${myHost}/reason_for_failure/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -325,7 +364,9 @@ async function chooseReasonForFailure(deal, reason_for_failure) {
     formData.append("reason_for_failure_id", reason_for_failure);
     let response = await fetch(`${myHost}/deals/${deal}/`, {
         method: "PATCH",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -338,31 +379,41 @@ async function addCalc(deal, companies_option, sum) {
     let response = await fetch(`${myHost}/calc/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getCalc(link = "") {
     let response = await fetch(`${myHost}/calc/${link}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function deleteCalc(id) {
     return await fetch(`${myHost}/calc/${id}/`, {
         method: "DELETE",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
 }
 async function getSD() {
     let response = await fetch(`${myHost}/sd/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getScrollDeals(currentPage) {
     let response = await fetch(`${myHost}/deals/${currentPage}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -370,7 +421,9 @@ async function getFilterDeals(funnel_id, link) {
     let response = await fetch(
         `${myHost}/deals/?funnel_id=${funnel_id}${link}`,
         {
-            headers: headers,
+            headers: {
+                AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+            },
         }
     );
     return await response.json();
@@ -378,13 +431,17 @@ async function getFilterDeals(funnel_id, link) {
 async function globalSearch(search) {
     let url = `${myHost}/basepolicies/search/?search=${search}`;
     let response = await fetch(url, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getScrollSearch(currentPage) {
     let response = await fetch(`${myHost}${currentPage}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -404,7 +461,9 @@ async function getScrollSearch(currentPage) {
 
 async function getBanks() {
     let response = await fetch(`${myHost}/banks/l/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -414,7 +473,9 @@ async function redactorPopUpDealCars(carsId, key, value) {
     formData.append(key, value);
     let response = await fetch(`${myHost}/cars/${carsId}/`, {
         method: "PATCH",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: formData,
     });
     return await response.json();
@@ -425,13 +486,17 @@ async function redactorIpoteca(mortagesId, key, value) {
     let response = await fetch(`${myHost}/mortgages/${mortagesId}/`, {
         method: "PATCH",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getClientsBirthday() {
     let response = await fetch(`${myHost}/clients/birthday_count/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -450,49 +515,63 @@ async function oneForAll(
             : `${myHost}/policies/`;
     }
     let response = await fetch(url, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getChannels() {
     let response = await fetch(`${myHost}/channels/l/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getCompanies() {
     let response = await fetch(`${myHost}/companies/l/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getFilterSels(link) {
     let response = await fetch(`${myHost}/policies/?${link}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getPolicies(search) {
     let url = `${myHost}/policies/`;
-    if (search != "") {
+    if (search !== "") {
         url = url + `&search=${search}`;
     }
     let response = await fetch(url, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getSelsDocuments(id) {
     let response = await fetch(`${myHost}/files/?policy=${id}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function oneForAllPost(body) {
-    headers["Content-Type"] = "application/json";
     let response = await fetch(`${myHost}/ofa/`, {
         method: "POST",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+            ContentType: "application/json",
+        },
         body: JSON.stringify(body),
     });
     if (body.upload) {
@@ -504,39 +583,51 @@ async function addPolicy(formData) {
     let response = await fetch(`${myHost}/pn/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function deletePolicy(id) {
     return await fetch(`${myHost}/pn/${id}/`, {
         method: "DELETE",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
 }
 async function addFiles(formData) {
     let response = await fetch(`${myHost}/files/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getChannelsCompany(id) {
     let response = await fetch(`${myHost}/get_channels/?id=${id}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getActSales() {
     let response = await fetch(`${myHost}/srv/l/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function addActSales(fornData) {
     let response = await fetch(`${myHost}/srv/pre_act/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: fornData,
         method: "POST",
     });
@@ -544,7 +635,9 @@ async function addActSales(fornData) {
 }
 async function createActSales(fornData) {
     let response = await fetch(`${myHost}/srv/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: fornData,
         method: "POST",
     });
@@ -552,7 +645,9 @@ async function createActSales(fornData) {
 }
 async function addClient(fornData) {
     let response = await fetch(`${myHost}/clients/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
         body: fornData,
         method: "POST",
     });
@@ -562,46 +657,60 @@ async function addBasePolicy(formData) {
     let response = await fetch(`${myHost}/basepolicies/upload/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function giveBasePolicy(body) {
-    headers["Content-Type"] = "application/json";
     let response = await fetch(`${myHost}/basepolicies/broadcast/`, {
         method: "POST",
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+            ContentType: "application/json",
+        },
         body: JSON.stringify(body),
     });
     return await response.json();
 }
 async function getAnalytics() {
     let response = await fetch(`${myHost}/pn/statistic/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getManagersTelefony(method) {
     let response = await fetch(`${myHost}/beeline/?method=${method}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getFilterAnalytics(link) {
     let response = await fetch(`${myHost}/pn/statistic/?${link}`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getBriefly() {
     let response = await fetch(`${myHost}/pn/briefly/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getSellsDepartment() {
     let response = await fetch(`${myHost}/sd/l/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -611,7 +720,9 @@ async function addtypePolicys(name) {
     let response = await fetch(`${myHost}/typies/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -621,7 +732,9 @@ async function addChannels(name) {
     let response = await fetch(`${myHost}/channels/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -631,7 +744,9 @@ async function addCompanies(name) {
     let response = await fetch(`${myHost}/companies/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -641,7 +756,9 @@ async function addBanks(name) {
     let response = await fetch(`${myHost}/banks/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -651,7 +768,9 @@ async function addSd(name) {
     let response = await fetch(`${myHost}/sd/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -661,7 +780,9 @@ async function redactortypePolicys(name) {
     let response = await fetch(`${myHost}/typies/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -671,7 +792,9 @@ async function redactorChannels(name) {
     let response = await fetch(`${myHost}/channels/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -681,7 +804,9 @@ async function redactorCompanies(name) {
     let response = await fetch(`${myHost}/companies/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -691,7 +816,9 @@ async function redactorBanks(name) {
     let response = await fetch(`${myHost}/banks/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -701,13 +828,17 @@ async function redactorSd(name) {
     let response = await fetch(`${myHost}/sd/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
 async function getDeal(id) {
     let response = await fetch(`${myHost}/deals/${id}/`, {
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -716,7 +847,9 @@ async function regManagers(formData) {
     let response = await fetch(`${myHost}/reg_user/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -724,7 +857,9 @@ async function editManagers(formData) {
     let response = await fetch(`${myHost}/users/up/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
@@ -732,10 +867,13 @@ async function resetPassword(formData) {
     let response = await fetch(`${myHost}/users/reset_password/`, {
         method: "POST",
         body: formData,
-        headers: headers,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
     });
     return await response.json();
 }
+
 export {
     Login,
     loging,

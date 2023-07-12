@@ -66,21 +66,21 @@ function PopUpActs({
     }
     return (
         <div onClick={closeActs} className="main__container">
-            <div className="container__Acts">
-                <div className="content__PopUp_CreateDeal container__Acts">
-                    <div className="content__PopUp_btn">
-                        <div className="big">
-                            <ion-icon name="reader-outline"></ion-icon>
-                            {count.count}
-                        </div>
-                        <div className="big">
-                            <ion-icon name="cash-outline"></ion-icon>
-                            {count.sum}
-                        </div>
+            <div className="content__PopUp_CreateDeal">
+                <div className="container__PopUp_Tools">
+                    <div className="big__logo">
+                        <ion-icon name="reader-outline"></ion-icon>
+                        {count.count}
                     </div>
+                    <div className="big__logo">
+                        <ion-icon name="cash-outline"></ion-icon>
+                        {count.sum}
+                    </div>
+                </div>
+                <div className="content__Acts">
                     <Select
                         setId="typePoliciesActs"
-                        style="requared inputBox__select_largest"
+                        style="requared input__L"
                         name="Тип полиса"
                         options={typePolicies}
                         onChange={getCountPolisiesAndValue}
@@ -88,35 +88,35 @@ function PopUpActs({
                     <Select
                         setId="channelActs"
                         options={channel}
-                        style="requared inputBox__select_largest"
+                        style="requared input__L"
                         name="Канал продаж"
                         onChange={getCountPolisiesAndValue}
                     />
                     <Select
                         setId="companiesActs"
                         options={insCompany}
-                        style="requared inputBox__select_largest"
+                        style="requared input__L"
                         name="Страховая компания"
                         onChange={getCountPolisiesAndValue}
                     />
                     <Input
                         setId="nowActs"
                         value={now}
-                        style="input__medium  requared"
+                        style="input__L  requared"
                         name="Дата оформления с"
                         onBlur={getCountPolisiesAndValue}
                     />
                     <Input
                         setId="monthActs"
                         value={month}
-                        style="input__medium  requared"
+                        style="input__L  requared"
                         name="Дата оформления по"
                         onBlur={getCountPolisiesAndValue}
                     />
                     <Input
                         setId="nameAct"
                         name="Название Акта"
-                        style="input__medium  requared"
+                        style="input__L  requared"
                     />
                     <Button
                         onClick={createAct}

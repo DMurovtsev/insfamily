@@ -32,7 +32,7 @@ function ProblemBook() {
                     </li>
                 </ul>
                 <div className="PropblemBookArea"></div>
-                <Input style="inputBox__select_large" name="Поставить задачу" />
+                <Input style="input__M" name="Поставить задачу" />
                 <Button name="Отправить" style="button_green" />
             </div>
         </div>

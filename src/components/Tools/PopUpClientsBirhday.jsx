@@ -20,7 +20,7 @@ function PopUpClientsBirhday({ clientsBirhday, managerss, setClientsBirhday }) {
     }
     return (
         <div onClick={closePopUp} className="main__container">
-            <div className="content__PopUp_CreateDeal content__PopUp_CreateNewDeal">
+            <div className="content__PopUp_CreateNewDeal">
                 <table className="table">
                     <thead className="table__thead">
                         <tr>

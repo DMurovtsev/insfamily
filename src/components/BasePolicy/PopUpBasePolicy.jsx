@@ -42,39 +42,39 @@ function PopUpBasePolicy({ setShowBasePolicy, managers, createFilterBody }) {
     }
     /*Функция закрытие popUp*/
     function closePopUp(e) {
-        if (!e.target.closest(".container__Acts")) {
+        if (!e.target.closest(".container__PopUp")) {
             setShowBasePolicy(false);
         }
     }
 
     return (
         <div onClick={closePopUp} className="main__container">
-            <div className="container__Acts">
-                <div className="content__Acts container__Acts">
+            <div className="container__PopUp">
+                <div className="content__Acts">
                     <Select
                         setId="funnelsBasePolicy"
                         options={funnels}
                         onChange={chooseFunnel}
                         name="Воронки"
-                        style="requared inputBox__select_largest"
+                        style="requared input__M"
                     />
                     <Select
                         setId="stagesBasePolicy"
                         options={stages}
                         name="Этапы"
-                        style="requared inputBox__select_largest"
+                        style="requared input__M"
                     />
                     <Input
                         setId="countBasePolicy"
                         name="Кол-во полисов"
                         type="number"
-                        style="input__medium"
+                        style="input__M"
                     />
                     <Select
                         setId="managersBasePolicy"
                         options={managers}
                         name="Менеджер"
-                        style="requared inputBox__select_largest"
+                        style="requared input__M"
                     />
                     <Button
                         onClick={goBasePolicy}

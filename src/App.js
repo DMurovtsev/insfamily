@@ -20,24 +20,31 @@ import { SearchResults } from "./pages/SearchResults";
 
 function App() {
     const [admin, setAdmin] = useState();
+    const [access, setAccess] = useState("");
 
     useEffect(() => {
         loging().then((data) => {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
             setAdmin(data.a);
-
-            // getCookie("a");
-            // console.log(getCookie("a"));
+            const accessInterval = setInterval(() => {
+                getAccessToken().then((token) => {
+                    localStorage.removeItem("access");
+                    localStorage.setItem("access", token.access);
+                    setAccess(token.access);
+                });
+            }, 1000 * 60 * 4);
         });
+        // getCookie("a");
+        // console.log(getCookie("a"));
 
         // периодичное обновление access
-        const accessInterval = setInterval(() => {
-            getAccessToken().then((token) =>
-                localStorage.setItem("access", token.access)
-            );
-        }, 1000 * 60 * 4);
-    }, []);
+        // const accessInterval = setInterval(() => {
+        //     getAccessToken().then((token) =>
+        //         localStorage.setItem("access", token.access)
+        //     );
+        // }, 1000 * 60 * 4);
+    }, [access]);
 
     // function getCookie(name) {
     //     const cookies = document.cookie.split(";");
@@ -51,7 +58,7 @@ function App() {
     // }
 
     return (
-        <div className="App">
+        <div>
             <Context admin={admin}>
                 <Router>
                     <SideBar />

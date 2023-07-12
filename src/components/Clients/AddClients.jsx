@@ -78,7 +78,7 @@ function AddClients({ setAddClient }) {
     /*Закртие popUp добавления клиента*/
     function closePopUp(e) {
         {
-            if (!e.target.closest(".container__AddClients")) {
+            if (!e.target.closest(".container__PopUp")) {
                 setAddClient();
             }
         }
@@ -86,8 +86,8 @@ function AddClients({ setAddClient }) {
 
     return (
         <div onClick={closePopUp} className="main__container">
-            <div id="container__AddClients" className="container__AddClients">
-                <div className="content__PopUp_input ">
+            <div className="container__PopUp">
+                <div className="content__Acts">
                     <Input
                         setId="fioAddClient"
                         name="ФИО клиента"
@@ -132,11 +132,9 @@ function AddClients({ setAddClient }) {
                         id="file-list"
                         className="content__AddClients_files"
                     ></div>
-                    <div className="addClientsPopUp">
-                        <InputFile name="Загрузить файл" setId="file-input" />
-                    </div>
-                </div>
-                <div className="twoBtnAddClients">
+
+                    <InputFile name="Загрузить файл" setId="file-input" />
+
                     <Button
                         onClick={createClient}
                         style="button_green"

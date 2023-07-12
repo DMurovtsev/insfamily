@@ -40,6 +40,7 @@ function Administration() {
         getSellsDepartment().then((data) => {
             setSd(data);
         });
+
         let list = document.querySelectorAll(".navigation li");
         list.forEach((item) => {
             item.classList.remove("hovered");
@@ -102,7 +103,7 @@ function Administration() {
             <>
                 <div className="administration__container">
                     <div className="administration__content">
-                        <h3 className="administrationH">Тип полиса</h3>
+                        <h3>Тип полиса</h3>
                         {type ? (
                             type.map((t) => (
                                 <Input
@@ -114,7 +115,7 @@ function Administration() {
                                     }}
                                     value={t.name}
                                     name="Тип полиса"
-                                    style="input__small "
+                                    style="input__M "
                                 />
                             ))
                         ) : (
@@ -122,7 +123,7 @@ function Administration() {
                         )}
                         <Input
                             setId="addTypeAdministration"
-                            style="input__small"
+                            style="input__M"
                             name="Добавить"
                             onKeyDown={(e) => {
                                 if (e.keyCode === 13) {
@@ -133,7 +134,7 @@ function Administration() {
                     </div>
                     <div className="administration__content">
                         {" "}
-                        <h3 className="administrationH">Канал продаж</h3>
+                        <h3>Канал продаж</h3>
                         {channels ? (
                             channels.map((c) => (
                                 <Input
@@ -145,7 +146,7 @@ function Administration() {
                                     }}
                                     value={c.name}
                                     name="Канал продаж"
-                                    style="input__small"
+                                    style="input__M"
                                 />
                             ))
                         ) : (
@@ -153,7 +154,7 @@ function Administration() {
                         )}
                         <Input
                             setId="addChannelsAdministration"
-                            style="input__small"
+                            style="input__M"
                             name="Добавить"
                             onKeyDown={(e) => {
                                 if (e.keyCode === 13) {
@@ -164,7 +165,7 @@ function Administration() {
                     </div>
                     <div className="administration__content">
                         {" "}
-                        <h3 className="administrationH">Компания</h3>
+                        <h3>Компания</h3>
                         {companies ? (
                             companies.map((k) => (
                                 <Input
@@ -176,7 +177,7 @@ function Administration() {
                                     }}
                                     value={k.name}
                                     name="Компания"
-                                    style="input__small"
+                                    style="input__M"
                                 />
                             ))
                         ) : (
@@ -184,7 +185,7 @@ function Administration() {
                         )}
                         <Input
                             setId="addCompanieAdministration"
-                            style="input__small"
+                            style="input__M"
                             name="Добавить"
                             onKeyDown={(e) => {
                                 if (e.keyCode === 13) {
@@ -194,8 +195,7 @@ function Administration() {
                         />
                     </div>
                     <div className="administration__content">
-                        <h3 className="administrationH">Банк</h3>
-
+                        <h3>Банк</h3>
                         {bank ? (
                             bank.map((b) => (
                                 <Input
@@ -207,7 +207,7 @@ function Administration() {
                                     }}
                                     value={b.name}
                                     name="Банк"
-                                    style="input__small"
+                                    style="input__M"
                                 />
                             ))
                         ) : (
@@ -215,7 +215,7 @@ function Administration() {
                         )}
                         <Input
                             setId="addBankAdministration"
-                            style="input__small"
+                            style="input__M"
                             name="Добавить"
                             onKeyDown={(e) => {
                                 if (e.keyCode === 13) {
@@ -225,7 +225,7 @@ function Administration() {
                         />
                     </div>
                     <div className="administration__content">
-                        <h3 className="administrationH">Отдел продаж</h3>
+                        <h3>Отдел продаж</h3>
 
                         {sd ? (
                             sd.map((s) => (
@@ -238,7 +238,7 @@ function Administration() {
                                     }}
                                     value={s.name}
                                     name="Отдел продаж"
-                                    style="input__small "
+                                    style="input__M "
                                 />
                             ))
                         ) : (
@@ -246,7 +246,7 @@ function Administration() {
                         )}
                         <Input
                             setId="addSdAdministration"
-                            style="input__small"
+                            style="input__M"
                             name="Добавить"
                             onKeyDown={(e) => {
                                 if (e.keyCode === 13) {

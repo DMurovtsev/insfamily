@@ -197,7 +197,7 @@ function Clients() {
     return (
         <div>
             {addClient ? <AddClients setAddClient={setAddClient} /> : <></>}
-            <div className="container__header_clients">
+            <div className="container__header">
                 {admin ? (
                     <Link to="/ClientsBases">
                         <Button name="Базы" />
@@ -206,56 +206,60 @@ function Clients() {
                     <></>
                 )}
                 <Select
+                    style="input__S"
                     onChange={filtrClientsSelects}
                     setId="insCompanyClints"
                     options={insCompany}
                     name="Компания"
-                    style="inputBox__select"
                 />
                 <Select
+                    style="input__M"
                     onChange={filtrClientsSelects}
                     setId="channelClints"
                     options={channel}
                     name="Канал продаж"
-                    style="inputBox__select"
                 />
                 <Select
+                    style="input__S"
                     onChange={filtrClientsSelects}
                     setId="typePoliciesClints"
                     options={typePolicies}
                     name="Тип полиса"
-                    style="inputBox__select"
                 />
                 {admin ? (
                     <Select
+                        style="input__S"
                         onChange={filtrClientsSelects}
                         setId="managersClints"
                         options={managers}
                         name="Менеджер"
-                        style="inputBox__select"
                     />
                 ) : (
                     <></>
                 )}
                 <Input
+                    style="input__M"
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск клиента"
                     setId="searchClients"
-                    style="inputBox__standart"
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             Search(e);
                         }
                     }}
                 />
-                <Button name="Добавить клиента" onClick={showPopUpNewDeal} />
+                <Button
+                    style="button_green"
+                    name="Добавить клиента"
+                    onClick={showPopUpNewDeal}
+                />
                 {admin ? (
                     <Button onClick={unloadClients} name="Выгрузить" />
                 ) : (
                     <></>
                 )}
             </div>
-            <div className="container__body_clients">
+            <div>
                 <Table
                     onClick={showClient}
                     loader={loader}

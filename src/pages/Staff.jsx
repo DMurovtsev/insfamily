@@ -30,7 +30,7 @@ function Staff() {
         getSellsDepartment().then((data) => {
             setSd(data);
         });
-        let list = document.querySelectorAll(".navigation li");
+        let list = document.querySelectorAll(".navigation ul li");
         list.forEach((item) => {
             item.classList.remove("hovered");
         });
@@ -111,12 +111,12 @@ function Staff() {
             ) : (
                 <></>
             )}
-            <div className="container__header_managers">
+            <div className="container__header">
                 <Select
                     onChange={filtrManagersSelects}
                     setId="stuffSdSelect"
                     options={sd}
-                    style="input__small"
+                    style="input__M"
                     name="Отдел продаж"
                 />
                 <Button
@@ -125,7 +125,7 @@ function Staff() {
                     name="Добавить менеджера"
                 />
             </div>
-            <div className="container__table_stuff">
+            <div className="container__table_widthAuto">
                 <Table
                     header={managersHeaderArray}
                     loader={loader}

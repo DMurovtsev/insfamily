@@ -79,7 +79,6 @@ function Table({
                                     onClick ? onClick(item) : <></>
                                 }
                                 id={item ? item.id : ""}
-                                className="trTableSales"
                             >
                                 {check ? (
                                     <td data-label="+">{check}</td>

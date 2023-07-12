@@ -78,7 +78,7 @@ function Stage({
     /*Сохранение измененного этапа */
     function handleNameSave() {
         let newId = props.stage.id;
-        let newName = document.querySelector(".inputReadactorStage").value;
+        let newName = document.getElementById("inputUpdateStage").value;
         updateStageName(newId, newName).then((response) => {
             setStage(response);
         });
@@ -164,7 +164,7 @@ function Stage({
             data-id={props.stage.id}
             data-sort={props.stage.sort}
             draggable
-            className="containerFlex__header_single "
+            className="containerFlex__header_single"
             onDragStart={(e) => {
                 dragStart(e);
             }}
@@ -172,7 +172,6 @@ function Stage({
             onDragOver={(e) => {
                 dragOver(e, currentStage);
             }}
-            // onDrop={drop}
         >
             <div className={admin ? "containerStage" : "containerStageManager"}>
                 <div className="redactorStageDiv">
@@ -199,7 +198,7 @@ function Stage({
                         ></ion-icon>
                     </span>
                 </div>
-                <div className="containerStageContent containerStageManagerContent">
+                <div className="containerStageContent">
                     {admin ? (
                         <span className={editing ? "none" : "redactorStage"}>
                             <ion-icon
@@ -216,7 +215,6 @@ function Stage({
                         <input
                             id="inputUpdateStage"
                             onKeyDown={handleKeyDown}
-                            className="inputReadactorStage"
                             type="text"
                             value={name}
                             onChange={handleNameChange}
@@ -231,13 +229,6 @@ function Stage({
                         <h5>{props.count}</h5>
                         <h5>{props.sum}&#8381;</h5>
                     </div>
-                    {editing ? (
-                        <div className="smallBtn" onClick={handleNameSave}>
-                            <ion-icon name="checkmark-outline"></ion-icon>
-                        </div>
-                    ) : (
-                        ""
-                    )}
                 </div>
             </div>
         </div>

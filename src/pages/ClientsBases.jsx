@@ -298,7 +298,7 @@ function ClientsBases() {
     }
 
     return (
-        <div className="containerBaserClients">
+        <div>
             {showBasePolicy ? (
                 <PopUpBasePolicy
                     createFilterBody={createFilterBody}
@@ -320,11 +320,48 @@ function ClientsBases() {
                     setId="unloadBasePolicy"
                     name="Загрузить"
                 />
+            </div>
+            <div className="container__headerBaserClients">
+                <Select
+                    options={baseSource}
+                    setId="clientsBaseBaseSource"
+                    name="Источник"
+                    style="input__S"
+                    onChange={filtrBasePolicysSelects}
+                />
+                <Select
+                    options={insCompany}
+                    setId="clientsBaseCompany"
+                    name="Компания"
+                    style="input__S"
+                    onChange={filtrBasePolicysSelects}
+                />
+                <Select
+                    options={typePolicies}
+                    setId="clientsBaseType"
+                    name="Тип полиса"
+                    s
+                    style="input__S"
+                    onChange={filtrBasePolicysSelects}
+                />
+                <Select
+                    options={carBrandSelectClientBase}
+                    setId="clientsBaseCarBrand"
+                    name="Марка машины"
+                    style="input__M"
+                    onChange={filtrBasePolicysSelects}
+                />
+                <Select
+                    setId="clientsBaseCarYear"
+                    options={carYearSelectClientBase}
+                    style="input__S"
+                    name="Год выпуска"
+                    onChange={filtrBasePolicysSelects}
+                />
                 <Input
                     setId="searcBasePolicy"
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск по базе полисов"
-                    style="inputBox__standart"
                     onBlur={Search}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
@@ -334,42 +371,11 @@ function ClientsBases() {
                 />
             </div>
             <div className="container__headerBaserClients">
-                <Select
-                    options={baseSource}
-                    setId="clientsBaseBaseSource"
-                    name="Источник"
-                    style="inputBox__select"
-                    onChange={filtrBasePolicysSelects}
-                />
-                <Select
-                    options={insCompany}
-                    setId="clientsBaseCompany"
-                    name="Компания"
-                    style="inputBox__select"
-                    onChange={filtrBasePolicysSelects}
-                />
-                <Select
-                    options={typePolicies}
-                    setId="clientsBaseType"
-                    name="Тип полиса"
-                    s
-                    style="inputBox__select"
-                    onChange={filtrBasePolicysSelects}
-                />
-                <Select
-                    setId="inworkBasePolicy"
-                    options={status}
-                    first="Нет"
-                    firstValue="no"
-                    name="В работе"
-                    style="requared inputBox__select_largest"
-                    onChange={filtrBasePolicysSelects}
-                />
                 <Input
                     setId="clientsBaseDateStart"
                     Date="Date"
                     name="Дата окончания с"
-                    style="inputBox__select_s"
+                    style="input__M"
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrBasePolicysSelects();
@@ -380,32 +386,19 @@ function ClientsBases() {
                     Date="Date"
                     setId="clientsBaseDateEnd"
                     name="Дата окончания по"
-                    style="inputBox__select_s"
+                    style="input__M"
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrBasePolicysSelects();
                         }
                     }}
                 />
-                <Select
-                    options={carBrandSelectClientBase}
-                    setId="clientsBaseCarBrand"
-                    name="Марка машины"
-                    style="inputBox__select"
-                    onChange={filtrBasePolicysSelects}
-                />
-                <Select
-                    setId="clientsBaseCarYear"
-                    options={carYearSelectClientBase}
-                    style="inputBox__select"
-                    name="Год выпуска"
-                    onChange={filtrBasePolicysSelects}
-                />
+
                 <Input
                     setId="clientBaseSpMin"
                     name="Стоимость полиса от"
                     type="number"
-                    style="inputBox__select_s"
+                    style="input__L"
                     onBlur={filtrBasePolicysSelects}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
@@ -417,13 +410,22 @@ function ClientsBases() {
                     setId="clientBaseSpMax"
                     name="Стоимость полиса до"
                     type="number"
-                    style="inputBox__select_s"
+                    style="input__L"
                     onBlur={filtrBasePolicysSelects}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrBasePolicysSelects();
                         }
                     }}
+                />
+                <Select
+                    setId="inworkBasePolicy"
+                    options={status}
+                    first="Нет"
+                    firstValue="no"
+                    name="В работе"
+                    style="requared input__XS"
+                    onChange={filtrBasePolicysSelects}
                 />
             </div>
             <Table

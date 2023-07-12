@@ -327,26 +327,38 @@ function Sales() {
                 )}
                 <div className="container__header_sales">
                     <Button onClick={addPolicy} name="Добавить полис" />
+                    {admin ? (
+                        <Button onClick={openPopUpActs} name="Создать АКТ" />
+                    ) : (
+                        <></>
+                    )}
+                    {admin ? (
+                        <Button onClick={unloadPolicy} name="Выгрузить" />
+                    ) : (
+                        <></>
+                    )}
+                </div>
+                <div className="container__header_sales">
                     <Select
                         onChange={filtrSelects}
                         setId="typeSelectSels"
                         options={typePolicies}
                         name="Тип полиса"
-                        style="inputBox__select_larg"
+                        style="input__M"
                     />
                     <Select
                         onChange={filtrSelects}
                         setId="channelSelectSels"
                         options={channel}
                         name="Канал продаж"
-                        style="inputBox__select_larg"
+                        style="input__L"
                     />
                     <Select
                         onChange={filtrSelects}
                         setId="insCompanySelectSels"
                         options={insCompany}
                         name="Страховая компания"
-                        style="inputBox__select_largest"
+                        style="input__XL"
                     />
                     {admin ? (
                         <Select
@@ -354,61 +366,11 @@ function Sales() {
                             setId="managerSelectSels"
                             options={managers}
                             name="Менеджер"
-                            style="inputBox__select"
+                            style="input__M"
                         />
                     ) : (
                         <></>
                     )}
-                    {admin ? (
-                        <Select
-                            first="Сверка"
-                            firstValue="false"
-                            onChange={filtrSelects}
-                            setId="statusSelectSels"
-                            options={statusSelectSels}
-                            name="Статус"
-                            style="inputBox__small"
-                        />
-                    ) : (
-                        <></>
-                    )}
-                    {admin ? (
-                        <Select
-                            setId="actsId"
-                            options={acts}
-                            name="Акты"
-                            style="inputBox__small"
-                            onChange={filtrSelects}
-                        />
-                    ) : (
-                        <></>
-                    )}
-                    <Input
-                        setId="inputDateStartSels"
-                        Date="Date"
-                        style="inputBox__select_s"
-                        name="Дата оформления с"
-                        value={now}
-                        onBlur={filtrSelects}
-                        onKeyDown={(e) => {
-                            if (e.keyCode === 13) {
-                                filtrSelects();
-                            }
-                        }}
-                    />
-                    <Input
-                        setId="inputDateEndSels"
-                        Date="Date"
-                        style="inputBox__select_s"
-                        name="Дата оформления по"
-                        value={month}
-                        onBlur={filtrSelects}
-                        onKeyDown={(e) => {
-                            if (e.keyCode === 13) {
-                                filtrSelects();
-                            }
-                        }}
-                    />
                     {admin ? (
                         <div className="center">
                             <input
@@ -422,29 +384,70 @@ function Sales() {
                     ) : (
                         <></>
                     )}
+                </div>
+                <div className="container__header_sales">
+                    <Input
+                        setId="inputDateStartSels"
+                        Date="Date"
+                        style="input__M"
+                        name="Дата оформления с"
+                        value={now}
+                        onBlur={filtrSelects}
+                        onKeyDown={(e) => {
+                            if (e.keyCode === 13) {
+                                filtrSelects();
+                            }
+                        }}
+                    />
+                    <Input
+                        setId="inputDateEndSels"
+                        Date="Date"
+                        style="input__M"
+                        name="Дата оформления по"
+                        value={month}
+                        onBlur={filtrSelects}
+                        onKeyDown={(e) => {
+                            if (e.keyCode === 13) {
+                                filtrSelects();
+                            }
+                        }}
+                    />
+                    {admin ? (
+                        <Select
+                            first="Сверка"
+                            firstValue="false"
+                            onChange={filtrSelects}
+                            setId="statusSelectSels"
+                            options={statusSelectSels}
+                            name="Статус"
+                            style="input__S"
+                        />
+                    ) : (
+                        <></>
+                    )}
+                    {admin ? (
+                        <Select
+                            setId="actsId"
+                            options={acts}
+                            name="Акты"
+                            style="input__XS"
+                            onChange={filtrSelects}
+                        />
+                    ) : (
+                        <></>
+                    )}
                     <Input
                         setId="searchSale"
                         logo={<ion-icon name="search-outline"></ion-icon>}
                         name="Поиск по полисам"
-                        style="inputBox__standart"
                         onKeyDown={(e) => {
                             if (e.keyCode === 13) {
                                 Search(e);
                             }
                         }}
                     />
-                    {admin ? (
-                        <Button onClick={openPopUpActs} name="Создать АКТ" />
-                    ) : (
-                        <></>
-                    )}
-                    {admin ? (
-                        <Button onClick={unloadPolicy} name="Выгрузить" />
-                    ) : (
-                        <></>
-                    )}
                 </div>
-                <div className="container__body_sales">
+                <div>
                     <Table
                         loader={loader}
                         header={policiesHeaderArray}

@@ -138,34 +138,30 @@ function PopUpCreateDeal({
         }
     }
     return (
-        <div
-            onClick={closePopUp}
-            className="main__container"
-            id="container__PopUp_CreateDeal"
-        >
+        <div onClick={closePopUp} className="main__container">
             <div className="content__PopUp_CreateDeal">
                 <Select
                     setId="basesource_id"
-                    style="requared inputBox__select_largest"
+                    style="requared"
                     name="Источник"
                     options={baseSource}
                 />
                 <Select
                     setId="type_policy"
-                    style="requared inputBox__select_largest"
+                    style="requared"
                     name="Тип полиса"
                     options={typePolicies}
                 />
                 <Select
                     setId="stage_id"
-                    style="requared inputBox__select_largest"
+                    style="requared"
                     options={optionsStage}
                     name="Этап"
                 />
                 {admin ? (
                     <Select
                         setId="user"
-                        style="requared inputBox__select_largest"
+                        style="requared"
                         name="Менеджер"
                         options={managers}
                     />
@@ -174,39 +170,39 @@ function PopUpCreateDeal({
                 )}
                 <Input
                     setId="full_name"
-                    style="input__medium  requared"
+                    style="input__L  requared"
                     name="ФИО клиента"
                     Fio="Fio"
                 />
                 <Input
                     setId="address"
-                    style="input__medium"
+                    style="input__L"
                     name="Регион прописки"
                 />
                 <Input
                     setId="phoneCreateDeals"
                     divId="divPhoneCreateDeals"
-                    style="input__medium requared"
+                    style="input__L requared"
                     name="Телефон"
                     Phone="Phone"
                 />
                 <Input
                     setId="mailCreateDeals"
                     divId="divMailCreateDeals"
-                    style="input__medium"
+                    style="input__L"
                     name="Почта"
                     Email="Email"
                 />
                 <Input
                     setId="dateCreateDeals"
                     divId="divDateCreateDeals"
-                    style="input__medium"
+                    style="input__L"
                     name="Дата Рождения"
                     Birthday="Birthday"
                 />
                 <Select
                     setId="selectInsObject"
-                    style="inputBox__select_largest"
+                    style=""
                     name="Объект Страхования"
                     options={insObject}
                     onChange={showCarObject}
@@ -214,37 +210,37 @@ function PopUpCreateDeal({
                 <Input
                     divId="brandDivInput"
                     setId="brandInput"
-                    style="input__medium  none"
+                    style="input__L  none"
                     name="Марка"
                 />
                 <Input
                     setId="gosNomerInput"
                     divId="gosNomerDivInput"
-                    style="input__medium  none"
+                    style="input__L  none"
                     name="Гос. Номер"
                 />
                 <Input
                     setId="vinInput"
                     divId="vinDivInput"
-                    style="input__medium none"
+                    style="input__L none"
                     name="VIN"
                 />
                 <Input
                     setId="yearInput"
                     divId="yearDivInput"
-                    style="input__medium none"
+                    style="input__L none"
                     name="Год выпуска"
                 />
                 <Input
                     setId="ipotecaInput"
                     divId="ipotecaDivInput"
-                    style="input__medium requared none"
+                    style="input__L requared none"
                     name="Ипотека"
                 />
                 <Select
                     setId="bankInput"
                     divId="bankDivInput"
-                    style="input__medium none "
+                    style="none"
                     name="Банк"
                     options={banks}
                 />
@@ -258,12 +254,12 @@ function PopUpCreateDeal({
                 <Input
                     setId="remainderInput"
                     divId="remainderDivInput"
-                    style="input__medium none"
+                    style="input__L none"
                     name="Остаток"
                     type="number"
                     step={0.1}
                 />
-                <div className="content__PopUp_btn">
+                <div>
                     <Button
                         style="button_green"
                         onClick={handleClick}

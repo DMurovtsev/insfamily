@@ -6,6 +6,7 @@ import {
     addComments,
     addDiscription,
     getDeals,
+    getManagersTelefony,
     redactorIpoteca,
     redactorPopUpDeal,
     redactorPopUpDealCars,
@@ -25,9 +26,13 @@ function PopUpDeal({
     banks,
     insObjectRisk,
     sockets,
+    setCalculations,
+    calculations,
+    setShowReasonForFailure,
+    showReasonForFailure,
 }) {
     const [showPopUp, setShowPopUp] = useState(false);
-    const [showReasonForFailure, setShowReasonForFailure] = useState(false);
+
     let deal = currentDeal.id;
     /*Редактирование сделок*/
     function redactorDeal(e, i) {
@@ -54,11 +59,7 @@ function PopUpDeal({
     }
     /*Функция отрисовки рассчётов*/
     function showPopUpCalculations() {
-        if (document.querySelector(".container__Calculations")) {
-            document
-                .querySelector(".container__Calculations")
-                .classList.toggle("active");
-        }
+        setCalculations(true);
     }
     /*Функция отрисовки причин отказа*/
     function showPopUpReasonForFailure() {
@@ -82,9 +83,7 @@ function PopUpDeal({
                     deal_id: id,
                 })
             );
-            getDeals(idFunnel.id).then((data) => {
-                // setDeals(data);
-            });
+            getDeals(idFunnel.id).then((data) => {});
         });
     }
     function addComment() {
@@ -96,15 +95,16 @@ function PopUpDeal({
         let phone = currentDeal.policy.policyholder.phone;
         window.open(`https://web.whatsapp.com/send?phone=${phone}, "_blank"`);
     }
+    function call() {
+        getManagersTelefony(
+            `call&user_id=SIP00NLIU00LIR@ip.beeline.ru&phone=89178452574`
+        );
+    }
     useEffect(() => {
         if (currentDeal.calcs[0]) {
-            document
-                .querySelector(".container__Calculations")
-                .classList.add("active");
+            setCalculations(true);
         } else {
-            document
-                .querySelector(".container__Calculations")
-                .classList.remove("active");
+            setCalculations(false);
         }
         const fileInput = document.getElementById("popUp_InputFile");
         const fileList = document.getElementById("content__PopUp_files");
@@ -125,65 +125,57 @@ function PopUpDeal({
             });
         }
     }, []);
+
     /*Функция закрытия popUp*/
     function closePopUp(e) {
         {
-            if (!e.target.closest(".container__PopUp") && !showPopUp) {
+            if (
+                showPopUp !== true &&
+                !e.target.closest(".main__flex, .content__Calculations")
+            ) {
                 setCurrentDeal();
             }
         }
     }
-
     return (
-        <div onClick={closePopUp} className="popUp__body">
-            {showPopUp === true ? (
+        <div onClick={closePopUp} className="main__container">
+            {showPopUp == true ? (
                 <PopUpNewDeal
                     setShowPopUp={setShowPopUp}
+                    showPopUp={showPopUp}
                     currentDeal={currentDeal}
                 />
             ) : (
                 <></>
             )}
-            <div id="container__PopUp" className="container__PopUp">
-                <div className="content__PopUp">
+            <div className="main__flex">
+                <div className="content__PopUp_Deal">
                     <div className="content__PopUp_header">
                         <p>{currentDeal.name}</p>
                         <p>{currentDeal.date_create}</p>
                     </div>
                     <div className="content__PopUp_comments"></div>
-                    <div className="content__PopUp_comment ">
+                    <div className="content__PopUp_AddComment">
                         <Input
                             setId="inputAddComments"
                             name="Добавить комментарий"
                         />
                         <Button
                             onClick={addComment}
-                            style="button_green addComment"
+                            style="button_green"
                             name={<ion-icon name="arrow-up-outline"></ion-icon>}
                         />
-                        <div className="content__PopUp_discription">
-                            <textarea
-                                id="textareaDiscription"
-                                className="textareaDiscription"
-                                onBlur={Discription}
-                            >
-                                {currentDeal.description}
-                            </textarea>
-                        </div>
-                        <div className="content__PopUp_btnNew">
-                            <Button
-                                onClick={showPopUpReasonForFailure}
-                                style="button_red"
-                                name="В архив"
-                            />
-                            <Button
-                                onClick={showPopUpNewDeal}
-                                style="button_green"
-                                name="Оплачено"
-                            />
-                        </div>
                     </div>
-                    <div className="content__PopUp_input">
+                    <div className="content__PopUp_discription">
+                        <textarea
+                            id="textareaDiscription"
+                            className="textareaDiscription"
+                            onBlur={Discription}
+                        >
+                            {currentDeal.description}
+                        </textarea>
+                    </div>
+                    <div className="content__PopUp_DealInput right">
                         <Input
                             value={currentDeal.price}
                             name="Стоимость сделки"
@@ -203,7 +195,6 @@ function PopUpDeal({
                             none="none"
                             value={currentDeal.policy.policyholder.full_name}
                             name="ФИО клиента"
-                            style="inputBox__standart"
                             Fio="Fio"
                         />
                         <Input
@@ -221,6 +212,7 @@ function PopUpDeal({
                             name="Телефон клиента"
                             Phone="Phone"
                             whatsUp={whatsUp}
+                            call={call}
                             ion_icon={
                                 currentDeal.policy.policyholder.phone != ""
                                     ? "ion_icon"
@@ -278,7 +270,7 @@ function PopUpDeal({
                                     redactorMortages(e);
                                 }}
                                 options={insObjectRisk}
-                                style="input__medium input__medium_xl"
+                                style="input__XL"
                                 first={
                                     currentDeal.policy.ipoteka ? (
                                         currentDeal.policy.ipoteka.obj
@@ -401,7 +393,6 @@ function PopUpDeal({
                             none="none"
                             setId="popUpDealFioNew"
                             name="ФИО страхователя"
-                            style="popUpDealFioNew"
                             value={
                                 currentDeal.policy.policyholder_text
                                     ? currentDeal.policy.policyholder_text
@@ -424,14 +415,17 @@ function PopUpDeal({
                             name="Расчёты"
                             style="button_green"
                         />
+                        <Button
+                            onClick={showPopUpReasonForFailure}
+                            style="button_red"
+                            name="В архив"
+                        />
+                        <Button
+                            onClick={showPopUpNewDeal}
+                            style="button_green"
+                            name="Оплачено"
+                        />
                     </div>
-                    <Calculations
-                        setCalc={setCalc}
-                        companiesL={companiesL}
-                        deal={deal}
-                        currentDeal={currentDeal}
-                        setCurrentDeal={setCurrentDeal}
-                    />
                 </div>
                 {showReasonForFailure === true ? (
                     <ReasonForFailure
@@ -444,6 +438,18 @@ function PopUpDeal({
                     <></>
                 )}
             </div>
+            {calculations == true ? (
+                <Calculations
+                    setCalculations={setCalculations}
+                    setCalc={setCalc}
+                    companiesL={companiesL}
+                    deal={deal}
+                    currentDeal={currentDeal}
+                    setCurrentDeal={setCurrentDeal}
+                />
+            ) : (
+                <></>
+            )}
         </div>
     );
 }

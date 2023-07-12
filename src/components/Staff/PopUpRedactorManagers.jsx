@@ -65,8 +65,9 @@ function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
     return (
         <div onClick={closePopUp} className="main__container">
             <div className="content__PopUp_CreateDeal">
-                <div className="content__reazon ">
+                <div className="content__Acts">
                     <Input
+                        style="input__M"
                         onKeyDown={(e) => {
                             if (e.keyCode === 13) {
                                 redactorManagers(e);
@@ -77,6 +78,7 @@ function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
                         name="Фамилия"
                     />
                     <Input
+                        style="input__M"
                         onKeyDown={(e) => {
                             if (e.keyCode === 13) {
                                 redactorManagers(e);
@@ -87,6 +89,7 @@ function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
                         name="Имя"
                     />
                     <Input
+                        style="input__M"
                         onKeyDown={(e) => {
                             if (e.keyCode === 13) {
                                 redactorManagers(e);
@@ -97,17 +100,17 @@ function PopUpRedactorManagers({ setCurrentManagers, currentManagers, sd }) {
                         name="Отчество"
                     />
                     <Select
+                        style="input__M"
                         onChange={redactorManagers}
                         setId="sdAddManagers"
-                        style="inputBox__standart"
                         name="Отдел продаж"
                         options={sd}
                         valueName={currentManagers.department__name}
                     />
                     <Select
+                        style="input__M"
                         onChange={redactorManagers}
                         setId="statusAddManagers"
-                        style="inputBox__standart"
                         name="Статус"
                         options={statusSelectManagers}
                         valueName={currentManagers.active_display}

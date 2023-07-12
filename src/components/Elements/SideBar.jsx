@@ -15,7 +15,7 @@ function SideBar() {
     const navigate = useNavigate();
     const { admin } = useContext(CustomContext);
     const [briefly, setBriefly] = useState([]);
-    let list = document.querySelectorAll(".navigation li");
+    let list = document.querySelectorAll(".navigation ul li");
     useEffect(() => {
         getBriefly().then((data) => {
             setBriefly(data);
@@ -69,16 +69,18 @@ function SideBar() {
                                 src="logoContur.png"
                                 alt=""
                             />
-                            <span className="titleIF">
+                            {/* <span className="titleIF">
                                 InsFamily <br />
                                 <span style={{ fontSize: "13px" }}>
                                     центр страхования
                                 </span>
-                            </span>
-                            <div className="isAdmin">{admin}</div>
+                            </span> */}
+                            {/* <div className="isAdmin">{admin}</div> */}
                         </Link>
                         <div className="brieflySideBar">
-                            {" "}
+                            <div style={{ fontSize: "30px" }}>
+                                <ion-icon name="rocket-outline"></ion-icon>
+                            </div>
                             <p>{briefly.user}</p>
                             <p>{briefly.sum_sp} &#8381;</p>
                         </div>
@@ -147,30 +149,30 @@ function SideBar() {
                             <span className="title">Обучение</span>
                         </Link>
                     </li>
-                    {admin === true ? (
-                        <li>
+                    <li>
+                        {admin ? (
                             <Link to="/Staff">
                                 <span className="icon">
                                     <ion-icon name="people-outline"></ion-icon>
                                 </span>
                                 <span className="title">Персонал</span>
                             </Link>
-                        </li>
-                    ) : (
-                        ""
-                    )}
-                    {admin === true ? (
-                        <li>
+                        ) : (
+                            <></>
+                        )}
+                    </li>
+                    <li>
+                        {admin ? (
                             <Link to="/Administration">
                                 <span className="icon">
                                     <ion-icon name="logo-react"></ion-icon>
                                 </span>
                                 <span className="title">Администрирование</span>
                             </Link>
-                        </li>
-                    ) : (
-                        ""
-                    )}
+                        ) : (
+                            <></>
+                        )}
+                    </li>
                     <li>
                         <Link to="/Authorization">
                             <span className="icon">
@@ -187,7 +189,6 @@ function SideBar() {
                     setId="inputGlobalSearch"
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск"
-                    style="inputBox__standart_search"
                     onBlur={Search}
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {

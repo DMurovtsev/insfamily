@@ -18,7 +18,6 @@ import {
     getDeals,
     chanageDealCard,
     chanageStatusDealCard,
-    chanageLabelDealCard,
     getCompaniesL,
     getReasonForFailure,
     getSD,
@@ -34,8 +33,11 @@ import { Loader } from "../components/Elements/Loader";
 
 function Dashboard() {
     const [banks, setBanks] = useState([]);
+    const [calculations, setCalculations] = useState(false);
+    const [showReasonForFailure, setShowReasonForFailure] = useState(false);
     const [channel, setChannel] = useState([]);
     const [loader, setLoader] = useState(false);
+    const [addStage, setAddStage] = useState(false);
     const [sockets, setSockets] = useState();
     const [currentPage, setCurrentPage] = useState("");
     const [stages, setStage] = useState([]);
@@ -222,11 +224,7 @@ function Dashboard() {
     }
     /*Отрисовка div создания этапа*/
     function showAddStage() {
-        if (document.getElementById("addStage")) {
-            document
-                .querySelector(".container__addStage")
-                .classList.toggle("active");
-        }
+        setAddStage(true);
     }
     /*Поиск по Dashbord
     Удаление пробелов в начале и конце строки*/
@@ -382,6 +380,10 @@ function Dashboard() {
             )}
             {currentDeal ? (
                 <PopUpDeal
+                    setShowReasonForFailure={setShowReasonForFailure}
+                    showReasonForFailure={showReasonForFailure}
+                    setCalculations={setCalculations}
+                    calculations={calculations}
                     insObjectRisk={insObjectRisk}
                     banks={banks}
                     currentDeal={currentDeal}
@@ -409,7 +411,7 @@ function Dashboard() {
             ) : (
                 <></>
             )}
-            <div className="container__header_dashboard">
+            <div className="container__header">
                 <Select_2
                     name="Воронка Продаж"
                     options={funnels}
@@ -426,6 +428,7 @@ function Dashboard() {
                     firstValue="in_work"
                     name="Статус"
                     options={status}
+                    style="input__S"
                 />
                 <Select
                     setId="labelSelect"
@@ -434,12 +437,14 @@ function Dashboard() {
                     firstValue="all"
                     name="Метка"
                     options={label}
+                    style="input__XS"
                 />
                 <Select
                     setId="typeSelect"
                     onChange={filtrSelect}
                     name="Тип полиса"
                     options={typePolicies}
+                    style="input__S"
                 />
                 {admin === true ? (
                     <Select
@@ -447,6 +452,7 @@ function Dashboard() {
                         onChange={filtrSelect}
                         options={sd}
                         name="Отдел продаж"
+                        style="input__M"
                     />
                 ) : (
                     ""
@@ -457,6 +463,7 @@ function Dashboard() {
                         onChange={filtrSelect}
                         name="Менеджер"
                         options={managers}
+                        style="input__S"
                     />
                 ) : (
                     ""
@@ -464,8 +471,8 @@ function Dashboard() {
                 <Input
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск"
-                    style="inputBox__standart"
                     setId="inputSearch"
+                    style="input__M"
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             Search(e);
@@ -473,8 +480,8 @@ function Dashboard() {
                     }}
                 />
             </div>
-            <div className="containerFlex">
-                <div className=" containerFlex_header">
+            <div className="container__Dashboard">
+                <div className="container__header_Dashboard">
                     {stages.map((stage) => {
                         return (
                             <Stage
@@ -498,17 +505,23 @@ function Dashboard() {
                     ) : (
                         ""
                     )}
+
                     <Button
                         setId="createStage"
                         name="Создать сделку"
                         onClick={showCreateDeal}
                         style="button_green"
                     />
-                    <AddStage
-                        setDeals={setDeals}
-                        setStage={setStage}
-                        idFunnel={idFunnel}
-                    />
+                    {addStage == true ? (
+                        <AddStage
+                            setDeals={setDeals}
+                            setStage={setStage}
+                            idFunnel={idFunnel}
+                            setAddStage={setAddStage}
+                        />
+                    ) : (
+                        <></>
+                    )}
                 </div>
                 {loader ? (
                     <Loader />
@@ -551,7 +564,7 @@ function Dashboard() {
                 <div
                     onDragEnter={onDragEnterArhive}
                     onDragLeave={dragleaveArhive}
-                    className="main__botton_arhive"
+                    className="main__botton_Dashboard"
                     onDragOver={dragOverArhive}
                     onDrop={dropArhive}
                 >
@@ -560,7 +573,7 @@ function Dashboard() {
                 <div
                     onDragEnter={onDragEnterPaid}
                     onDragLeave={dragleavePaid}
-                    className="main__botton_paid"
+                    className="main__botton_Dashboard"
                     onDragOver={dragOverPaid}
                     onDrop={dropPaid}
                 >

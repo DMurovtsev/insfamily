@@ -43,7 +43,6 @@ function LiveTape() {
                     <Input
                         logo={<ion-icon name="search-outline"></ion-icon>}
                         name="Поиск"
-                        style="inputBox__standart_search"
                     />
                 </div>
                 <Table props={agentArray} title={title} />

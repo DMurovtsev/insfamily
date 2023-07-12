@@ -31,18 +31,19 @@ function Authorization() {
             Login(LoginArray).then((data) => {});
         }
     }
-
     return (
         <div className="container__Authorization">
-            <div className="form__Authorization">
-                <img src="logoContur.png" alt="" />
-                <Input setId="inputLoginId" name="Логин" />
-                <Input setId="inputPasswordId" name="Пароль" />
-                <Button
-                    onClick={LogIn}
-                    style="button_green"
-                    name="Авторизоваться"
-                />
+            <div className="content__Authorization">
+                <div className="form__Authorization">
+                    <img src="logoContur.png" alt="" />
+                    <Input setId="inputLoginId" name="Логин" />
+                    <Input setId="inputPasswordId" name="Пароль" />
+                    <Button
+                        onClick={LogIn}
+                        style="button_green"
+                        name="Авторизоваться"
+                    />
+                </div>
             </div>
         </div>
     );

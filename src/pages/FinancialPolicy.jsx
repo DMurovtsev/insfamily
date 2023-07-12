@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Dialer from "../components/Service/CallJsSip";
 
 function FinancialPolicy() {
     useEffect(() => {
@@ -9,6 +10,10 @@ function FinancialPolicy() {
         list[7].classList.add("hovered");
     }, []);
 
-    return;
+    return (
+        <div>
+            <Dialer />
+        </div>
+    );
 }
 export { FinancialPolicy };

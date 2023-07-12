@@ -130,7 +130,7 @@ function Telefhony() {
         const formattedDate = `${day}.${month}.${year}-${hours}:${minutes}:${seconds}`;
         return formattedDate;
     }
-
+    /*Функция прослушивания звонков*/
     function listenCall(item) {
         getManagersTelefony(
             `get_record&date=${item.startDate}&user_id=${item.abonent_id}`
@@ -138,27 +138,38 @@ function Telefhony() {
             setUrl(response.url);
         });
     }
+    /*Функция скачивания звонков*/
     function downLoadCall(item) {
         getManagersTelefony(
             `get_record&date=${item.startDate}&user_id=${item.abonent_id}`
-        ).then((response) => {});
+        ).then((response) => {
+            const downloadWindow = window.open(response.url);
+            downloadWindow.focus();
+        });
     }
+    /*Сегодняшняя дата*/
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    let today = `${day}.${month}.${year}`;
 
     return (
-        <div className="main" id="main">
-            <div className="container__header_clients">
+        <div>
+            <div className="container__header">
                 <Select
                     onChange={filtrManagersTelefony}
                     setId="managersTelefonyId"
                     options={managers}
                     name="Менеджер"
-                    style="inputBox__select"
+                    style="input__S"
                 />
                 <Input
+                    value={today}
                     setId="dateStartTelefonyId"
                     Date="Date"
                     name="Дата звонков с"
-                    style="input__small"
+                    style="input__S"
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrManagersTelefony();
@@ -169,7 +180,7 @@ function Telefhony() {
                     setId="dateEndTelefonyId"
                     Date="Date"
                     name="Дата звонков по"
-                    style="input__small"
+                    style="input__M"
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             filtrManagersTelefony();
@@ -179,7 +190,7 @@ function Telefhony() {
                 <Input
                     logo={<ion-icon name="search-outline"></ion-icon>}
                     name="Поиск по звонкам"
-                    style="inputBox__standart"
+                    style="input__L"
                     onKeyDown={(e) => {
                         if (e.keyCode === 13) {
                             Search(e);
@@ -194,21 +205,21 @@ function Telefhony() {
                 className="container__table_telefony"
             >
                 <h2 className="heading ">Звонки</h2>
-                {loader ? (
-                    <Loader />
-                ) : (
-                    <table className="table">
-                        <thead className="table_thead">
-                            <tr>
-                                <th>Дата и Время</th>
-                                <th>Менеджер</th>
-                                <th>Тип вызова</th>
-                                <th>Телефон</th>
-                                <th>Длительность</th>
-                                <th>Статус</th>
-                                <th>Запись</th>
-                            </tr>
-                        </thead>
+                <table className="table">
+                    <thead className="table_thead">
+                        <tr>
+                            <th>Дата и Время</th>
+                            <th>Менеджер</th>
+                            <th>Тип вызова</th>
+                            <th>Телефон</th>
+                            <th>Длительность</th>
+                            <th>Статус</th>
+                            <th>Запись</th>
+                        </tr>
+                    </thead>
+                    {loader ? (
+                        <Loader />
+                    ) : (
                         <tbody>
                             {telefony ? (
                                 telefony.map((call) => (
@@ -249,7 +260,11 @@ function Telefhony() {
                                                     onClick={() => {
                                                         listenCall(call);
                                                     }}
-                                                    className="listenDiv"
+                                                    className={
+                                                        call.status == "MISSED"
+                                                            ? "content__reazon_opacity"
+                                                            : "listenDiv"
+                                                    }
                                                 >
                                                     <ion-icon name="megaphone-outline"></ion-icon>
                                                 </div>
@@ -258,7 +273,11 @@ function Telefhony() {
                                                     onClick={() => {
                                                         downLoadCall(call);
                                                     }}
-                                                    className="downloadDiv"
+                                                    className={
+                                                        call.status == "MISSED"
+                                                            ? "content__reazon_opacity"
+                                                            : "downloadDiv"
+                                                    }
                                                 >
                                                     <ion-icon name="download-outline"></ion-icon>
                                                 </div>
@@ -270,8 +289,8 @@ function Telefhony() {
                                 <></>
                             )}
                         </tbody>
-                    </table>
-                )}
+                    )}
+                </table>
             </div>
             {url ? <PopUpTelefony url={url} setUrl={setUrl} /> : <></>}
         </div>

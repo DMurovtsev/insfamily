@@ -55,34 +55,34 @@ function PopUpRegManagers({ setUser, sd }) {
                 <h3 style={{ borderBottom: "thick double var(--dark)" }}>
                     Добавление Менеджера
                 </h3>
-                <div className="content__reazon">
+                <div className="content__Acts">
                     <Input
-                        style="input__medium"
+                        style="input__M"
                         setId="lastNameAddManagerId"
                         name="Фамилия"
                     />
                     <Input
-                        style="input__medium"
+                        style="input__M"
                         setId="firstNameAddManagerId"
                         name="Имя"
                     />
                     <Input
-                        style="input__medium"
+                        style="input__M"
                         setId="middleNameAddManagerId"
                         name="Отчество"
                     />
                     <Input
-                        style="input__medium"
+                        style="input__M"
                         setId="loginAddManagerId"
                         name="Логин"
                     />
                     <Input
-                        style="input__medium"
+                        style="input__M"
                         setId="passworAddManagerdId"
                         name="Пароль"
                     />
                     <Select
-                        style="inputBox__select_largest"
+                        style="input__M"
                         setId="sdAddManagersId"
                         options={sd}
                         name="Отдел продаж"

@@ -88,7 +88,7 @@ function Select_2({ options, setDeals, setStage, setIdFunnel, idFunnel }) {
                             placeholder="Добавить воронку"
                         />
                         <span onClick={addSalesFunnel} className="addVoronka">
-                            <ion-icon name="add-outline"></ion-icon>
+                            <ion-icon name="checkmark-circle-outline"></ion-icon>
                         </span>
                     </div>
                 ) : (

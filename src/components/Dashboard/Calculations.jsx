@@ -3,7 +3,13 @@ import { Select } from "../Elements/Select";
 import { Button } from "../Elements/Button";
 import { addCalc, deleteCalc, getCalc } from "../../Api";
 
-function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
+function Calculations({
+    companiesL,
+    deal,
+    currentDeal,
+    setCalculations,
+    setCurrentDeal,
+}) {
     /*Функция создания рассчётов*/
     function createCalc() {
         if (document.getElementById("selectCompaniesL")) {
@@ -27,19 +33,11 @@ function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
     }
     /*Функция закрытия рассчётов */
     function closeCalculation() {
-        document
-            .querySelector(".container__Calculations")
-            .classList.remove("active");
+        setCalculations(false);
     }
 
     return (
-        <div
-            className={
-                currentDeal.calcs
-                    ? "container__Calculations active"
-                    : "container__Calculations"
-            }
-        >
+        <div className="container__Calculations">
             <div className="content__Calculations">
                 <h3>Расчёты</h3>
                 <div className="list__Calculations">
@@ -59,21 +57,22 @@ function Calculations({ companiesL, deal, currentDeal, setCurrentDeal }) {
                           ))
                         : ""}
                 </div>
-                <div className="container__flex_calc">
+                <div className="container__PopUp_Tools">
                     <Select
                         setId="selectCompaniesL"
                         name="Компания"
                         options={companiesL}
+                        style="input__S"
                     />
                     <Input
                         setId="inputSum"
                         step="0.1"
                         type="number"
-                        style="inputBox__small"
+                        style="input__XS"
                         name="Сумма"
                     />
                 </div>
-                <div className="flexBtn">
+                <div className="container__PopUp_Tools">
                     <Button
                         onClick={createCalc}
                         name="Создать"

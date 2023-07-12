@@ -18,10 +18,7 @@ function ResetPassword({ currentManagers, setDeletePopUp, setPassword }) {
     }
     return (
         <div className="main__container">
-            <div
-                id="content__PopUp_CreateDeal"
-                className="content__PopUp_CreateDeal"
-            >
+            <div className="content__PopUp_CreateDeal">
                 <div>
                     <h2 style={{ color: "red" }}>
                         <ion-icon name="warning-outline"></ion-icon>ТОЧНО
