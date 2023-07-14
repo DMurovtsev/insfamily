@@ -426,6 +426,32 @@ body {
 .none {
     display: none;
 }
+/*Page__Mortage*/
+.mortage__contener {
+    position: relative;
+    width: 1400px;
+    gap: 20px;
+    top: 20px;
+    left: 50px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.mortage__content {
+    flex-grow: 0;
+    align-self: flex-start;
+    width: 300px;
+    max-height: auto;
+    box-shadow: 0 0 15px var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 15px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-radius: 15px;
+    background: var(--white);
+}
 
 /*Page__Sales*/
 
@@ -683,17 +709,17 @@ body {
     position: fixed;
     display: flex;
     justify-content: center;
+    align-items: center;
     top: -10%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100;
-    color: #000000;
     min-width: 100px;
-    height: 30px;
+    height: 50px;
     border-radius: 5px;
     transition: 0.5s;
-    background: rgba(236, 236, 236, 0.45);
-    border: 1px solid rgba(71, 71, 71, 0.5);
+
+    /* border: 1px solid rgba(71, 71, 71, 0.5); */
 
     backdrop-filter: blur(25px);
     visibility: hidden;
@@ -702,13 +728,13 @@ body {
     border: 1px solid var(--red);
     padding: 0 5px;
     color: var(--red);
-    box-shadow: 0 0 5px var(--red);
+    box-shadow: 0 0 25px var(--red);
 }
 .popup__Info_green {
     border: 1px solid var(--green);
     padding: 0 5px;
     color: var(--green);
-    box-shadow: 0 0 5px var(--green);
+    box-shadow: 0 0 25px var(--green);
 }
 
 .popup__Info.active {
@@ -727,6 +753,18 @@ body {
     display: inline;
     text-align: center;
     font-size: 15px;
+}
+.closePopUpInfo {
+    position: absolute;
+    top: -7px;
+    right: -3px;
+    cursor: pointer;
+    color: #adadad;
+}
+.closePopUpInfo:hover {
+    transition: 1s;
+    transform: scale(1.2);
+    color: #ff0000;
 }
 
 /*All__Components-----All__Components-----All__Components-----All__Components*/
@@ -923,6 +961,7 @@ body {
 .redactorStage:hover {
     color: var(--green);
     cursor: pointer;
+    transition: 0.5s;
 }
 .closeRedactorStage {
     position: absolute;
@@ -933,6 +972,7 @@ body {
 }
 .closeRedactorStage:hover {
     color: var(--red);
+    transition: 0.5s;
 }
 .containerStage {
     padding: 10px;
@@ -942,6 +982,7 @@ body {
     position: relative;
 }
 .containerStage:hover {
+    transition: 0.5s;
     scale: 1.05;
     box-shadow: 0px 0px 5px var(--dark), 0px 0px 15px var(--dark);
     cursor: grab;

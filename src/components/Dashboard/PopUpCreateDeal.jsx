@@ -140,6 +140,9 @@ function PopUpCreateDeal({
     return (
         <div onClick={closePopUp} className="main__container">
             <div className="content__PopUp_CreateDeal">
+                <h3 style={{ borderBottom: "thick double var(--dark)" }}>
+                    Создать сделку
+                </h3>
                 <Select
                     setId="basesource_id"
                     style="requared"

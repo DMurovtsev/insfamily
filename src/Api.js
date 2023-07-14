@@ -1,3 +1,11 @@
+import { InfoPopUp } from "./components/Service/InfoPopUp";
+
+function checkErrors(response) {
+    if (!response.ok) {
+        InfoPopUp(`Неизвестная ошибка № ${response.status}`, "popup__Info_red");
+    }
+}
+
 const myHost = "https://app.insfamily.ru";
 
 /*Логирование*/
@@ -873,6 +881,44 @@ async function resetPassword(formData) {
     });
     return await response.json();
 }
+async function mortgageApplication(formData) {
+    let response = await fetch(`${myHost}/mpv/`, {
+        method: "POST",
+        body: formData,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
+    });
+    checkErrors(response);
+    return await response.json();
+}
+async function getMortageStatistic() {
+    let response = await fetch(`${myHost}/mpv/`, {
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
+    });
+    return await response.json();
+}
+async function getMortageWeekStatistic() {
+    let response = await fetch(`${myHost}/mpv/users/`, {
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
+    });
+    return await response.json();
+}
+async function unloadMortage(formData) {
+    let response = await fetch(`${myHost}/mpv/unload/`, {
+        method: "POST",
+        body: formData,
+        headers: {
+            AUTHORIZATION: `Bearer ${localStorage.getItem("access")}`,
+        },
+    });
+    checkErrors(response);
+    return await response.json();
+}
 
 export {
     Login,
@@ -949,4 +995,8 @@ export {
     regManagers,
     editManagers,
     resetPassword,
+    mortgageApplication,
+    getMortageStatistic,
+    getMortageWeekStatistic,
+    unloadMortage,
 };

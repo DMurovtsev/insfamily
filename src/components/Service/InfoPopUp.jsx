@@ -5,7 +5,7 @@ function InfoPopUp(text, style) {
     infoPopUp.classList.add("active");
     infoPopUp.classList.add(style);
     popup__Info_P.textContent = text;
-    let timeout = setTimeout(Info_PopUp_close, 3000);
+    setTimeout(Info_PopUp_close, 30000);
     function Info_PopUp_close() {
         infoPopUp.classList.remove("active");
         infoPopUp.classList.remove(style);

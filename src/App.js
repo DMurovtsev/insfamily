@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { getAccessToken, loging } from "./Api";
 import { Context } from "./components/Service/Context";
 import { SearchResults } from "./pages/SearchResults";
+import { Mortage } from "./pages/Mortage";
 
 function App() {
     const [admin, setAdmin] = useState();
@@ -83,6 +84,7 @@ function App() {
                                 path="/ClientsBases"
                                 element={<ClientsBases />}
                             />
+                            <Route path="/Mortage" element={<Mortage />} />
                             <Route path="/Dashboard" element={<Dashboard />} />
                             <Route path="/Education" element={<Education />} />
                             <Route path="/Finance" element={<Finance />} />

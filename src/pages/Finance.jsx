@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { StackedBar } from "../components/Elements/StackedBar";
 
 function Finance() {
     useEffect(() => {
@@ -13,7 +12,6 @@ function Finance() {
     return (
         <div>
             <h1>Статистика звонков</h1>
-            <StackedBar />
         </div>
     );
 }

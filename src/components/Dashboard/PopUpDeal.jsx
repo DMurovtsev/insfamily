@@ -15,6 +15,7 @@ import { ReasonForFailure } from "./ReasonForFailure";
 import { Calculations } from "./Calculations";
 import { Select } from "../Elements/Select";
 import { PopUpNewDeal } from "./PopUpNewDeal";
+import { PopUpMortgageApplication } from "./PopUpMortgageApplication";
 
 function PopUpDeal({
     currentDeal,
@@ -32,6 +33,7 @@ function PopUpDeal({
     showReasonForFailure,
 }) {
     const [showPopUp, setShowPopUp] = useState(false);
+    const [mortage, setMortage] = useState(false);
 
     let deal = currentDeal.id;
     /*Редактирование сделок*/
@@ -60,6 +62,10 @@ function PopUpDeal({
     /*Функция отрисовки рассчётов*/
     function showPopUpCalculations() {
         setCalculations(true);
+    }
+    /*Функция отрисовки заявки на ипотеку*/
+    function showPopUpMortage() {
+        setMortage(true);
     }
     /*Функция отрисовки причин отказа*/
     function showPopUpReasonForFailure() {
@@ -125,11 +131,11 @@ function PopUpDeal({
             });
         }
     }, []);
-
     /*Функция закрытия popUp*/
     function closePopUp(e) {
         {
             if (
+                mortage !== true &&
                 showPopUp !== true &&
                 !e.target.closest(".main__flex, .content__Calculations")
             ) {
@@ -143,6 +149,15 @@ function PopUpDeal({
                 <PopUpNewDeal
                     setShowPopUp={setShowPopUp}
                     showPopUp={showPopUp}
+                    currentDeal={currentDeal}
+                />
+            ) : (
+                <></>
+            )}
+            {mortage == true ? (
+                <PopUpMortgageApplication
+                    banks={banks}
+                    setMortage={setMortage}
                     currentDeal={currentDeal}
                 />
             ) : (
@@ -416,14 +431,19 @@ function PopUpDeal({
                             style="button_green"
                         />
                         <Button
-                            onClick={showPopUpReasonForFailure}
-                            style="button_red"
-                            name="В архив"
-                        />
-                        <Button
                             onClick={showPopUpNewDeal}
                             style="button_green"
                             name="Оплачено"
+                        />
+                        <Button
+                            onClick={showPopUpMortage}
+                            style="button_green"
+                            name="Ипотека"
+                        />
+                        <Button
+                            onClick={showPopUpReasonForFailure}
+                            style="button_red"
+                            name="В архив"
                         />
                     </div>
                 </div>

@@ -39,7 +39,9 @@ function Calculations({
     return (
         <div className="container__Calculations">
             <div className="content__Calculations">
-                <h3>Расчёты</h3>
+                <h3 style={{ borderBottom: "thick double var(--dark)" }}>
+                    Рассчёты
+                </h3>
                 <div className="list__Calculations">
                     {currentDeal.calcs[0]
                         ? currentDeal.calcs.map((item) => (

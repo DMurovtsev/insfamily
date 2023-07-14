@@ -198,6 +198,9 @@ function Clients() {
         <div>
             {addClient ? <AddClients setAddClient={setAddClient} /> : <></>}
             <div className="container__header">
+                <Link to="/Mortage">
+                    <Button name="Заявки на ипотеку" />
+                </Link>
                 {admin ? (
                     <Link to="/ClientsBases">
                         <Button name="Базы" />

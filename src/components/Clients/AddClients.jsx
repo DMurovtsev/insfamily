@@ -88,6 +88,9 @@ function AddClients({ setAddClient }) {
         <div onClick={closePopUp} className="main__container">
             <div className="container__PopUp">
                 <div className="content__Acts">
+                    <h3 style={{ borderBottom: "thick double var(--dark)" }}>
+                        Добавить клиента
+                    </h3>
                     <Input
                         setId="fioAddClient"
                         name="ФИО клиента"

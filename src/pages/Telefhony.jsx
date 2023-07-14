@@ -133,7 +133,7 @@ function Telefhony() {
     /*Функция прослушивания звонков*/
     function listenCall(item) {
         getManagersTelefony(
-            `get_record&date=${item.startDate}&user_id=${item.abonent_id}`
+            `get_record&date=${item.startDate}&user_id=${item.abonent_id}&phone=${item.phone}`
         ).then((response) => {
             setUrl(response.url);
         });
@@ -141,7 +141,7 @@ function Telefhony() {
     /*Функция скачивания звонков*/
     function downLoadCall(item) {
         getManagersTelefony(
-            `get_record&date=${item.startDate}&user_id=${item.abonent_id}`
+            `get_record&date=${item.startDate}&user_id=${item.abonent_id}&phone=${item.phone}`
         ).then((response) => {
             const downloadWindow = window.open(response.url);
             downloadWindow.focus();
@@ -162,7 +162,7 @@ function Telefhony() {
                     setId="managersTelefonyId"
                     options={managers}
                     name="Менеджер"
-                    style="input__S"
+                    style="input__M"
                 />
                 <Input
                     value={today}
